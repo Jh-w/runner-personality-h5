@@ -1,0 +1,116 @@
+/* ShareSheet 底部弹窗样式 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-overlay);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sheet {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--sp-md) var(--sp-lg) calc(var(--sp-xl) + var(--safe-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-md);
+}
+
+.sheetVisible {
+  transform: translateY(0);
+}
+
+.handle {
+  width: 36px;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  margin-bottom: var(--sp-xs);
+}
+
+.title {
+  font-size: var(--fs-title);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.preview {
+  width: 180px;
+  height: 240px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: #f0f0f0;
+}
+
+.previewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  padding: var(--sp-md);
+  background: #f5f5f5;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.actionBtn:active {
+  background: #e8e8e8;
+}
+
+.actionIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.actionLabel {
+  text-align: left;
+}
+
+.cancelBtn {
+  width: 100%;
+  padding: var(--sp-md);
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.cancelBtn:active {
+  background: #f5f5f5;
+}

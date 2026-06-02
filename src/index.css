@@ -1,0 +1,8 @@
+/* 跑步人格测试 - 全局样式入口 */
+@import './styles/variables.css';
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,8 @@
+{
+  "name": "runningtype-analytics-proxy",
+  "version": "1.0.0",
+  "description": "跑步人格测试 - 神策埋点代理SCF",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {}
+}

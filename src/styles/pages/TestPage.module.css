@@ -1,0 +1,27 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-md);
+  padding-top: var(--sp-lg);
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.cardWrapper {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  padding-top: var(--sp-md);
+  animation: slideIn 0.35s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "runningtype-session-init",
+  "version": "1.0.0",
+  "description": "跑步人格测试 - Session初始化SCF函数",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {}
+}

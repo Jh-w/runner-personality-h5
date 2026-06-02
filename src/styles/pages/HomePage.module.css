@@ -1,0 +1,155 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, #FF8C42 0%, #FF6B35 40%, #E65100 100%);
+  overflow: hidden;
+}
+
+/* 跑道纹理 - CSS重复渐变模拟 */
+.trackOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 38px,
+      rgba(255, 255, 255, 0.06) 38px,
+      rgba(255, 255, 255, 0.06) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 38px,
+      rgba(255, 255, 255, 0.04) 38px,
+      rgba(255, 255, 255, 0.04) 40px
+    );
+  pointer-events: none;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-xl) var(--sp-md);
+  z-index: 1;
+  gap: var(--sp-lg);
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 var(--sp-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-xs);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.emoji {
+  font-size: 52px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.subtitle {
+  font-size: var(--fs-body);
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-xs) var(--sp-lg);
+}
+
+.metaItem {
+  font-size: var(--fs-small);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+}
+
+.metaDivider {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
+}
+
+.participants {
+  font-size: var(--fs-small);
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  margin: 0;
+}
+
+.participants strong {
+  font-weight: 800;
+  font-size: var(--fs-body);
+  color: #fff;
+}
+
+.startBtn {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: var(--sp-md) var(--sp-xl);
+  background: #fff;
+  color: var(--brand-primary);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  margin-top: var(--sp-md);
+}
+
+.startBtn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.startBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.footer {
+  z-index: 1;
+  text-align: center;
+  padding: var(--sp-md);
+  padding-bottom: calc(var(--sp-lg) + var(--safe-bottom));
+}
+
+.brand {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 1px;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

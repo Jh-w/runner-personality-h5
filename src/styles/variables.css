@@ -1,0 +1,164 @@
+/* 跑步人格测试 - CSS变量体系 */
+:root {
+  /* 16型人格主色 */
+  --color-type1: #FF4444;   /* 赛道卷王 - 竞技红 */
+  --color-type2: #FF6B35;   /* PB特种兵 - 橙红 */
+  --color-type3: #E91E63;   /* 竞速社交达人 - 粉红 */
+  --color-type4: #9C27B0;   /* 装备理财产品经理 - 紫 */
+  --color-type5: #2196F3;   /* 跑圈政委 - 蓝 */
+  --color-type6: #00BCD4;   /* 气氛组卷王 - 青 */
+  --color-type7: #607D8B;   /* 沉默破风者 - 灰蓝 */
+  --color-type8: #4CAF50;   /* 天赋型选手 - 绿 */
+  --color-type9: #FF9800;   /* 跑步气氛组 - 暖橙 */
+  --color-type10: #F44336;  /* 跑团穿搭博主 - 正红 */
+  --color-type11: #3F51B5;  /* 精致独行侠 - 靛蓝 */
+  --color-type12: #E040FB;  /* 装备颜控散步党 - 亮紫 */
+  --color-type13: #8BC34A;  /* 佛系约跑人PLUS - 草绿 */
+  --color-type14: #BDBDBD;  /* 真·佛系约跑人 - 浅灰 */
+  --color-type15: #607D8B;  /* 禅修跑者 - 灰蓝绿 */
+  --color-type16: #795548;  /* 城市流浪跑者 - 棕 */
+
+  /* 品牌色 */
+  --brand-primary: #FF6B35;
+  --brand-secondary: #2196F3;
+
+  /* 文字 */
+  --text-primary: #1a1a2e;
+  --text-secondary: #555;
+  --text-light: #999;
+  --text-white: #fff;
+
+  /* 背景 */
+  --bg-page: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(0,0,0,0.5);
+
+  /* 字号 */
+  --fs-hero: 28px;
+  --fs-title: 22px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-caption: 12px;
+
+  /* 间距 */
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+
+  /* 圆角 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-round: 50%;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.16);
+
+  /* 安全区域 */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* 过渡 */
+  --transition: 300ms ease-out;
+}
+
+/* 全局重置 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* 通用按钮 */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: var(--sp-md) var(--sp-lg);
+  background: linear-gradient(135deg, var(--brand-primary), #FF5722);
+  color: var(--text-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  padding: var(--sp-md);
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-small);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.btn-secondary:active {
+  background: #f0f0f0;
+}
+
+/* 页面容器 */
+.page {
+  padding: var(--sp-lg) var(--sp-md);
+  padding-bottom: calc(var(--sp-xl) + var(--safe-bottom));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toast提示 */
+.toast {
+  position: fixed;
+  bottom: calc(var(--sp-xl) + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: var(--text-white);
+  padding: var(--sp-sm) var(--sp-lg);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-small);
+  z-index: 999;
+  animation: toastIn 0.3s ease-out;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
