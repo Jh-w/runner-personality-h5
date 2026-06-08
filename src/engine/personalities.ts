@@ -1,245 +1,314 @@
-// 16种跑步人格完整数据
-// 格式: dimensions数组 [动机, 装备, 社交, 计划] → 0/1
+// 16种跑步人格完整数据 — PRD v3.0 §6.2
+// 按四维编码排序: CSDG → EPGM
 
-import type { PersonalityResult, PersonalityTypeId } from './types';
+import type { PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
 
-const personalityData: PersonalityResult[] = [
-  // === 类型1: 赛道卷王 (成绩+装备+群跑+计划) ===
-  {
-    typeId: 1, name: '赛道卷王', emoji: '🏆',
-    roast: '你的跑团群名叫「今天你PB了吗」，而且你是真心在问。',
+/** 16型人格数据 */
+const personalityData: Record<PersonalityCode, PersonalityResult> = {
+  // ═══ 1. CSDG | 赛道卷王 | 竞技+独狼+计划+装备 ═══
+  CSDG: {
+    typeId: 1,
+    code: 'CSDG',
+    name: '赛道卷王',
+    emoji: '🏆',
+    keywords: ['数据狂魔', 'PB焦虑症', '装备测评师'],
+    roast: '你认识每一代Vaporfly的差别，也知道自己最近30天的配速曲线，但朋友只知道你周末没法约饭——你要跑LSD。',
     traits: [
-      '碳板鞋至少两双，轮换穿，每双的里程数精确到小数点后',
-      '间歇跑训练时你是跑团里的配速标尺，大家都跟你跑',
-      '你的年度账单里「运动装备」那一栏比「吃饭」还高',
+      '每次跑完第一件事不是拉伸，是看数据',
+      '买跑鞋前至少看了5篇测评',
+      '一个人跑得比一群人快，也不想等人',
     ],
-    advice: '强制每周至少2天完全休息或交叉训练（游泳/力量），引入「恢复周」概念（每4周减量50%）。',
-    motto: 'Pain is temporary, PB is forever.',
-    dimensionScores: { motivation: 1, equipment: 1, social: 1, planning: 1 },
+    dimensionScores: { motivation: -1, social: -1, style: -1, ritual: -1 },
     color: '#FF4444',
   },
-  // === 类型2: PB特种兵 (成绩+装备+群跑+随性) ===
-  {
-    typeId: 2, name: 'PB特种兵', emoji: '🪖',
-    roast: '你跑间歇的时候，跑团其他人都在心里默念「别叫我别叫我别叫我」。',
+
+  // ═══ 2. CSDM | 沉默破风者 | 竞技+独狼+计划+极简 ═══
+  CSDM: {
+    typeId: 2,
+    code: 'CSDM',
+    name: '沉默破风者',
+    emoji: '🌬️',
+    keywords: ['黑练', '一双鞋跑到退役', '不跑团不打卡不废话'],
+    roast: '训练计划精确到分钟，但从没人知道你在练——直到比赛日你从后面超过去，留下一阵风和一堆问号。',
     traits: [
-      '跑团里的卷王担当，间歇跑永远冲在最前面，跑完还要加两组',
-      '装备必须顶配，但你对装备的态度是「哪个能帮我PB就买哪个」',
-      '平时训练比较随性，但比赛前两周突然变身精密训练机器',
+      '训练计划精确到分钟，但从不发朋友圈',
+      '一双跑鞋穿到报废，跑鞋墙是什么？',
+      '比赛中很少说话，超你的时候也不说话',
     ],
-    advice: '80/20法则：80%跑量保持低强度（能边跑边聊天），20%高强度。间歇跑时注意控制配速均匀，不要起跑太快后程掉速。',
-    motto: '不PB的跑步和散步有什么区别？',
-    dimensionScores: { motivation: 1, equipment: 1, social: 1, planning: 0 },
+    dimensionScores: { motivation: -1, social: -1, style: -1, ritual: 1 },
+    color: '#607D8B',
+  },
+
+  // ═══ 3. CPDG | 装备型冲刺怪 | 竞技+独狼+随性+装备 ═══
+  CPDG: {
+    typeId: 3,
+    code: 'CPDG',
+    name: '装备型冲刺怪',
+    emoji: '⚡',
+    keywords: ['间歇跑上头', '买了等于练了', '冲动报名型'],
+    roast: '你的鞋墙比训练日志丰富，但每次间歇跑你都能把自己逼到怀疑人生的地步——然后发朋友圈说「爽」。',
+    traits: [
+      '装备比训练计划多，但该拼的时候绝对拼',
+      '报名马拉松通常发生在深夜刷小红书之后',
+      '一个人跑间歇跑到怀疑人生，然后发朋友圈说「爽」',
+    ],
+    dimensionScores: { motivation: -1, social: -1, style: 1, ritual: -1 },
     color: '#FF6B35',
   },
-  // === 类型3: 竞速社交达人 (成绩+装备+独行+计划) ===
-  {
-    typeId: 3, name: '竞速社交达人', emoji: '📸',
-    roast: '你的跑步朋友圈获赞数比你的马拉松完赛名次高一位。',
+
+  // ═══ 4. CPDM | 野生竞速者 | 竞技+独狼+随性+极简 ═══
+  CPDM: {
+    typeId: 4,
+    code: 'CPDM',
+    name: '野生竞速者',
+    emoji: '😎',
+    keywords: ['天赋型选手', '赛前一周才想起有比赛', '天生跑得快'],
+    roast: '赛前一周才想起有比赛，不热身、不补给、不拉伸——然后PB了。你是所有认真训练的人的天敌。',
     traits: [
-      '一个人训练（群跑影响配速），但赛后的九宫格必须出片',
-      '装备精良——每一件都上镜，配色经过精心搭配',
-      '训练高度自律，成绩不错，但你更在意的是成绩能不能配上一条好文案',
+      '训练没有计划，但PB刷新得比谁都勤',
+      '赛前不碳水加载，赛中不补给策略，跑完不拉伸',
+      '让所有科学训练派咬牙切齿的人',
     ],
-    advice: '比赛日把手机交给朋友或存包，专注于比赛本身。赛后有的是时间拍——终点拱门、奖牌、完赛包，素材管够。',
-    motto: 'PB重要，但PB的截图能不能发朋友圈更重要。',
-    dimensionScores: { motivation: 1, equipment: 1, social: 0, planning: 1 },
-    color: '#E91E63',
-  },
-  // === 类型4: 装备理财产品经理 (成绩+装备+独行+随性) ===
-  {
-    typeId: 4, name: '装备理财产品经理', emoji: '💼',
-    roast: '你的购物车比月跑量长，但每一件装备你都能说出三个买它的技术理由。',
-    traits: [
-      '对每双鞋的中底科技如数家珍，但上脚跑过的不到一半',
-      '一个人跑，因为研究装备参数比跟人聊天有意思多了',
-      '训练看心情，但装备绝不含糊——今天的配色必须搭配这双鞋',
-    ],
-    advice: '制定「装备激励计划」：每完成50K跑量奖励自己一件种草已久的装备。把购物欲转化为跑步动力。',
-    motto: '我不是在买装备，我是在投资跑步体验。',
-    dimensionScores: { motivation: 1, equipment: 1, social: 0, planning: 0 },
-    color: '#9C27B0',
-  },
-  // === 类型5: 跑圈政委 (成绩+极简+群跑+计划) ===
-  {
-    typeId: 5, name: '跑圈政委', emoji: '🫡',
-    roast: '跑团里唯一一个记得所有人的PB、伤病史和下个比赛日期的人。跑团真正的灵魂不是团长，是你。',
-    traits: [
-      '装备够用就行，注意力在人不在装备',
-      '训练有严格计划，也帮别人做计划',
-      '你是跑团里那个「照顾所有人配速」的人——快的人你追不上，但你陪着慢的人跑完',
-    ],
-    advice: '每周至少安排两次「自私跑」——按自己的目标和配速来，不等人也不照顾人。帮助别人前，先保证自己的进步。',
-    motto: '一个人跑得快，一群人跑得远。我是那个保证大家都跑得远的人。',
-    dimensionScores: { motivation: 1, equipment: 0, social: 1, planning: 1 },
-    color: '#2196F3',
-  },
-  // === 类型6: 气氛组卷王 (成绩+极简+群跑+随性) ===
-  {
-    typeId: 6, name: '气氛组卷王', emoji: '⚡',
-    roast: '装备随便穿，但一跑起来就认真了。你以为他在养生跑，结果最后一公里加速冲刺。',
-    traits: [
-      '装备极简——一双跑鞋走天下，不关心碳板不碳板',
-      '群里约跑就来，平时自己随性跑',
-      '跑到兴起就认真了——说好的轻松跑最后变成了Tempo Run',
-    ],
-    advice: '你的能力被随性的训练方式限制了。尝试每周一次有目的的训练（如间歇跑或节奏跑），你会发现成绩提升比想象的快。',
-    motto: '装备不重要，重要的是跑起来那一刻我有多认真。',
-    dimensionScores: { motivation: 1, equipment: 0, social: 1, planning: 0 },
-    color: '#00BCD4',
-  },
-  // === 类型7: 沉默破风者 (成绩+极简+独行+计划) ===
-  {
-    typeId: 7, name: '沉默破风者', emoji: '🌬️',
-    roast: '她穿一双看不出品牌的旧跑鞋，然后轻松跑进330。装备党集体陷入存在主义危机。',
-    traits: [
-      '装备极简——一双鞋穿到退役，不聊装备不逛装备店',
-      '训练极其自律，课表完成率接近100%，但从来不晒',
-      '一个人默默训练，比赛时安静地超过你，你甚至没注意到她的存在',
-    ],
-    advice: '保持你的自律，但建议每隔一段时间找教练或有经验的跑者做一次跑姿评估。你的「极简」不是问题，但偶尔的「外部视角」可以帮你走得更远。',
-    motto: '跑得快的人不说话，说话的人跑不快。',
-    dimensionScores: { motivation: 1, equipment: 0, social: 0, planning: 1 },
-    color: '#607D8B',
-  },
-  // === 类型8: 天赋型选手 (成绩+极简+独行+随性) ===
-  {
-    typeId: 8, name: '天赋型选手', emoji: '😎',
-    roast: '月跑量不到80K，半马轻松跑进145。你的存在让认真训练的人怀疑自己是不是练错了。',
-    traits: [
-      '装备？随便。训练计划？看心情。但成绩就是比大部分认真练的人好',
-      '一个人跑，不需要跑团——跑团的人都在追你的成绩',
-      '比赛前两周才开始「稍微跑一下」，然后就PB了',
-    ],
-    advice: '你的天赋是礼物，但系统训练可以帮你兑现更多潜力。尝试一个12周的结构化训练计划，你会发现原来自己还可以更快。',
-    motto: '我随便跑的。（然后配速4\'30"）',
-    dimensionScores: { motivation: 1, equipment: 0, social: 0, planning: 0 },
+    dimensionScores: { motivation: -1, social: -1, style: 1, ritual: 1 },
     color: '#4CAF50',
   },
-  // === 类型9: 跑步气氛组 (享受+装备+群跑+计划) ===
-  {
-    typeId: 9, name: '跑步气氛组', emoji: '🎉',
-    roast: '装备齐全、训练计划周密、约跑从不迟到——但你对配速的唯一要求是「能边跑边聊天」。你是跑团的快乐源泉。',
+
+  // ═══ 5. CGDG | 跑团结算官 | 竞技+社群+计划+装备 ═══
+  CGDG: {
+    typeId: 5,
+    code: 'CGDG',
+    name: '跑团结算官',
+    emoji: '🧮',
+    keywords: ['群接龙永远第一个', '团服收集者', '配速警察'],
+    roast: '跑团群就是你的第二个家——的物业管理处。你比团长还清楚每个人的出勤率和最近三场的配速曲线。',
     traits: [
-      '装备专业度看起来像精英跑者，但配速暴露了你',
-      '约跑必到，且负责活跃气氛——讲笑话、拍照、安排跑后聚餐',
-      '有计划，但计划的核心KPI是「今天跑得开心吗」不是「今天配速多少」',
+      '跑团群就是你的第二个家……的物业管理员',
+      '团训迟到30秒会焦虑一整个热身',
+      '装备不仅要好，还要和团服配色匹配',
     ],
-    advice: '每次跑步前明确：今天是社交跑还是训练跑？社交跑尽情聊，训练跑戴耳机保持专注。两者分开，各得其乐。',
-    motto: '跑步最大的作用不是锻炼身体，是锻炼友情。',
-    dimensionScores: { motivation: 0, equipment: 1, social: 1, planning: 1 },
+    dimensionScores: { motivation: -1, social: 1, style: -1, ritual: -1 },
+    color: '#2196F3',
+  },
+
+  // ═══ 6. CGDM | 团练教官 | 竞技+社群+计划+极简 ═══
+  CGDM: {
+    typeId: 6,
+    code: 'CGDM',
+    name: '团练教官',
+    emoji: '🫡',
+    keywords: ['间歇课表执行器', '拉爆队友不计后果', '严肃跑者脸'],
+    roast: '带着课本来团练，不聊天、不拍照、不放过任何一个拉爆队友的机会。严肃跑者的脸上写满了「再来一组」。',
+    traits: [
+      '带着课表来团练，且严格执行，不聊天',
+      '装备实用至上，但训练日志写了一本又一本',
+      '队友的配速就是你最大的焦虑来源',
+    ],
+    dimensionScores: { motivation: -1, social: 1, style: -1, ritual: 1 },
+    color: '#00BCD4',
+  },
+
+  // ═══ 7. CPGG | 社交竞速家 | 竞技+社群+随性+装备 ═══
+  CPGG: {
+    typeId: 7,
+    code: 'CPGG',
+    name: '社交竞速家',
+    emoji: '🎭',
+    keywords: ['比赛就是聚会', '完赛奖牌收藏家', '装备比配速好看'],
+    roast: '每场比赛的OOTD比配速策略早一周定好。跑完第一件事：找人合影，配速是次要的。',
+    traits: [
+      '每场比赛的装备搭配比配速策略更用心',
+      '跑完第一件事是找人合影，配速是次要的',
+      '跑团里最擅长组织「赛后聚餐」的人',
+    ],
+    dimensionScores: { motivation: -1, social: 1, style: 1, ritual: -1 },
+    color: '#E91E63',
+  },
+
+  // ═══ 8. CPGM | 佛系跟跑王 | 竞技+社群+随性+极简 ═══
+  CPGM: {
+    typeId: 8,
+    code: 'CPGM',
+    name: '佛系跟跑王',
+    emoji: '😌',
+    keywords: ['配速随缘', '跟团就行', '永远在队伍中段'],
+    roast: '一个人不跑，一群人跑开心。你不追PB，你追的是「跑完这顿去哪吃」。让所有严肃跑者又爱又困惑。',
+    traits: [
+      '一个人不跑，一群人跑开心',
+      '不追求PB，追求「今天跑完又和大家吃了顿好的」',
+      '让严肃跑者困惑「他明明不怎么练为什么也能跑完」',
+    ],
+    dimensionScores: { motivation: -1, social: 1, style: 1, ritual: 1 },
     color: '#FF9800',
   },
-  // === 类型10: 跑团穿搭博主 (享受+装备+群跑+随性) ===
-  {
-    typeId: 10, name: '跑团穿搭博主', emoji: '👔',
-    roast: '每次约跑都是一场装备时装秀。别人关心今天跑几公里，你关心今天的配色主题是什么。',
+
+  // ═══ 9. ESDG | 精致漫跑者 | 体验+独狼+计划+装备 ═══
+  ESDG: {
+    typeId: 9,
+    code: 'ESDG',
+    name: '精致漫跑者',
+    emoji: '🎩',
+    keywords: ['路线先导组', '装备穿搭博主', '跑步是生活方式'],
+    roast: '路线必须有好风景、好光线、好路面。配速不重要——今天的穿搭和今天的风景配不配，才是你出门跑步的真正动力。',
     traits: [
-      '跑团合照里穿得最亮眼的那个人——荧光色、拼色、限量款',
-      '约跑你必到，不是因为想跑，是因为想看看大家今天穿了什么',
-      '跑步是社交活动，配速不重要，重要的是跑完的合影和Brunch',
+      '路线比配速重要——必须是好风景、好路面、好光线',
+      '穿搭在跑前花的时间比热身长',
+      '一个人跑，因为节奏要自己掌控',
     ],
-    advice: '发挥你的社交优势：发起「跑团穿搭挑战」主题约跑（如复古跑鞋日/荧光色日），把装备热情转化为团队出勤率。',
-    motto: '跑得快不快不重要，跑得好看是一辈子的事。',
-    dimensionScores: { motivation: 0, equipment: 1, social: 1, planning: 0 },
-    color: '#F44336',
+    dimensionScores: { motivation: 1, social: -1, style: -1, ritual: -1 },
+    color: '#9C27B0',
   },
-  // === 类型11: 精致独行侠 (享受+装备+独行+计划) ===
-  {
-    typeId: 11, name: '精致独行侠', emoji: '🎩',
-    roast: '一个人的跑步仪式感拉满：配色统一的装备、精挑细选的歌单、计划好的路线——然后享受这段只属于自己的高质量独处。',
+
+  // ═══ 10. ESDM | 修行式跑者 | 体验+独狼+计划+极简 ═══
+  ESDM: {
+    typeId: 10,
+    code: 'ESDM',
+    name: '修行式跑者',
+    emoji: '🧘',
+    keywords: ['跑步=冥想', '不说话的跑者', '规律得像钟摆'],
+    roast: '跑步是你的移动冥想时间。固定路线、固定时间、固定配速——像个钟摆，也像个禅师。朋友问你跑步时在想什么，你说「什么都没想，这就是重点」。',
     traits: [
-      '跑步是你的「私人时间」——不约人，不被打扰',
-      '装备精致但不为成绩，是为体验——这双鞋的脚感配这条路的风景正好',
-      '有计划但计划服务于体验：今天跑什么路线取决于今天想看到什么风景',
+      '跑步不是为了比赛，是为了独自思考的时间',
+      '路线固定、时间固定、距离固定——跑步是一种仪式',
+      '不需要跑步社交，跑步本身就是最好的陪伴',
     ],
-    advice: '尝试「无计划跑」——偶尔丢掉手表、不做路线规划、不配歌单，纯粹去跑。你会重新发现跑步最原始的快乐。',
-    motto: '跑步是我一天中唯一不被打扰的高质量独处。装备和路线，都是仪式感的一部分。',
-    dimensionScores: { motivation: 0, equipment: 1, social: 0, planning: 1 },
+    dimensionScores: { motivation: 1, social: -1, style: -1, ritual: 1 },
     color: '#3F51B5',
   },
-  // === 类型12: 装备颜控散步党 (享受+装备+独行+随性) ===
-  {
-    typeId: 12, name: '装备颜控散步党', emoji: '👗',
-    roast: '穿最贵的装备，跑最佛的步。配速不重要的，重要的是今天的穿搭和今天的风景配不配。',
+
+  // ═══ 11. EPDG | 装备体验师 | 体验+独狼+随性+装备 ═══
+  EPDG: {
+    typeId: 11,
+    code: 'EPDG',
+    name: '装备体验师',
+    emoji: '🔬',
+    keywords: ['开箱型跑者', '试跑三公里退货', '装备才是本体'],
+    roast: '买装备的频率是跑步频率的两倍。每双新鞋「开光」需要选一个好天气、好路线、好心情的日子——然后跑三公里，回家写测评。',
     traits: [
-      '装备的「颜值」和「脚感」同等重要，丑的装备不配出现在你的鞋柜',
-      '一个人跑，因为没有人能理解你为什么停下来拍了五分钟的树',
-      '没有训练计划，今天跑3公里还是10公里取决于沿途有多少值得拍的东西',
+      '买装备的频率是跑步频率的两倍',
+      '新鞋开光要选一个好天气、好路线、好心情的日子',
+      '「这双鞋的脚感我不喜欢」——每三双鞋有这一句',
     ],
-    advice: '用「收集城市最美跑步路线」代替「收集跑鞋配色」，用探索欲驱动跑量。每条新路线都是新的跑步动力。',
-    motto: '跑步五分钟，拍照两小时。但这五分钟我也跑了呀。',
-    dimensionScores: { motivation: 0, equipment: 1, social: 0, planning: 0 },
+    dimensionScores: { motivation: 1, social: -1, style: 1, ritual: -1 },
     color: '#E040FB',
   },
-  // === 类型13: 佛系约跑人PLUS (享受+极简+群跑+计划) ===
-  {
-    typeId: 13, name: '佛系约跑人PLUS', emoji: '🧘',
-    roast: '你对跑步的唯一KPI是「今天开心吗」。装备随便，但约跑你从不鸽——因为跑步本身不重要，重要的是和谁一起跑。',
+
+  // ═══ 12. EPDM | 自由流浪跑者 | 体验+独狼+随性+极简 ═══
+  EPDM: {
+    typeId: 12,
+    code: 'EPDM',
+    name: '自由流浪跑者',
+    emoji: '🗺️',
+    keywords: ['想跑就跑', '一双跑鞋走天下', '今天不跑明天再说'],
+    roast: '没有训练计划，没有跑步App，一双鞋走天下。跑步存在于「突然想跑」的瞬间，不在日程表上——你的闹钟就是窗外的阳光。',
     traits: [
-      '极简装备——一双入门跑鞋走天下，手表用手机代替',
-      '约跑出勤率100%，因为跑步只是载体，社交才是本体',
-      '有计划但计划的核心是「和大家一起」，不是「跑多少」',
+      '没有训练计划，甚至连跑步App都没有',
+      '但跑起来的时候比谁都享受',
+      '跑步存在于「突然想跑」的瞬间，不是日程表上',
     ],
-    advice: '建立「社交+独跑」双轨制：每周1-2次约跑满足社交需求，1次独跑培养独自出门的能力。',
-    motto: '跑不跑不重要，和谁一起跑才重要。',
-    dimensionScores: { motivation: 0, equipment: 0, social: 1, planning: 1 },
-    color: '#8BC34A',
-  },
-  // === 类型14: 真·佛系约跑人 (享受+极简+群跑+随性) ===
-  {
-    typeId: 14, name: '真·佛系约跑人', emoji: '☁️',
-    roast: '群里喊就跑，没人喊就躺，跑多跑少看心情。你对跑步的态度就像对人生——随缘。',
-    traits: [
-      '装备？有双鞋就行',
-      '计划和配速？不存在的',
-      '唯一能让你出门跑步的理由是：群里有人喊了',
-    ],
-    advice: '设定一个极低的基础目标（如每周至少跑1次，哪怕只跑3公里），降低启动门槛。跑步的价值不在跑量，在持续。',
-    motto: '跑步嘛，开心最重要。',
-    dimensionScores: { motivation: 0, equipment: 0, social: 1, planning: 0 },
-    color: '#BDBDBD',
-  },
-  // === 类型15: 禅修跑者 (享受+极简+独行+计划) ===
-  {
-    typeId: 15, name: '禅修跑者', emoji: '🧘‍♂️',
-    roast: '一双鞋、一条路、一个人。你的跑步不是运动，是移动的冥想。',
-    traits: [
-      '极简到极致——手表都不戴，跟着身体感觉跑',
-      '一个人的固定路线，享受重复中的变化（同一棵树四季不同）',
-      '有规律但规律服务于心境：每周三次，雷打不动的「精神排毒时间」',
-    ],
-    advice: '保持你的节奏，但偶尔试试新路线。新的风景会带来新的「冥想素材」。固定路线是锚，新路线是风。',
-    motto: '跑步不是逃避，是最深的存在。',
-    dimensionScores: { motivation: 0, equipment: 0, social: 0, planning: 1 },
-    color: '#607D8B',
-  },
-  // === 类型16: 城市流浪跑者 (享受+极简+独行+随性) ===
-  {
-    typeId: 16, name: '城市流浪跑者', emoji: '🗺️',
-    roast: '没有固定路线、没有配速目标、没有跑步计划。你跑步的唯一目的就是——看看今天这座城市会给你什么惊喜。',
-    traits: [
-      '一双鞋出门，跑到哪算哪，迷路了开导航回去',
-      '一个人的城市探索，每次跑不同的路，发现城市隐藏角落',
-      '完全随性，今天跑5K还是15K取决于前面的路口有没有吸引你的风景',
-    ],
-    advice: '享受你的探索模式，但建议手机充满电再出门。或者设计「环形探索路线」——跑出去和跑回来是同一条路的不同方向。',
-    motto: '每一个路口都是新的起点。',
-    dimensionScores: { motivation: 0, equipment: 0, social: 0, planning: 0 },
+    dimensionScores: { motivation: 1, social: -1, style: 1, ritual: 1 },
     color: '#795548',
   },
-];
+
+  // ═══ 13. EGDG | 跑团气氛组 | 体验+社群+计划+装备 ═══
+  EGDG: {
+    typeId: 13,
+    code: 'EGDG',
+    name: '跑团气氛组',
+    emoji: '🎉',
+    keywords: ['团服一定要好看', '加油声比脚步声响', '跑团灵魂人物'],
+    roast: '每次团练都到，配速不重要。跑团没你会安静很多——安静到跑不起来。你是跑团的精神支柱，虽然你的配速完全不是。',
+    traits: [
+      '每次团练都到，但配速不重要',
+      '热心组织队服定制、团建聚餐、赛事应援',
+      '跑团没有你会安静很多，跑不起来了',
+    ],
+    dimensionScores: { motivation: 1, social: 1, style: -1, ritual: -1 },
+    color: '#F44336',
+  },
+
+  // ═══ 14. EGDM | 社区慢跑队长 | 体验+社群+计划+极简 ═══
+  EGDM: {
+    typeId: 14,
+    code: 'EGDM',
+    name: '社区慢跑队长',
+    emoji: '🐢',
+    keywords: ['养生跑组织者', '每次跑完必合影', '享受陪跑'],
+    roast: '配速不快但每周准时出现。最擅长陪新人完成第一次5公里——装备越简单越好，这样人人都觉得自己也可以跑。你是跑步界的「入门友善大使」。',
+    traits: [
+      '跑的配速不快，但每周准时出现',
+      '最擅长陪新人完成第一次5公里',
+      '装备越简单越好，这样人人觉得自己也可以跑',
+    ],
+    dimensionScores: { motivation: 1, social: 1, style: -1, ritual: 1 },
+    color: '#8BC34A',
+  },
+
+  // ═══ 15. EPGG | 潮流跟跑员 | 体验+社群+随性+装备 ═══
+  EPGG: {
+    typeId: 15,
+    code: 'EPGG',
+    name: '潮流跟跑员',
+    emoji: '🌟',
+    keywords: ['什么流行跑什么', '跑团打卡王', '装备分享狂'],
+    roast: '跑团里什么新活动都有你的身影。你的Sunday Scaries和跑步有关：「这周末跑哪儿？」——答案是哪儿火跑哪儿。',
+    traits: [
+      '跑团里什么新活动都有你的身影',
+      '跑步装备一半是功能需求，一半是社交货币',
+      '「这周末跑哪儿？」——你的Sunday Scaries和跑步有关',
+    ],
+    dimensionScores: { motivation: 1, social: 1, style: 1, ritual: -1 },
+    color: '#FF5722',
+  },
+
+  // ═══ 16. EPGM | 快乐散步跑者 | 体验+社群+随性+极简 ═══
+  EPGM: {
+    typeId: 16,
+    code: 'EPGM',
+    name: '快乐散步跑者',
+    emoji: '☀️',
+    keywords: ['跑着玩', '聊着天就跑完了', '比赛=大型派对'],
+    roast: '跑步的终极目的是「开心」。你对跑圈所有严肃争论表示困惑——碳板还是薄底？前掌还是后跟？有差吗？开心就好。',
+    traits: [
+      '跑步的终极目的是「开心」',
+      '和不同人一起跑最开心，一个人跑容易放弃',
+      '对跑圈所有严肃争论（碳板vs薄底、前掌vs后跟）表示困惑',
+    ],
+    dimensionScores: { motivation: 1, social: 1, style: 1, ritual: 1 },
+    color: '#FFC107',
+  },
+};
+
+// ─── 导出函数 ──────────────────────────────────────
+
+/** 根据四字母编码获取人格数据 */
+export function getPersonalityByCode(code: PersonalityCode): PersonalityResult {
+  const p = personalityData[code];
+  if (!p) {
+    throw new Error(`Invalid personality code: ${code}`);
+  }
+  return p;
+}
 
 /** 根据typeId获取人格数据 */
 export function getPersonality(typeId: PersonalityTypeId): PersonalityResult {
-  const p = personalityData.find(p => p.typeId === typeId);
+  const p = Object.values(personalityData).find(p => p.typeId === typeId);
   if (!p) {
     throw new Error(`Invalid personality typeId: ${typeId}`);
   }
   return p;
 }
 
+/** 编码→typeId 映射（用于计分引擎） */
+export function codeToTypeId(code: PersonalityCode): PersonalityTypeId {
+  const p = personalityData[code];
+  if (!p) {
+    throw new Error(`Invalid personality code: ${code}`);
+  }
+  return p.typeId;
+}
+
 /** 获取所有16型人格 */
 export function getAllPersonalities(): PersonalityResult[] {
-  return personalityData;
+  // 按typeId升序排列
+  return Object.values(personalityData).sort((a, b) => a.typeId - b.typeId);
 }

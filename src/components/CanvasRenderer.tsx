@@ -138,20 +138,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
 
   curY += 10;
 
-  // 5. 实用建议
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'bold 28px "PingFang SC", "Helvetica Neue", sans-serif';
-  ctx.fillText('💡 实用建议', cardX, curY);
-  curY += 60;
-
-  ctx.fillStyle = '#555';
-  ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
-  const adviceLines = wrapText(ctx, personality.advice, cardW - 40);
-  adviceLines.forEach((line, i) => {
-    ctx.fillText(line, cardX + 10, curY + i * 38);
-  });
-
-  // 6. 传播钩子文案 + 二维码
+  // 5. 传播钩子文案 + 二维码
   const hookY = H - 280;
   ctx.fillStyle = personality.color;
   ctx.font = 'bold 30px "PingFang SC", "Helvetica Neue", sans-serif';

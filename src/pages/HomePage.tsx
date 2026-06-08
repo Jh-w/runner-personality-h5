@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTestEngine } from '../hooks/useTestEngine';
 import { getOrCreateSession } from '../hooks/useSession';
+import PrivacyLink from '../components/PrivacyLink';
 import styles from '../styles/pages/HomePage.module.css';
 
 export default function HomePage() {
@@ -72,6 +73,7 @@ export default function HomePage() {
         <button
           className={styles.startBtn}
           onClick={handleStart}
+          aria-label="开始测试"
         >
           🚀 开始测试
         </button>
@@ -80,6 +82,8 @@ export default function HomePage() {
       <footer className={styles.footer}>
         <span className={styles.brand}>跑步人格测试</span>
       </footer>
+
+      <PrivacyLink />
     </div>
   );
 }

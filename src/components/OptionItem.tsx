@@ -23,9 +23,11 @@ export const OptionItem = memo(function OptionItem({
       className={`${styles.option} ${isSelected ? styles.selected : ''}`}
       onClick={() => onSelect(id)}
       disabled={disabled}
+      role="radio"
+      aria-checked={isSelected}
       aria-label={text}
     >
-      <span className={styles.emoji}>{emoji}</span>
+      <span className={styles.emoji} aria-hidden="true">{emoji}</span>
       <span className={styles.text}>{text}</span>
     </button>
   );

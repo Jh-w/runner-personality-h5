@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTestEngine } from '../hooks/useTestEngine';
+import PrivacyLink from '../components/PrivacyLink';
 import styles from '../styles/pages/CalculatingPage.module.css';
 
 const LOADING_MESSAGES = [
+  '正在计算你的维度得分...',
+  '正在匹配你的人格类型...',
+  '正在分析你的跑步偏好...',
   '正在翻你的鞋柜...',
   '正在检查你的跑步App...',
-  '正在分析你的跑步数据...',
-  '正在翻你的比赛记录...',
-  '正在调取你的运动手表数据...',
   '正在回顾你的跑团聊天记录...',
-  '正在扫描你的购物车...',
-  '正在计算你的摸鱼几率...',
+  '正在调取你的运动手表数据...',
+  '正在生成你的专属人格卡...',
 ];
 
 export default function CalculatingPage() {
@@ -79,6 +80,8 @@ export default function CalculatingPage() {
           {LOADING_MESSAGES[messageIndex]}
         </p>
       </div>
+
+      <PrivacyLink />
     </div>
   );
 }

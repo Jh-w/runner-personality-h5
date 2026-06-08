@@ -114,3 +114,9 @@
 .cancelBtn:active {
   background: #f5f5f5;
 }
+
+.shareTextSection {
+  width: 100%;
+  padding: var(--sp-sm) 0;
+  border-top: 1px solid #f0f0f0;
+}

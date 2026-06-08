@@ -6,6 +6,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const TestPage = lazy(() => import('./pages/TestPage'));
 const CalculatingPage = lazy(() => import('./pages/CalculatingPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 
 function LoadingFallback() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/test/:qid" element={<TestPage />} />
             <Route path="/calculating" element={<CalculatingPage />} />
             <Route path="/result/:typeId" element={<ResultPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </Suspense>
       </HashRouter>

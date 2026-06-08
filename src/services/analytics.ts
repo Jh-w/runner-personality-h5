@@ -2,9 +2,9 @@
 // 生产环境接入神策SDK后替换此文件
 
 type EventName =
-  | 'page_view' | 'test_start' | 'question_view' | 'question_answer'
+  | 'page_view' | 'test_start' | 'question_view' | 'answer_select'
   | 'test_complete' | 'result_view' | 'share_click' | 'share_success'
-  | 'cta_click' | 'cta_landing' | 'test_restart' | 'error_occur';
+  | 'share_text_copy' | 'cta_click' | 'cta_landing' | 'test_restart' | 'error_occur';
 
 interface AnalyticsEvent {
   event: EventName;

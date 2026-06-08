@@ -1,0 +1,62 @@
+/* ShareText 样式 */
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--sp-xs);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--sp-xs) var(--sp-sm);
+  background: #f5f5f5;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.tabActive {
+  background: var(--brand-primary);
+  color: var(--text-white);
+  font-weight: 600;
+}
+
+.textPreview {
+  background: #f9f9f9;
+  border-radius: var(--radius-sm);
+  padding: var(--sp-sm);
+  min-height: 48px;
+}
+
+.text {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.copyBtn {
+  width: 100%;
+  padding: var(--sp-sm);
+  background: var(--brand-primary);
+  color: var(--text-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.copyBtn:active {
+  transform: scale(0.97);
+}

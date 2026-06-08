@@ -1,85 +1,93 @@
-// 计分引擎 - 4维度×2题 = 16型人格匹配
+// 计分引擎 v3.0 — PRD §5.4 累积计分规则
+// 每题 dimensionScore: ±1 (强倾向) / ±0.5 (弱倾向)
+// 每维度2题累加 → >0=右极, <0=左极, ==0 偏右极
+// 4维组合 → 16型人格匹配
 
-import type { Answer, DimensionScores, PersonalityTypeId } from './types';
+import type { Answer, Dimension, DimensionScores, PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
 import { questionDimensionMap } from './questions';
-import { getPersonality } from './personalities';
+import { getAllPersonalities, getPersonality } from './personalities';
+
+// ─── 维度符号 → 类型ID 查找表（惰性构建） ─────────────
+
+let _signToTypeId: Map<string, PersonalityTypeId> | null = null;
+
+function getSignToTypeId(): Map<string, PersonalityTypeId> {
+  if (!_signToTypeId) {
+    _signToTypeId = new Map();
+    for (const p of getAllPersonalities()) {
+      const ds = p.dimensionScores;
+      const key = signKey(ds);
+      _signToTypeId.set(key, p.typeId);
+    }
+  }
+  return _signToTypeId;
+}
+
+/** 将 DimensionScores 转为符号键 "CSPG" 等（按 [motivation][social][style][ritual]） */
+function signKey(scores: DimensionScores): string {
+  const c1 = scores.motivation < 0 ? 'C' : 'E';
+  const c2 = scores.social < 0 ? 'S' : 'G';
+  const c3 = scores.style < 0 ? 'D' : 'P';
+  const c4 = scores.ritual < 0 ? 'G' : 'M';
+  return `${c1}${c2}${c3}${c4}`;
+}
+
+// ─── 公开 API ───────────────────────────────────────
 
 /**
- * 根据8个答案计算维度得分
- * 规则：每维度2题，每题正向=1分。维度总分≥1判定为正向
+ * 根据8个答案计算维度累积得分
+ * 返回每个维度的连续累积值（可为负）
  */
 export function calculateScores(answers: Answer[]): DimensionScores {
-  const scores: Record<string, number> = {
+  const scores: Record<Dimension, number> = {
     motivation: 0,
-    equipment: 0,
     social: 0,
-    planning: 0,
+    style: 0,
+    ritual: 0,
   };
 
   for (const answer of answers) {
     const dim = questionDimensionMap[answer.questionId];
     if (dim) {
-      scores[dim] += answer.score;
+      scores[dim] += answer.dimensionScore;
     }
   }
 
-  return {
-    motivation: (scores.motivation >= 1 ? 1 : 0) as 0 | 1,
-    equipment: (scores.equipment >= 1 ? 1 : 0) as 0 | 1,
-    social: (scores.social >= 1 ? 1 : 0) as 0 | 1,
-    planning: (scores.planning >= 1 ? 1 : 0) as 0 | 1,
-  };
+  return scores as DimensionScores;
+}
+
+/**
+ * 根据维度累积得分生成四字母人格编码（框架标准编码）
+ * 规则: 维度总分 > 0 → 右极; < 0 → 左极; == 0 → 右极（兜底偏右）
+ *
+ * 编码位置（PRD §5.1 定义）:
+ *   位1 (motivation): < 0 → 'C' (竞技驱动) | ≥ 0 → 'E' (体验驱动)
+ *   位2 (social):     < 0 → 'S' (独狼)     | ≥ 0 → 'G' (社群动物)
+ *   位3 (style):      < 0 → 'D' (计划狂)   | ≥ 0 → 'P' (随性派)
+ *   位4 (ritual):     < 0 → 'G' (装备党)   | ≥ 0 → 'M' (极简派)
+ */
+export function codeFromScores(scores: DimensionScores): PersonalityCode {
+  return signKey(scores);
 }
 
 /**
  * 根据维度得分匹配人格类型ID
- * 编码规则: [动机位, 装备位, 社交位, 计划位] 作为二进制
+ * 通过维度符号直接查找，不依赖 PRD 中可能不一致的四字母编码
  */
 export function matchPersonality(scores: DimensionScores): PersonalityTypeId {
-  const bits = [
-    scores.motivation,
-    scores.equipment,
-    scores.social,
-    scores.planning,
-  ];
-
-  // 二进制转十进制: 动机×8 + 装备×4 + 社交×2 + 计划×1
-  // 但我们需要映射到 1-16
-  // 映射关系:
-  // [0,0,0,0]=0 → typeId 16  (享受+极简+独行+随性)
-  // [0,0,0,1]=1 → typeId 15  (享受+极简+独行+计划)
-  // [0,0,1,0]=2 → typeId 14  (享受+极简+群跑+随性)
-  // [0,0,1,1]=3 → typeId 13  (享受+极简+群跑+计划)
-  // [0,1,0,0]=4 → typeId 12  (享受+装备+独行+随性)
-  // [0,1,0,1]=5 → typeId 11  (享受+装备+独行+计划)
-  // [0,1,1,0]=6 → typeId 10  (享受+装备+群跑+随性)
-  // [0,1,1,1]=7 → typeId 9   (享受+装备+群跑+计划)
-  // [1,0,0,0]=8 → typeId 8   (成绩+极简+独行+随性)
-  // [1,0,0,1]=9 → typeId 7   (成绩+极简+独行+计划)
-  // [1,0,1,0]=10 → typeId 6  (成绩+极简+群跑+随性)
-  // [1,0,1,1]=11 → typeId 5  (成绩+极简+群跑+计划)
-  // [1,1,0,0]=12 → typeId 4  (成绩+装备+独行+随性)
-  // [1,1,0,1]=13 → typeId 3  (成绩+装备+独行+计划)
-  // [1,1,1,0]=14 → typeId 2  (成绩+装备+群跑+随性)
-  // [1,1,1,1]=15 → typeId 1  (成绩+装备+群跑+计划)
-
-  const decimal = bits[0] * 8 + bits[1] * 4 + bits[2] * 2 + bits[3] * 1;
-
-  // 映射: decimal → typeId
-  const mapping: Record<number, PersonalityTypeId> = {
-    0: 16,  1: 15,  2: 14,  3: 13,
-    4: 12,  5: 11,  6: 10,  7: 9,
-    8: 8,   9: 7,  10: 6,  11: 5,
-    12: 4,  13: 3,  14: 2,  15: 1,
-  };
-
-  return mapping[decimal];
+  const key = signKey(scores);
+  const map = getSignToTypeId();
+  const typeId = map.get(key);
+  if (typeId === undefined) {
+    throw new Error(`No personality matched for score signs: ${key}`);
+  }
+  return typeId;
 }
 
 /**
- * 完整计分流程: 答案 → 维度得分 → 人格类型 → 人格数据
+ * 完整计分流程: 答案 → 维度得分 → 人格编码 → 人格结果
  */
-export function calculateResult(answers: Answer[]) {
+export function calculateResult(answers: Answer[]): PersonalityResult {
   const dimensionScores = calculateScores(answers);
   const typeId = matchPersonality(dimensionScores);
   const personality = getPersonality(typeId);

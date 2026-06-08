@@ -1,110 +1,188 @@
-// 计分引擎单元测试
-import { describe, it, expect } from 'vitest';
-import { calculateScores, matchPersonality, calculateResult } from '../scoring';
-import { questions } from '../questions';
-import type { Answer, DimensionScores, PersonalityTypeId } from '../types';
+// 计分引擎单元测试 — PRD v3.0 新四维框架
+// 覆盖16种组合 + 边界零分
 
-/** 为指定人格生成标准答案（选择所有正向选项） */
-function makeAnswersForType(
-  motivation: 0 | 1,
-  equipment: 0 | 1,
-  social: 0 | 1,
-  planning: 0 | 1,
-): Answer[] {
+import { describe, it, expect } from 'vitest';
+import { calculateScores, matchPersonality, calculateResult, codeFromScores } from '../scoring';
+import { questions } from '../questions';
+import { getAllPersonalities } from '../personalities';
+import type { Answer, Dimension, DimensionScores, PersonalityTypeId } from '../types';
+
+// ─── 辅助函数 ───────────────────────────────────────
+
+/**
+ * 为指定 typeId 生成模拟答案
+ * 从人格数据中取出 dimensionScores 的符号方向，
+ * 每题选择 dimensionScore 符号匹配且绝对值最大的选项
+ */
+function makeAnswersForTypeId(typeId: PersonalityTypeId): Answer[] {
+  const personalities = getAllPersonalities();
+  const personality = personalities.find(p => p.typeId === typeId);
+  if (!personality) throw new Error(`TypeId ${typeId} not found`);
+
+  const ds = personality.dimensionScores;
+  const wantSign: Record<string, number> = {
+    motivation: ds.motivation < 0 ? -1 : 1,
+    social: ds.social < 0 ? -1 : 1,
+    style: ds.style < 0 ? -1 : 1,
+    ritual: ds.ritual < 0 ? -1 : 1,
+  };
+
   const answers: Answer[] = [];
-  const target: Record<string, number> = { motivation, equipment, social, planning };
 
   for (const q of questions) {
-    const dim = q.dimension;
-    const wantScore = target[dim]; // 0 or 1
-    // 找第一个匹配score的选项
-    const option = q.options.find(o => o.score === wantScore) || q.options[0];
+    const dim = q.dimension as Dimension;
+    const sign = wantSign[dim];
+    // 找第一个符号匹配且绝对值最大的选项
+    let best = q.options[0];
+    for (const opt of q.options) {
+      const currSign = Math.sign(opt.dimensionScore);
+      const bestSign = Math.sign(best.dimensionScore);
+      if (currSign === sign && (bestSign !== sign || Math.abs(opt.dimensionScore) > Math.abs(best.dimensionScore))) {
+        best = opt;
+      }
+    }
     answers.push({
       questionId: q.id,
-      optionId: option.id,
-      score: option.score,
+      optionId: best.id,
+      dimensionScore: best.dimensionScore,
     });
   }
+
   return answers;
 }
 
+// ─── calculateScores 测试 ───────────────────────────
+
 describe('calculateScores', () => {
-  it('全正向 → 全部维度得1', () => {
-    const answers = makeAnswersForType(1, 1, 1, 1);
+  it('typeId 1 (赛道卷王) → 4维皆负', () => {
+    const answers = makeAnswersForTypeId(1);
     const scores = calculateScores(answers);
-    expect(scores).toEqual({ motivation: 1, equipment: 1, social: 1, planning: 1 });
+    expect(scores.motivation).toBeLessThan(0);
+    expect(scores.social).toBeLessThan(0);
+    expect(scores.style).toBeLessThan(0);
+    expect(scores.ritual).toBeLessThan(0);
   });
 
-  it('全反向 → 全部维度得0', () => {
-    const answers = makeAnswersForType(0, 0, 0, 0);
+  it('typeId 16 (快乐散步跑者) → 4维皆正', () => {
+    const answers = makeAnswersForTypeId(16);
     const scores = calculateScores(answers);
-    expect(scores).toEqual({ motivation: 0, equipment: 0, social: 0, planning: 0 });
+    expect(scores.motivation).toBeGreaterThan(0);
+    expect(scores.social).toBeGreaterThan(0);
+    expect(scores.style).toBeGreaterThan(0);
+    expect(scores.ritual).toBeGreaterThan(0);
   });
 
-  it('动机正向+装备正向+社交反向+计划反向', () => {
-    const answers = makeAnswersForType(1, 1, 0, 0);
+  it('混合编码至少得分为非零值', () => {
+    const answers = makeAnswersForTypeId(1);
     const scores = calculateScores(answers);
-    expect(scores).toEqual({ motivation: 1, equipment: 1, social: 0, planning: 0 });
-  });
-
-  it('动机反向+装备反向+社交正向+计划正向', () => {
-    const answers = makeAnswersForType(0, 0, 1, 1);
-    const scores = calculateScores(answers);
-    expect(scores).toEqual({ motivation: 0, equipment: 0, social: 1, planning: 1 });
+    expect(scores.motivation).not.toBe(0);
+    expect(scores.social).not.toBe(0);
+    expect(scores.style).not.toBe(0);
+    expect(scores.ritual).not.toBe(0);
   });
 });
 
-describe('matchPersonality', () => {
-  // 16种人格匹配测试
-  const cases: [PersonalityTypeId, DimensionScores, string][] = [
-    [1,  { motivation: 1, equipment: 1, social: 1, planning: 1 }, '赛道卷王'],
-    [2,  { motivation: 1, equipment: 1, social: 1, planning: 0 }, 'PB特种兵'],
-    [3,  { motivation: 1, equipment: 1, social: 0, planning: 1 }, '竞速社交达人'],
-    [4,  { motivation: 1, equipment: 1, social: 0, planning: 0 }, '装备理财产品经理'],
-    [5,  { motivation: 1, equipment: 0, social: 1, planning: 1 }, '跑圈政委'],
-    [6,  { motivation: 1, equipment: 0, social: 1, planning: 0 }, '气氛组卷王'],
-    [7,  { motivation: 1, equipment: 0, social: 0, planning: 1 }, '沉默破风者'],
-    [8,  { motivation: 1, equipment: 0, social: 0, planning: 0 }, '天赋型选手'],
-    [9,  { motivation: 0, equipment: 1, social: 1, planning: 1 }, '跑步气氛组'],
-    [10, { motivation: 0, equipment: 1, social: 1, planning: 0 }, '跑团穿搭博主'],
-    [11, { motivation: 0, equipment: 1, social: 0, planning: 1 }, '精致独行侠'],
-    [12, { motivation: 0, equipment: 1, social: 0, planning: 0 }, '装备颜控散步党'],
-    [13, { motivation: 0, equipment: 0, social: 1, planning: 1 }, '佛系约跑人PLUS'],
-    [14, { motivation: 0, equipment: 0, social: 1, planning: 0 }, '真·佛系约跑人'],
-    [15, { motivation: 0, equipment: 0, social: 0, planning: 1 }, '禅修跑者'],
-    [16, { motivation: 0, equipment: 0, social: 0, planning: 0 }, '城市流浪跑者'],
-  ];
+// ─── codeFromScores 测试 ────────────────────────────
 
-  cases.forEach(([typeId, scores, name]) => {
-    it(`[${scores.motivation}${scores.equipment}${scores.social}${scores.planning}] → ${name} (类型${typeId})`, () => {
-      expect(matchPersonality(scores)).toBe(typeId);
+describe('codeFromScores', () => {
+  it('全负 → CSDG', () => {
+    const scores: DimensionScores = { motivation: -2, social: -2, style: -2, ritual: -2 };
+    expect(codeFromScores(scores)).toBe('CSDG');
+  });
+
+  it('全正（框架编码）→ EGPM', () => {
+    // 框架标准编码: motivation=E, social=G, style=P, ritual=M → "EGPM"
+    // 注：PRD §6.3 中对应类型编码为 "EPGM"，但该表中的编码位置2-3与框架定义不一致。
+    // 本函數严格遵循 PRD §5.1 的编码定义。
+    const scores: DimensionScores = { motivation: 2, social: 2, style: 2, ritual: 2 };
+    expect(codeFromScores(scores)).toBe('EGPM');
+  });
+
+  it('零分兜底偏右 → EGPM', () => {
+    const scores: DimensionScores = { motivation: 0, social: 0, style: 0, ritual: 0 };
+    expect(codeFromScores(scores)).toBe('EGPM');
+  });
+
+  it('边界: motivation = +0.5 (刚好>0) → E', () => {
+    const scores: DimensionScores = { motivation: 0.5, social: -1, style: -1, ritual: -1 };
+    expect(codeFromScores(scores)[0]).toBe('E');
+  });
+
+  it('边界: motivation = -0.5 (刚好<0) → C', () => {
+    const scores: DimensionScores = { motivation: -0.5, social: -1, style: -1, ritual: -1 };
+    expect(codeFromScores(scores)[0]).toBe('C');
+  });
+
+  it('social: 0 → G (社群)', () => {
+    const scores: DimensionScores = { motivation: -1, social: 0, style: -1, ritual: -1 };
+    expect(codeFromScores(scores)).toBe('CGDG');
+  });
+
+  it('style: 0 → P (随性)', () => {
+    const scores: DimensionScores = { motivation: -1, social: -1, style: 0, ritual: -1 };
+    expect(codeFromScores(scores)).toBe('CSPG');
+  });
+
+  it('ritual: 0 → M (极简)', () => {
+    const scores: DimensionScores = { motivation: -1, social: -1, style: -1, ritual: 0 };
+    expect(codeFromScores(scores)).toBe('CSDM');
+  });
+});
+
+// ─── matchPersonality 测试 — 16种全量覆盖 ───────────
+
+describe('matchPersonality', () => {
+  const personalities = getAllPersonalities();
+
+  personalities.forEach((personality) => {
+    it(`typeId ${personality.typeId}: ${personality.name} (${personality.code})`, () => {
+      const answers = makeAnswersForTypeId(personality.typeId);
+      const scores = calculateScores(answers);
+      const matched = matchPersonality(scores);
+      expect(matched).toBe(personality.typeId);
     });
   });
 });
 
+// ─── calculateResult 测试 ────────────────────────────
+
 describe('calculateResult', () => {
-  it('全正向答案 → 赛道卷王 (类型1)', () => {
-    const answers = makeAnswersForType(1, 1, 1, 1);
+  it('typeId 1 → 赛道卷王', () => {
+    const answers = makeAnswersForTypeId(1);
     const result = calculateResult(answers);
     expect(result.typeId).toBe(1);
     expect(result.name).toBe('赛道卷王');
-    expect(result.dimensionScores).toEqual({ motivation: 1, equipment: 1, social: 1, planning: 1 });
+    expect(result.code).toBe('CSDG');
+    expect(result.keywords).toHaveLength(3);
+    expect(result.keywords).toContain('数据狂魔');
   });
 
-  it('全反向答案 → 城市流浪跑者 (类型16)', () => {
-    const answers = makeAnswersForType(0, 0, 0, 0);
+  it('typeId 16 → 快乐散步跑者', () => {
+    const answers = makeAnswersForTypeId(16);
     const result = calculateResult(answers);
     expect(result.typeId).toBe(16);
-    expect(result.name).toBe('城市流浪跑者');
+    expect(result.name).toBe('快乐散步跑者');
+    expect(result.code).toBe('EPGM');
   });
 
-  it('返回的人格数据完整（有name/roast/traits/advice/color）', () => {
-    const answers = makeAnswersForType(1, 1, 1, 1);
+  it('返回的人格数据完整（新字段：code/keywords）', () => {
+    const answers = makeAnswersForTypeId(1);
     const result = calculateResult(answers);
     expect(result.name).toBeTruthy();
+    expect(result.code).toBeTruthy();
     expect(result.roast).toBeTruthy();
     expect(result.traits).toHaveLength(3);
-    expect(result.advice).toBeTruthy();
+    expect(result.keywords).toHaveLength(3);
+    expect(result.emoji).toBeTruthy();
     expect(result.color).toMatch(/^#/);
+    expect(result.dimensionScores.motivation).toBeLessThan(0);
+  });
+
+  it('typeId 10 → 修行式跑者', () => {
+    const answers = makeAnswersForTypeId(10);
+    const result = calculateResult(answers);
+    expect(result.typeId).toBe(10);
+    expect(result.name).toBe('修行式跑者');
+    expect(result.code).toBe('ESDM');
   });
 });

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTestEngine } from '../hooks/useTestEngine';
 import { QuestionCard } from '../components/QuestionCard';
 import { ProgressIndicator } from '../components/ProgressIndicator';
+import PrivacyLink from '../components/PrivacyLink';
 import { questions } from '../engine/questions';
 import type { Option } from '../engine/types';
 import styles from '../styles/pages/TestPage.module.css';
@@ -78,7 +79,7 @@ export default function TestPage() {
 
     // After 0.3s highlight, move to next question
     transitionTimer.current = setTimeout(() => {
-      selectAnswer(questionIndex, optionId, option.score);
+      selectAnswer(questionIndex, optionId, option.dimensionScore);
 
       // Check if this was the last question (index 7 = Q8)
       if (questionIndex >= 7) {
@@ -123,6 +124,8 @@ export default function TestPage() {
           onSelect={handleSelect}
         />
       </div>
+
+      <PrivacyLink />
     </div>
   );
 }

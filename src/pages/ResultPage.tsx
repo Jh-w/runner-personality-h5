@@ -1,11 +1,15 @@
 // ResultPage - 跑步人格测试结果页
+// PRD §7.1 信息层级: 人格名称→关键词→吐槽→特征→分享按钮→公众号引导→再测+隐私
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPersonality } from '../engine/personalities';
 import { useTestEngine } from '../hooks/useTestEngine';
 import CanvasRenderer, { renderShareCard } from '../components/CanvasRenderer';
 import ShareSheet from '../components/ShareSheet';
+import KeywordTags from '../components/KeywordTags';
+import PrivacyLink from '../components/PrivacyLink';
 import { useToast } from '../components/Toast';
+import wechatQrPlaceholder from '../assets/wechat-qr-placeholder.png';
 import type { PersonalityTypeId, PersonalityResult } from '../engine/types';
 import styles from '../styles/pages/ResultPage.module.css';
 
@@ -99,14 +103,17 @@ export default function ResultPage() {
         <h1 className={styles.heroName}>{personality.name}</h1>
       </div>
 
-      {/* 2. 吐槽区 */}
+      {/* 2. 关键词标签 */}
+      <KeywordTags keywords={personality.keywords} color={color} />
+
+      {/* 3. 吐槽区 */}
       <div className={styles.roastCard}>
         <div className={styles.roastQuote}>
           「{personality.roast}」
         </div>
       </div>
 
-      {/* 3. 核心特征 */}
+      {/* 4. 核心特征 */}
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>核心特征</h2>
         <ol className={styles.traitList}>
@@ -119,22 +126,17 @@ export default function ResultPage() {
         </ol>
       </div>
 
-      {/* 4. 实用建议 */}
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>💡 实用建议</h2>
-        <p className={styles.adviceText}>{personality.advice}</p>
-      </div>
-
       {/* 5. 操作按钮 */}
       <div className={styles.actions}>
         <button
           className={`btn-primary ${styles.shareBtn}`}
           onClick={handleShare}
           disabled={imageError}
+          aria-label="生成分享图片"
         >
           📤 生成我的跑步人格分享给跑友
         </button>
-        <button className="btn-secondary" onClick={handleRetry}>
+        <button className="btn-secondary" onClick={handleRetry} aria-label="再测一次">
           🔄 再测一次
         </button>
       </div>
@@ -148,7 +150,13 @@ export default function ResultPage() {
           获取完整16型解读 + 跑者专属内容
         </p>
         <div className={styles.wechatQrPlaceholder}>
-          [公众号二维码]
+          <img
+            src={wechatQrPlaceholder}
+            alt="关注跑步人格测试公众号"
+            width={160}
+            height={160}
+            style={{ borderRadius: 12, display: 'block' }}
+          />
         </div>
         <p className={styles.wechatHint}>👆 长按识别关注</p>
       </div>
@@ -157,11 +165,14 @@ export default function ResultPage() {
       <ShareSheet
         visible={shareVisible}
         imageUrl={imageUrl}
+        personality={personality}
         onClose={() => setShareVisible(false)}
       />
 
       {/* Toast 容器 */}
       <ToastContainer />
+
+      <PrivacyLink />
     </div>
   );
 }

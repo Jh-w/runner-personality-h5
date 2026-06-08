@@ -1,22 +1,25 @@
 // 跑步人格测试 - 核心类型定义
-// 版本: v1.0
+// 版本: v3.0 — PRD v3.0 新四维框架
+
+// ─── 维度与编码 ──────────────────────────────────────
 
 /** 四个维度 */
-export type Dimension = 'motivation' | 'equipment' | 'social' | 'planning';
+export type Dimension = 'motivation' | 'social' | 'style' | 'ritual';
 
-/** 维度方向 */
-export type MotivationDirection = '成绩驱动' | '享受过程';
-export type EquipmentDirection = '装备党' | '极简派';
-export type SocialDirection = '群跑派' | '独行侠';
-export type PlanningDirection = '计划控' | '随性派';
+/** 四字母人格编码 (C/E × S/G × D/P × G/M) */
+export type PersonalityCode = string; // e.g. "CSDG", "EPGM"
 
-/** 维度得分 */
+// ─── 维度得分 ─────────────────────────────────────────
+
+/** 维度累积得分（可为负值，来自每题 dimensionScore 累加） */
 export interface DimensionScores {
-  motivation: 0 | 1;  // 0=享受过程, 1=成绩驱动
-  equipment: 0 | 1;   // 0=极简派, 1=装备党
-  social: 0 | 1;      // 0=独行侠, 1=群跑派
-  planning: 0 | 1;    // 0=随性派, 1=计划控
+  motivation: number; // >0=体验驱动E, <0=竞技驱动C
+  social: number;     // >0=社群动物G, <0=独狼S
+  style: number;      // >0=随性派P,   <0=计划狂D
+  ritual: number;     // >0=极简派M,   <0=装备党G
 }
+
+// ─── 人格 ────────────────────────────────────────────
 
 /** 人格类型ID (1-16) */
 export type PersonalityTypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
@@ -24,22 +27,24 @@ export type PersonalityTypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 /** 人格结果 */
 export interface PersonalityResult {
   typeId: PersonalityTypeId;
+  code: PersonalityCode;          // 四字母编码
   name: string;
   emoji: string;
-  roast: string;
-  traits: [string, string, string];
-  advice: string;
-  motto: string;
+  keywords: [string, string, string]; // 3个关键词
+  roast: string;                      // 一句话吐槽
+  traits: [string, string, string];   // 3条特征
   dimensionScores: DimensionScores;
   color: string;
 }
 
+// ─── 题目与选项 ───────────────────────────────────────
+
 /** 选项 */
 export interface Option {
-  id: string;       // A/B/C/D
-  text: string;     // 选项文案
-  emoji: string;    // emoji图标
-  score: 0 | 1;     // 该维度正向得分 (1=正向, 0=反向)
+  id: string;              // A/B/C/D
+  text: string;            // 选项文案
+  emoji: string;           // emoji图标
+  dimensionScore: number;  // 该维度得分: ±1 (强倾向) / ±0.5 (弱倾向)
 }
 
 /** 题目 */
@@ -50,12 +55,17 @@ export interface Question {
   options: Option[];
 }
 
+// ─── 答案与状态 ──────────────────────────────────────
+
 /** 答案 */
 export interface Answer {
   questionId: number;
   optionId: string;
-  score: number;
+  dimensionScore: number;
 }
+
+/** 答题阶段 */
+export type TestPhase = 'idle' | 'testing' | 'calculating' | 'completed';
 
 /** Session数据 */
 export interface SessionData {
@@ -72,9 +82,6 @@ export interface RandomizedQuestion {
 }
 
 /** 答题状态 */
-export type TestPhase = 'idle' | 'testing' | 'calculating' | 'completed';
-
-/** 答题状态 */
 export interface TestState {
   sessionId: string;
   currentQuestionIndex: number;
@@ -87,7 +94,17 @@ export interface TestState {
 /** 答题动作 */
 export type TestAction =
   | { type: 'START_TEST'; session: SessionData }
-  | { type: 'SELECT_ANSWER'; questionIndex: number; optionId: string; score: number }
+  | { type: 'SELECT_ANSWER'; questionIndex: number; optionId: string; dimensionScore: number }
   | { type: 'COMPLETE_TEST' }
   | { type: 'SET_RESULT'; result: PersonalityResult }
-  | { type: 'RESET' };
+  | { type: 'RESET' }
+  | { type: 'RESTORE_PROGRESS'; progress: SavedProgress };
+
+/** localStorage 持久化的答题进度 */
+export interface SavedProgress {
+  sessionId: string;
+  currentQuestionIndex: number;
+  answers: Record<number, Answer>;
+  randomizedOptions: RandomizedQuestion[];
+  savedAt: number;
+}

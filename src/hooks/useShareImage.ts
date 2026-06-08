@@ -141,20 +141,7 @@ async function renderShareImage(personality: PersonalityResult): Promise<Blob> {
     });
   });
 
-  // 5. 实用建议
-  const adviceY = traitStartY + personality.traits.length * 80 * scale;
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = `bold ${26 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
-  ctx.fillText('💡 实用建议', 60 * scale, adviceY);
-
-  ctx.fillStyle = '#555';
-  ctx.font = `${22 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
-  const adviceLines = wrapText(ctx, personality.advice, roastWidth - 80 * scale);
-  adviceLines.forEach((line, i) => {
-    ctx.fillText(line, 70 * scale, adviceY + 50 * scale + i * 34 * scale);
-  });
-
-  // 6. 钩子文案
+  // 5. 钩子文案
   const hookY = CANVAS_HEIGHT - 200 * scale;
   ctx.fillStyle = personality.color;
   ctx.font = `bold ${28 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;

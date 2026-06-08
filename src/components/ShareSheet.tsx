@@ -1,16 +1,19 @@
 // ShareSheet - 底部弹窗分享组件
 import { useEffect, useRef } from 'react';
+import type { PersonalityResult } from '../engine/types';
+import ShareText from './ShareText';
 import styles from '../styles/components/ShareSheet.module.css';
 import { showToast } from './Toast';
 
 interface ShareSheetProps {
   visible: boolean;
   imageUrl: string | null;
+  personality: PersonalityResult;
   onClose: () => void;
   shareUrl?: string;
 }
 
-export default function ShareSheet({ visible, imageUrl, onClose, shareUrl }: ShareSheetProps) {
+export default function ShareSheet({ visible, imageUrl, personality, onClose, shareUrl }: ShareSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
 
   // 点击遮罩关闭
@@ -22,7 +25,6 @@ export default function ShareSheet({ visible, imageUrl, onClose, shareUrl }: Sha
   const handleSaveImage = async () => {
     if (!imageUrl) return;
     try {
-      // 尝试使用 Web Share API（支持文件分享的浏览器）
       const blob = await fetch(imageUrl).then(r => r.blob());
       const file = new File([blob], 'running-personality.jpg', { type: 'image/jpeg' });
 
@@ -30,7 +32,6 @@ export default function ShareSheet({ visible, imageUrl, onClose, shareUrl }: Sha
         await navigator.share({ files: [file], title: '我的跑步人格' });
         showToast('已保存到相册');
       } else {
-        // fallback: 下载
         const link = document.createElement('a');
         link.href = imageUrl;
         link.download = 'running-personality.jpg';
@@ -40,9 +41,7 @@ export default function ShareSheet({ visible, imageUrl, onClose, shareUrl }: Sha
         showToast('图片已保存');
       }
     } catch (err) {
-      // 用户取消分享不算错误
       if (err instanceof Error && err.name !== 'AbortError') {
-        // fallback download
         const link = document.createElement('a');
         link.href = imageUrl;
         link.download = 'running-personality.jpg';
@@ -94,18 +93,23 @@ export default function ShareSheet({ visible, imageUrl, onClose, shareUrl }: Sha
         )}
 
         <div className={styles.actions}>
-          <button className={styles.actionBtn} onClick={handleSaveImage}>
+          <button className={styles.actionBtn} onClick={handleSaveImage} aria-label="保存图片到相册">
             <span className={styles.actionIcon}>📥</span>
             <span className={styles.actionLabel}>保存图片到相册</span>
           </button>
 
-          <button className={styles.actionBtn} onClick={handleCopyLink}>
+          <button className={styles.actionBtn} onClick={handleCopyLink} aria-label="复制链接">
             <span className={styles.actionIcon}>🔗</span>
             <span className={styles.actionLabel}>复制链接</span>
           </button>
         </div>
 
-        <button className={styles.cancelBtn} onClick={onClose}>
+        {/* 分享文案复制 */}
+        <div className={styles.shareTextSection}>
+          <ShareText personality={personality} />
+        </div>
+
+        <button className={styles.cancelBtn} onClick={onClose} aria-label="取消">
           取消
         </button>
       </div>

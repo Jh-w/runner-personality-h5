@@ -21,7 +21,7 @@ export const QuestionCard = memo(function QuestionCard({
   onSelect,
 }: QuestionCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} role="radiogroup" aria-label={`第${questionNumber}题`}>
       <div className={styles.questionNum}>Q{questionNumber}</div>
       <h2 className={styles.question}>{questionText}</h2>
       <div className={styles.options}>

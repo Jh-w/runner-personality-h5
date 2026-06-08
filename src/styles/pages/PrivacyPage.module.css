@@ -1,0 +1,99 @@
+/* PrivacyPage 样式 - 简洁文字页面，移动端适配 */
+.page {
+  padding: 0;
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.card {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--sp-xl) var(--sp-lg);
+  padding-bottom: 60px; /* 给底部固定链接留空间 */
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-xs);
+  line-height: 1.3;
+}
+
+.updateDate {
+  font-size: var(--fs-caption);
+  color: var(--text-light);
+  margin-bottom: var(--sp-xl);
+}
+
+.section {
+  margin-bottom: var(--sp-lg);
+}
+
+.section h2 {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-sm);
+  line-height: 1.5;
+}
+
+.section p {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--sp-xs);
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-xs) 0;
+}
+
+.section li {
+  position: relative;
+  padding-left: var(--sp-md);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--sp-xs);
+}
+
+.section li::before {
+  content: '•';
+  position: absolute;
+  left: 4px;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.section li strong {
+  color: var(--text-primary);
+}
+
+.notice {
+  background: #FFF3E0;
+  border-left: 3px solid #FF9800;
+  padding: var(--sp-sm);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: var(--fs-small) !important;
+  color: #E65100 !important;
+  margin-top: var(--sp-sm) !important;
+}
+
+.footer {
+  text-align: center;
+  font-size: var(--fs-caption);
+  color: var(--text-light);
+  margin-top: var(--sp-xl);
+  padding-top: var(--sp-lg);
+  border-top: 1px solid #eee;
+}
+
+/* 响应式微调 - 大屏增加内边距 */
+@media (min-width: 480px) {
+  .card {
+    padding: var(--sp-xl) 32px;
+  }
+}
