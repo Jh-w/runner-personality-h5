@@ -1,4 +1,4 @@
-// 16种跑步人格完整数据 — PRD v3.0 §6.2 + v3.1 Phase1 (quote + colorDark)
+// 16种跑步人格完整数据 — PRD v3.3-Phase3 (svgIcon)
 // 按四维编码排序: CSDG → EPGM
 
 import type { PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
@@ -22,6 +22,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#FF4444',
     quote: '我不和别人比，我只和昨天的自己比——然后发现昨天的自己真菜。',
     colorDark: '#CC2222',
+    svgIcon: 'CSDG',
   },
 
   // ═══ 2. CSDM | 沉默破风者 | 竞技+独狼+计划+极简 ═══
@@ -41,6 +42,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#607D8B',
     quote: '不说话，不打卡，不解释。只是在你没看见的时候，又跑了一个全马。',
     colorDark: '#37474F',
+    svgIcon: 'CSDM',
   },
 
   // ═══ 3. CPDG | 装备型冲刺怪 | 竞技+独狼+随性+装备 ═══
@@ -60,6 +62,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#FF6B35',
     quote: '鞋墙比我的人生规划还整齐，间歇跑比我的情绪还稳定。',
     colorDark: '#CC4400',
+    svgIcon: 'CPDG',
   },
 
   // ═══ 4. CPDM | 野生竞速者 | 竞技+独狼+随性+极简 ═══
@@ -79,6 +82,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#4CAF50',
     quote: '赛前不练，赛中不乱，赛后不酸——别问，问就是天赋。',
     colorDark: '#2E7D32',
+    svgIcon: 'CPDM',
   },
 
   // ═══ 5. CGDG | 跑团结算官 | 竞技+社群+计划+装备 ═══
@@ -98,6 +102,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#2196F3',
     quote: '跑团的数据中心，配速的警察叔叔，团费的财务总监。',
     colorDark: '#0D47A1',
+    svgIcon: 'CGDG',
   },
 
   // ═══ 6. CGDM | 团练教官 | 竞技+社群+计划+极简 ═══
@@ -117,6 +122,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#00BCD4',
     quote: '课表就是课表，风雨无阻。拉爆你不是目的，是被迫的。',
     colorDark: '#006064',
+    svgIcon: 'CGDM',
   },
 
   // ═══ 7. CPGG | 社交竞速家 | 竞技+社群+随性+装备 ═══
@@ -136,6 +142,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#E91E63',
     quote: '装备是通行证，比赛是社交场，PB 是顺便的事。',
     colorDark: '#AD1457',
+    svgIcon: 'CPGG',
   },
 
   // ═══ 8. CPGM | 佛系跟跑王 | 竞技+社群+随性+极简 ═══
@@ -155,6 +162,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#FF9800',
     quote: '一个人不跑，一群人跑开心。PB 不重要，重要的是跑完去哪吃。',
     colorDark: '#E65100',
+    svgIcon: 'CPGM',
   },
 
   // ═══ 9. ESDG | 精致漫跑者 | 体验+独狼+计划+装备 ═══
@@ -174,6 +182,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#9C27B0',
     quote: '配速可以慢，但穿搭必须在线。今天的光线和今天的鞋，必须配。',
     colorDark: '#6A1B9A',
+    svgIcon: 'ESDG',
   },
 
   // ═══ 10. ESDM | 修行式跑者 | 体验+独狼+计划+极简 ═══
@@ -193,6 +202,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#3F51B5',
     quote: '固定的路线，固定的时间，固定的自己。跑步是我的移动冥想室。',
     colorDark: '#1A237E',
+    svgIcon: 'ESDM',
   },
 
   // ═══ 11. EPDG | 装备体验师 | 体验+独狼+随性+装备 ═══
@@ -212,6 +222,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#E040FB',
     quote: '买的装备比跑的路多，但每一双都试过——试了三公里。',
     colorDark: '#7B1FA2',
+    svgIcon: 'EPDG',
   },
 
   // ═══ 12. EPDM | 自由流浪跑者 | 体验+独狼+随性+极简 ═══
@@ -231,6 +242,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#795548',
     quote: '没有计划，没有 App，没有目标。但有风，有路，有自由。',
     colorDark: '#4E342E',
+    svgIcon: 'EPDM',
   },
 
   // ═══ 13. EGDG | 跑团气氛组 | 体验+社群+计划+装备 ═══
@@ -250,6 +262,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#F44336',
     quote: '跑步不重要，重要的是跑团里有你。没你，他们跑不起来。',
     colorDark: '#B71C1C',
+    svgIcon: 'EGDG',
   },
 
   // ═══ 14. EGDM | 社区慢跑队长 | 体验+社群+计划+极简 ═══
@@ -269,6 +282,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#8BC34A',
     quote: '配速不快，但从不缺席。最成功的 PB，是陪新人跑完第一个五公里。',
     colorDark: '#558B2F',
+    svgIcon: 'EGDM',
   },
 
   // ═══ 15. EPGG | 潮流跟跑员 | 体验+社群+随性+装备 ═══
@@ -288,6 +302,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#FF5722',
     quote: '什么火跑什么，哪热闹去哪。跑圈潮流的风向标，跑团朋友圈的封面。',
     colorDark: '#BF360C',
+    svgIcon: 'EPGG',
   },
 
   // ═══ 16. EPGM | 快乐散步跑者 | 体验+社群+随性+极简 ═══
@@ -307,6 +322,7 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     color: '#FFC107',
     quote: '碳板还是薄底？前掌还是后跟？——有差吗？开心就好。',
     colorDark: '#FF8F00',
+    svgIcon: 'EPGM',
   },
 };
 

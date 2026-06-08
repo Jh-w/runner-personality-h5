@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#FF9800;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#bg)" rx="16"/>
+  <!-- Running Shoe Base -->
+  <g transform="translate(48,72)">
+    <ellipse cx="80" cy="80" rx="72" ry="28" fill="none" stroke="#FF9800" stroke-width="2.5"/>
+    <path d="M8,80 Q8,52 32,52 L120,52 Q140,52 146,60 L152,72 L152,80 Z" fill="#FF9800" fill-opacity="0.2" stroke="#FF9800" stroke-width="2.5"/>
+    <path d="M146,60 Q152,50 156,44 L156,28 Q156,20 152,20 L138,20 Q130,20 130,28 L130,44" fill="none" stroke="#FF9800" stroke-width="2.5"/>
+    <line x1="32" y1="52" x2="32" y2="80" stroke="#FF9800" stroke-width="2.5"/>
+    <path d="M110,20 Q120,12 130,20 Q140,12 150,20" fill="none" stroke="#FF9800" stroke-width="2"/><path d="M108,28 Q120,18 132,28 Q144,18 152,28" fill="none" stroke="#FF9800" stroke-width="1.5"/><ellipse cx="130" cy="12" rx="6" ry="4" fill="#FF9800" opacity="0.5"/>
+  </g>
+</svg>

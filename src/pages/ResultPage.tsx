@@ -1,5 +1,6 @@
 // ResultPage - 跑步人格测试结果页
 // PRD §7.1 信息层级 + Phase 2 入场动画、雷达图、粒子效果
+// Phase 3: PK Banner + PK CTA + PK URL生成
 
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,16 +14,21 @@ import KeywordTags from '../components/KeywordTags';
 import PrivacyLink from '../components/PrivacyLink';
 import RadarChart from '../components/RadarChart';
 import ParticleBackground from '../components/ParticleBackground';
+import PkCard from '../components/PkCard';
+import { renderPkCard } from '../components/PkCanvasRenderer';
 import { useToast } from '../components/Toast';
 import { useEntranceAnimation } from '../hooks/useEntranceAnimation';
 import wechatQrPlaceholder from '../assets/wechat-qr-placeholder.png';
-import type { PersonalityTypeId, PersonalityResult } from '../engine/types';
+import { calculatePkResult } from '../engine/pkMatching';
+import { getStoredPkParams, clearPkParams, generatePkUrl } from '../utils/pkUrlParams';
+import type { PersonalityTypeId, PersonalityResult, PkResult } from '../engine/types';
+import type { PersonalityCode } from '../engine/types';
 import styles from '../styles/pages/ResultPage.module.css';
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const { typeId: typeIdParam } = useParams<{ typeId: string }>();
-  const { reset } = useTestEngine();
+  const { state, reset } = useTestEngine();
   const { ToastContainer } = useToast();
 
   const [shareVisible, setShareVisible] = useState(false);
@@ -30,6 +36,12 @@ export default function ResultPage() {
   const [, setImageGenerating] = useState(false);
   const [imageError, setImageError] = useState(false);
   const generatingRef = useRef(false);
+
+  // Phase 3: PK 状态
+  const [pkResult, setPkResult] = useState<PkResult | null>(null);
+  const [pkCardBlob, setPkCardBlob] = useState<Blob | null>(null);
+  const [pkPreviewVisible, setPkPreviewVisible] = useState(false);
+  const pkProcessedRef = useRef(false);
 
   // 从 URL path param 获取 typeId
   const typeId = Number(typeIdParam) as PersonalityTypeId;
@@ -41,6 +53,25 @@ export default function ResultPage() {
       return null;
     }
   }, [typeId]);
+
+  // Phase 3: 检测 PK 参数并计算匹配度
+  useMemo(() => {
+    if (!personality || pkProcessedRef.current) return;
+    const pkParams = getStoredPkParams();
+    if (!pkParams) return;
+
+    pkProcessedRef.current = true;
+    const result = calculatePkResult(pkParams.pk as PersonalityCode, personality.code as PersonalityCode);
+    if (result) {
+      setPkResult(result);
+      // 后台预生成 PK 卡片
+      renderPkCard(result).then(blob => {
+        setPkCardBlob(blob);
+      }).catch(() => { /* ignore */ });
+    }
+    // 清除 sessionStorage（仅使用一次）
+    clearPkParams();
+  }, [personality]);
 
   // CanvasRenderer 预生成回调
   const handleCanvasGenerated = useCallback((blob: Blob) => {
@@ -54,7 +85,6 @@ export default function ResultPage() {
     if (!personality) return;
     setShareVisible(true);
 
-    // 如果没有预生成，强制生成
     if (!imageBlob && !generatingRef.current) {
       generatingRef.current = true;
       setImageGenerating(true);
@@ -71,6 +101,58 @@ export default function ResultPage() {
     }
   }, [personality, imageBlob]);
 
+  // Phase 3: 「和好友 PK」CTA — 生成链接并复制
+  const handlePkShare = useCallback(async () => {
+    if (!personality || !state.sessionId) return;
+    const url = generatePkUrl(personality.code, state.sessionId);
+    try {
+      await navigator.clipboard.writeText(url);
+      // Use global toast
+      const Toast = (await import('../components/Toast')).showToast;
+      Toast('PK链接已复制！发给好友来测吧');
+    } catch {
+      // fallback
+      const Toast = (await import('../components/Toast')).showToast;
+      Toast('PK链接已生成，请手动复制分享');
+    }
+  }, [personality, state.sessionId]);
+
+  // Phase 3: 查看PK完整卡片
+  const handleViewPkCard = useCallback(() => {
+    setPkPreviewVisible(true);
+  }, []);
+
+  // Phase 3: 保存PK卡片
+  const handleSavePkImage = useCallback(async () => {
+    if (!pkCardBlob) return;
+    const url = URL.createObjectURL(pkCardBlob);
+    try {
+      const blob = await fetch(url).then(r => r.blob());
+      const file = new File([blob], 'running-pk.jpg', { type: 'image/jpeg' });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: '跑步人格PK' });
+      } else {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'running-pk.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+      const Toast = (await import('../components/Toast')).showToast;
+      Toast('PK卡片已保存');
+    } catch {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'running-pk.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }, [pkCardBlob]);
+
   // 再测一次
   const handleRetry = useCallback(() => {
     reset();
@@ -79,6 +161,7 @@ export default function ResultPage() {
 
   // 图片 URL
   const imageUrl = imageBlob ? URL.createObjectURL(imageBlob) : null;
+  const pkImageUrl = pkCardBlob ? URL.createObjectURL(pkCardBlob) : null;
 
   // ─── 入场动画 Hook ─────────────────────────────────
 
@@ -124,6 +207,15 @@ export default function ResultPage() {
       {/* 隐藏 Canvas 预生成器 */}
       <CanvasRenderer personality={personality} onGenerated={handleCanvasGenerated} />
 
+      {/* Phase 3: PK Banner（如果有pkResult）*/}
+      {pkResult && (
+        <PkCard
+          pkResult={pkResult}
+          onViewFullCard={handleViewPkCard}
+          onSaveImage={handleSavePkImage}
+        />
+      )}
+
       {/* 1. Hero Card：背景展开 + Emoji + 名称 + 金句 */}
       <div
         className={`${styles.hero} ${heroVisible ? styles.heroExpanded : ''}`}
@@ -157,7 +249,7 @@ export default function ResultPage() {
         </div>
       </div>
 
-      {/* 3.5 Phase 2 模块三：四维雷达图（在 Roast 与 Buddy 之间） */}
+      {/* 3.5 Phase 2 模块三：四维雷达图 */}
       {radarVisible && (
         <RadarChart
           dimensionScores={personality.dimensionScores}
@@ -172,7 +264,15 @@ export default function ResultPage() {
         <BestBuddy bestBuddy={bestBuddy} userColor={color} />
       )}
 
-      {/* 5. 核心特征 - stagger slideLeft */}
+      {/* Phase 3: 「和好友 PK」CTA */}
+      {!pkResult && buddyVisible && (
+        <div className={styles.pkCta} onClick={handlePkShare}>
+          <div className={styles.pkCtaText}>⚔️ 和好友 PK，看谁是「天选跑搭子」</div>
+          <div className={styles.pkCtaSub}>生成你们的专属对比卡片 →</div>
+        </div>
+      )}
+
+      {/* 5. 核心特征 */}
       <div className={`${styles.section} ${trait0 ? styles.visible : styles.entranceModule}`}>
         <h2 className={styles.sectionTitle}>核心特征</h2>
         <ol className={styles.traitList}>
@@ -236,6 +336,18 @@ export default function ResultPage() {
         personality={personality}
         onClose={() => setShareVisible(false)}
       />
+
+      {/* Phase 3: PK 卡片全屏预览 */}
+      {pkPreviewVisible && pkImageUrl && (
+        <div className={styles.pkPreview} onClick={() => setPkPreviewVisible(false)}>
+          <button className={styles.pkCloseBtn} onClick={() => setPkPreviewVisible(false)}>✕</button>
+          <img src={pkImageUrl} alt="PK对比卡片" className={styles.pkPreviewImg} />
+          <div className={styles.pkPreviewActions}>
+            <button className="btn-primary" onClick={handleSavePkImage}>💾 保存到相册</button>
+            <button className="btn-secondary" onClick={() => setPkPreviewVisible(false)}>关闭</button>
+          </div>
+        </div>
+      )}
 
       {/* Toast 容器 */}
       <ToastContainer />

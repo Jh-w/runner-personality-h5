@@ -1,5 +1,5 @@
 // 答题状态机 - 通过 React Context 跨页面共享状态
-// v3.0 AC-10: localStorage 持久化答题进度，支持断点续答
+// v3.3-Phase3: 12题模式 + localStorage版本兼容检测
 import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react';
 import type { TestState, SessionData } from '../engine/types';
 import { calculateResult } from '../engine/scoring';
@@ -24,7 +24,7 @@ let globalLastClick = 0;
 export function TestEngineProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(testReducer, INITIAL_STATE);
 
-  // AC-10: 页面加载时尝试恢复答题进度
+  // AC-10: 页面加载时尝试恢复答题进度（带版本检测）
   useEffect(() => {
     const saved = loadProgress();
     if (saved && saved.sessionId && Object.keys(saved.answers).length > 0) {
@@ -50,7 +50,8 @@ export function TestEngineProvider({ children }: { children: ReactNode }) {
 
   const setResult = useCallback(() => {
     const answersArray = Object.values(state.answers);
-    if (answersArray.length < 8) return;
+    // v3.3: 12题模式
+    if (answersArray.length < 12) return;
     const result = calculateResult(answersArray);
     dispatch({ type: 'SET_RESULT', result });
   }, [state.answers]);

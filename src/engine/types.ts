@@ -1,5 +1,5 @@
 // 跑步人格测试 - 核心类型定义
-// 版本: v3.0 — PRD v3.0 新四维框架
+// 版本: v3.3-Phase3 — PRD v3.3 新四维框架 + PK + SVG
 
 // ─── 维度与编码 ──────────────────────────────────────
 
@@ -38,6 +38,7 @@ export interface PersonalityResult {
   quote: string;                      // 跑者金句（v3.1 Phase1）
   colorDark?: string;                 // 深色变体，用于渐变（v3.1 Phase1）
   bestBuddy?: BestBuddy;              // 最佳跑团搭档（v3.1 Phase1）
+  svgIcon: string;                    // SVG 图标文件名（v3.3 Phase3）
 }
 
 // ─── 最佳搭档（v3.1 Phase1）─────────────────────────────
@@ -117,9 +118,41 @@ export type TestAction =
 
 /** localStorage 持久化的答题进度 */
 export interface SavedProgress {
+  version: number;           // v3.3: 版本号=3，用于兼容检测
   sessionId: string;
   currentQuestionIndex: number;
   answers: Record<number, Answer>;
   randomizedOptions: RandomizedQuestion[];
   savedAt: number;
 }
+
+// ─── PK 对比卡片（v3.3 Phase3）─────────────────────────
+
+/** 维度对比信息 */
+export interface DimensionComparison {
+  dimension: 'motivation' | 'social' | 'style' | 'ritual';
+  typeA: string;
+  typeB: string;
+  isComplementary: boolean;
+  label: string;
+}
+
+/** PK 评级 1-5 */
+export type PkRating = 1 | 2 | 3 | 4 | 5;
+
+/** PK 对比结果 */
+export interface PkResult {
+  codeA: PersonalityCode;
+  codeB: PersonalityCode;
+  nameA: string;
+  nameB: string;
+  matchPercentage: number;
+  complementCount: number;
+  rating: PkRating;
+  judgment: string;
+  description: string;
+  dimensionComparisons: DimensionComparison[];
+}
+
+/** 当前数据版本号 */
+export const CURRENT_VERSION = 3;

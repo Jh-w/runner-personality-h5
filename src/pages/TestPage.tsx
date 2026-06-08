@@ -18,6 +18,9 @@ export default function TestPage() {
   const [selectPhase, setSelectPhase] = useState<SelectPhase>('idle');
   const selectTimer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const selectTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Phase 3: 中段激励提示
+  const [showHalfwayHint, setShowHalfwayHint] = useState(false);
+  const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Guard: redirect if not in testing phase
   useEffect(() => {
@@ -53,6 +56,7 @@ export default function TestPage() {
     return () => {
       if (selectTimer1.current) clearTimeout(selectTimer1.current);
       if (selectTimer2.current) clearTimeout(selectTimer2.current);
+      if (hintTimer.current) clearTimeout(hintTimer.current);
     };
   }, []);
 
@@ -92,8 +96,14 @@ export default function TestPage() {
       setSelectPhase('stable');
       selectAnswer(questionIndex, optionId, option.dimensionScore);
 
-      // Check if this was the last question (index 7 = Q8)
-      if (questionIndex >= 7) {
+      // Phase 3: 中段激励提示（第6题=index 5 答完时）
+      if (questionIndex === 5) {
+        setShowHalfwayHint(true);
+        hintTimer.current = setTimeout(() => setShowHalfwayHint(false), 2000);
+      }
+
+      // Check if this was the last question (index 11 = Q12)
+      if (questionIndex >= 11) {
         navigate('/calculating');
       }
     }, 250);
@@ -110,11 +120,18 @@ export default function TestPage() {
   return (
     <div className={`page ${styles.page}`}>
       <RunwayProgress
-        total={8}
+        total={12}
         current={questionIndex}
         answered={answeredCount}
         color="#FF6B35"
       />
+
+      {/* Phase 3: 中段激励提示 */}
+      {showHalfwayHint && (
+        <div className={styles.halfwayHint}>
+          <span>🏃‍♂️ 已过半！凭直觉继续 →</span>
+        </div>
+      )}
 
       <div className={styles.cardWrapper} key={questionIndex}>
         <QuestionCard

@@ -94,6 +94,57 @@ describe('saveProgress / loadProgress', () => {
     expect(store[PROGRESS_KEY]).toBeUndefined();
   });
 
+  it('loadProgress discards old progress without version field', () => {
+    const oldProgress = {
+      sessionId: 'rp_old',
+      currentQuestionIndex: 3,
+      answers: { 0: { questionId: 1, optionId: 'A', dimensionScore: 1 } },
+      randomizedOptions: [],
+      savedAt: Date.now(),
+    };
+    store[PROGRESS_KEY] = JSON.stringify(oldProgress);
+    const result = loadProgress();
+    expect(result).toBeNull();
+    // Should clean up
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith(PROGRESS_KEY);
+  });
+
+  it('loadProgress discards progress with old version (v2)', () => {
+    const oldProgress = {
+      version: 2,
+      sessionId: 'rp_old_v2',
+      currentQuestionIndex: 3,
+      answers: { 0: { questionId: 1, optionId: 'A', dimensionScore: 1 } },
+      randomizedOptions: [],
+      savedAt: Date.now(),
+    };
+    store[PROGRESS_KEY] = JSON.stringify(oldProgress);
+    const result = loadProgress();
+    expect(result).toBeNull();
+  });
+
+  it('loadProgress keeps progress with current version (v3)', () => {
+    const currentProgress = {
+      version: 3,
+      sessionId: 'rp_current_v3',
+      currentQuestionIndex: 5,
+      answers: { 0: { questionId: 1, optionId: 'A', dimensionScore: 1 } },
+      randomizedOptions: [],
+      savedAt: Date.now(),
+    };
+    store[PROGRESS_KEY] = JSON.stringify(currentProgress);
+    const result = loadProgress();
+    expect(result).not.toBeNull();
+    expect(result!.sessionId).toBe('rp_current_v3');
+  });
+
+  it('saveProgress writes version field', () => {
+    const state = makeTestState();
+    saveProgress(state);
+    const raw = JSON.parse(store[PROGRESS_KEY]);
+    expect(raw.version).toBe(3);
+  });
+
   it('does NOT save when phase is completed', () => {
     const state = makeTestState({ phase: 'completed' });
     saveProgress(state);
@@ -153,11 +204,12 @@ describe('testReducer', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockResult: any = {
-      typeId: 5, code: 'SPMI', name: '竞速狂飙', emoji: '🏃',
-      keywords: ['速度', '竞技', '激情'] as [string, string, string],
-      roast: '跑这么快赶着去哪', traits: ['配速党', 'PB控', '赛霸'] as [string, string, string],
-      dimensionScores: { solo: 1, style: 1, distance: 1, surface: 0, climate: -1, ritual: 0, social: -1 },
-      color: '#E74C3C',
+      typeId: 5, code: 'CGDG', name: '跑团结算官', emoji: '🧮',
+      keywords: ['数据', '规则', '装备'] as [string, string, string],
+      roast: '最强大脑', traits: ['配速党', 'PB控', '赛霸'] as [string, string, string],
+      dimensionScores: { motivation: -1, social: 1, style: -1, ritual: -1 },
+      color: '#2196F3',
+      svgIcon: 'CGDG',
     };
 
     const state = testReducer(makeTestState(), {
@@ -191,18 +243,22 @@ describe('testReducer', () => {
     expect(result).toBe(idle); // Same reference — no change
   });
 
-  it('SELECT_ANSWER transitions to calculating on last question (index 7)', () => {
-    const state = makeTestState({ currentQuestionIndex: 7, answers: {
+  it('SELECT_ANSWER transitions to calculating on last question (index 11)', () => {
+    const state = makeTestState({ currentQuestionIndex: 11, answers: {
       0: { questionId: 1, optionId: 'A', dimensionScore: 1 },
-      1: { questionId: 2, optionId: 'B', dimensionScore: 0 },
+      1: { questionId: 2, optionId: 'B', dimensionScore: 0.5 },
       2: { questionId: 3, optionId: 'A', dimensionScore: 1 },
       3: { questionId: 4, optionId: 'C', dimensionScore: -1 },
       4: { questionId: 5, optionId: 'D', dimensionScore: 1 },
-      5: { questionId: 6, optionId: 'A', dimensionScore: 0 },
+      5: { questionId: 6, optionId: 'A', dimensionScore: 0.5 },
       6: { questionId: 7, optionId: 'B', dimensionScore: 1 },
+      7: { questionId: 8, optionId: 'C', dimensionScore: -1 },
+      8: { questionId: 9, optionId: 'D', dimensionScore: 1 },
+      9: { questionId: 10, optionId: 'A', dimensionScore: 0.5 },
+      10: { questionId: 11, optionId: 'B', dimensionScore: 1 },
     }});
-    const result = testReducer(state, { type: 'SELECT_ANSWER', questionIndex: 7, optionId: 'C', dimensionScore: -1 });
+    const result = testReducer(state, { type: 'SELECT_ANSWER', questionIndex: 11, optionId: 'C', dimensionScore: -1 });
     expect(result.phase).toBe('calculating');
-    expect(Object.keys(result.answers)).toHaveLength(8);
+    expect(Object.keys(result.answers)).toHaveLength(12);
   });
 });

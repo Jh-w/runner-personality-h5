@@ -1,9 +1,12 @@
-// CanvasRenderer — Phase 1 满幅高饱和渐变分享卡片 (1080×1440)
+// CanvasRenderer — Phase 1+3 满幅高饱和渐变分享卡片 (1080×1440)
+// Phase 3: SVG drawImage + emoji fallback
 // 组件不渲染 DOM，仅提供 generateImage() 并在挂载时预生成
 import { useEffect, useRef, useCallback } from 'react';
 import QRCode from 'qrcode';
 import type { PersonalityResult, BestBuddy } from '../engine/types';
+import type { PersonalityCode } from '../engine/types';
 import { getPersonality } from '../engine/personalities';
+import { loadPersonalitySvgImg } from '../utils/svgLoader';
 
 interface CanvasRendererProps {
   personality: PersonalityResult;
@@ -91,22 +94,36 @@ function drawBackground(ctx: CanvasRenderingContext2D, color: string, colorDark:
   ctx.fillRect(0, 0, W, H);
 }
 
-// ---------- Emoji 绘制 ----------
+// ---------- 人格图标绘制（Phase 3: SVG 优先）----------
 
-function drawEmoji(ctx: CanvasRenderingContext2D, emoji: string, y: number): number {
-  const fontSize = 150;
-  ctx.textAlign = 'center';
-  ctx.font = `${fontSize}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+async function drawPersonalityIcon(
+  ctx: CanvasRenderingContext2D,
+  code: PersonalityCode,
+  emoji: string,
+  x: number,
+  y: number,
+  size: number,
+): Promise<void> {
+  const img = await loadPersonalitySvgImg(code);
 
-  // 底部发光阴影
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.3)';
-  ctx.shadowBlur = 32;
-  ctx.shadowOffsetY = 8;
-  ctx.fillText(emoji, W / 2, y);
-  ctx.restore();
-
-  return fontSize;
+  if (img) {
+    // SVG 绘制 + 底部弥散光效
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,255,255,0.3)';
+    ctx.shadowBlur = 32;
+    ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+    ctx.restore();
+  } else {
+    // Emoji fallback
+    ctx.textAlign = 'center';
+    ctx.font = `${size * 0.83}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+    ctx.shadowBlur = 32;
+    ctx.shadowOffsetY = 8;
+    ctx.fillText(emoji, x, y + size * 0.35);
+    ctx.restore();
+  }
 }
 
 // ---------- 金句绘制 ----------
@@ -221,10 +238,11 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   // ═══ 1. 背景 ═══
   drawBackground(ctx, color, colorDark);
 
-  // ═══ 2. Emoji ═══
+  // ═══ 2. 人格图标（Phase 3: SVG 优先）═══
   let curY = 250;
-  drawEmoji(ctx, personality.emoji, curY);
-  curY += 170; // emoji visual height + gap
+  const iconSize = 180;
+  await drawPersonalityIcon(ctx, personality.code as PersonalityCode, personality.emoji, W / 2, curY + iconSize / 2, iconSize);
+  curY += iconSize + 20;
 
   // ═══ 3. 人格名 ═══
   ctx.textAlign = 'center';
@@ -253,12 +271,11 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   }
 
   // ═══ 7. CTA 引导语 ═══
-  // 确保底部有足够空间放 CTA + QR + 品牌
   const brandY = 1400;
   const qrSize = 200;
   const qrPadding = 16;
   const qrSubstrateSize = qrSize + qrPadding * 2;
-  const minQrTop = brandY - qrSubstrateSize - 80 - 60; // brand - QR area - CTA area
+  const minQrTop = brandY - qrSubstrateSize - 80 - 60;
 
   if (curY > minQrTop) {
     curY = minQrTop;
@@ -292,7 +309,6 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
     const qrY = qrSubstrateY + qrPadding;
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
   } catch {
-    // 二维码生成失败时绘制占位框
     ctx.strokeStyle = '#CCCCCC';
     ctx.lineWidth = 2;
     ctx.strokeRect(qrSubstrateX + qrPadding, qrSubstrateY + qrPadding, qrSize, qrSize);
@@ -318,7 +334,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   });
 }
 
-// ---------- 搭档卡片辅助函数（完整绘制：先测量再绘制）----------
+// ---------- 搭档卡片辅助函数 ----------
 
 function drawBuddyCardFull(
   ctx: CanvasRenderingContext2D,
@@ -336,7 +352,7 @@ function drawBuddyCardFull(
   let estY = 0;
 
   // 标题
-  estY += 50; // 标题行
+  estY += 50;
 
   // 搭档 emoji + name 行
   estY += 80;

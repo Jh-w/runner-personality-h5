@@ -1,6 +1,6 @@
-// 8道测试题数据 — PRD v3.0 §5.3
-// 新四维框架: motivation(1-2) / social(3-4) / style(5-6) / ritual(7-8)
-// 每题4选项，dimensionScore: ±1 (强倾向) / ±0.5 (弱倾向)
+// 12道测试题数据 — PRD v3.3-Phase3
+// 新四维框架: motivation(1-3) / social(3-6) / style(5-8) / ritual(7-12)
+// 每维度3题(2正向 + 1反向验证)，每题4选项，dimensionScore: ±1 (强倾向) / ±0.5 (弱倾向)
 
 import type { Question, Dimension } from './types';
 
@@ -108,16 +108,72 @@ export const questions: Question[] = [
       { id: 'D', emoji: '🗺️', text: '找个角落坐着研究明天的赛道地图', dimensionScore: 0.5 },
     ],
   },
+
+  // ═══ Q9 | 维度: motivation（反向验证）| 泛运动场景 ═══
+  {
+    id: 9,
+    text: '朋友约你周末一起参加一个你从没试过的运动（比如飞盘/骑行），但你原计划那天要跑一个配速训练，你会？',
+    dimension: 'motivation',
+    options: [
+      { id: 'A', emoji: '🌟', text: '果断改计划！新体验比配速重要多了', dimensionScore: 1 },
+      { id: 'B', emoji: '🤔', text: '先跑完训练，结束后再赶去参加', dimensionScore: -0.5 },
+      { id: 'C', emoji: '📅', text: '把配速训练调到前一天，两不误', dimensionScore: -0.5 },
+      { id: 'D', emoji: '🏃', text: '婉拒朋友，训练计划不能打乱', dimensionScore: -1 },
+    ],
+  },
+
+  // ═══ Q10 | 维度: social（反向验证）| 泛社交场景 ═══
+  {
+    id: 10,
+    text: '你独自完成了一次特别满意的跑步后，你的第一反应是？',
+    dimension: 'social',
+    options: [
+      { id: 'A', emoji: '📱', text: '立刻拍照/截图发跑团群/朋友圈分享', dimensionScore: 1 },
+      { id: 'B', emoji: '📝', text: '记录在私人日记/App里，自己留着看', dimensionScore: -0.5 },
+      { id: 'C', emoji: '💭', text: '在心里回味一下，继续做下一件事', dimensionScore: -0.5 },
+      { id: 'D', emoji: '🤫', text: '什么都不说，跑完就完了，有什么好说的', dimensionScore: -1 },
+    ],
+  },
+
+  // ═══ Q11 | 维度: style（反向验证）| 泛出行场景 ═══
+  {
+    id: 11,
+    text: '你要出门旅行三天，你会怎么处理跑步这件事？',
+    dimension: 'style',
+    options: [
+      { id: 'A', emoji: '📋', text: '提前查好酒店附近的跑步路线，每天跑多少都规划好了', dimensionScore: -1 },
+      { id: 'B', emoji: '🎒', text: '带一双跑鞋，有机会就跑，没有就拉倒', dimensionScore: 0.5 },
+      { id: 'C', emoji: '🗓️', text: '看看行程有没有空档，有的话跑个短距离', dimensionScore: -0.5 },
+      { id: 'D', emoji: '🏖️', text: '旅行就是旅行，跑步的事回家再说', dimensionScore: 1 },
+    ],
+  },
+
+  // ═══ Q12 | 维度: ritual（反向验证）| 泛消费场景 ═══
+  {
+    id: 12,
+    text: '你打算买一双新跑鞋，你的选鞋过程最接近？',
+    dimension: 'ritual',
+    options: [
+      { id: 'A', emoji: '🧪', text: '至少看 5 篇测评+对比视频，参数列 Excel 对比后才下单', dimensionScore: -1 },
+      { id: 'B', emoji: '👀', text: '去店里试穿，哪双舒服买哪双', dimensionScore: 0.5 },
+      { id: 'C', emoji: '💬', text: '问跑团里最懂鞋的人推荐，直接跟单', dimensionScore: -0.5 },
+      { id: 'D', emoji: '🛒', text: '随便买一双顺眼的，够用就行', dimensionScore: 1 },
+    ],
+  },
 ];
 
 /** 题号→维度映射 */
 export const questionDimensionMap: Record<number, Dimension> = {
   1: 'motivation',
   2: 'motivation',
+  9: 'motivation',
   3: 'social',
   4: 'social',
+  10: 'social',
   5: 'style',
   6: 'style',
+  11: 'style',
   7: 'ritual',
   8: 'ritual',
+  12: 'ritual',
 };
