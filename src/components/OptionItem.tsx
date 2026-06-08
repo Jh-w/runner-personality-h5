@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import styles from '../styles/components/OptionItem.module.css';
 
+export type SelectPhase = 'idle' | 'selecting' | 'bouncing' | 'stable';
+
 interface OptionItemProps {
   id: string;
   emoji: string;
@@ -8,6 +10,7 @@ interface OptionItemProps {
   isSelected: boolean;
   disabled: boolean;
   onSelect: (optionId: string) => void;
+  selectPhase?: SelectPhase;
 }
 
 export const OptionItem = memo(function OptionItem({
@@ -17,10 +20,27 @@ export const OptionItem = memo(function OptionItem({
   isSelected,
   disabled,
   onSelect,
+  selectPhase = 'idle',
 }: OptionItemProps) {
+  // 构建 className
+  let className = styles.option;
+
+  if (isSelected) {
+    if (selectPhase === 'selecting') {
+      className += ` ${styles.selecting}`;
+    } else if (selectPhase === 'bouncing') {
+      className += ` ${styles.selecting} ${styles.bouncing}`;
+    } else if (selectPhase === 'stable') {
+      className += ` ${styles.selectedStable}`;
+    }
+  } else if (selectPhase !== 'idle') {
+    // 未选中项淡化
+    className += ` ${styles.dimmed}`;
+  }
+
   return (
     <button
-      className={`${styles.option} ${isSelected ? styles.selected : ''}`}
+      className={className}
       onClick={() => onSelect(id)}
       disabled={disabled}
       role="radio"

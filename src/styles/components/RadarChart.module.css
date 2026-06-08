@@ -1,0 +1,82 @@
+/* RadarChart.module.css - 四维雷达图卡片样式 */
+/* Phase 2 模块三 */
+
+.radarCard {
+  background: var(--bg-card, #ffffff);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 16px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.radarTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.radarCanvas {
+  display: block;
+  margin: 0 auto;
+}
+
+/* 维度表格 */
+.dimensionTable {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dimensionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dimensionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dimName {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  min-width: 40px;
+}
+
+.poleLabel {
+  font-size: 12px;
+  color: #bbb;
+  transition: color 300ms ease;
+}
+
+.poleLabel.activePole {
+  color: var(--text-primary, #1a1a2e);
+  font-weight: 600;
+}
+
+/* 进度条 */
+.dimensionBar {
+  height: 6px;
+  border-radius: 3px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.dimensionBarFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 600ms ease-out 400ms;
+  min-width: 0;
+}
+
+.dimensionPercent {
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+}

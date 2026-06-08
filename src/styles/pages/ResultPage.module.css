@@ -1,4 +1,4 @@
-/* ResultPage 样式 */
+/* ResultPage 样式 — Phase 2 入场动画增强 */
 .page {
   padding: 0;
   min-height: 100vh;
@@ -7,9 +7,24 @@
   align-items: center;
   gap: 0;
   overflow-x: hidden;
+  position: relative;
 }
 
-/* 顶部英雄区 */
+/* ─── 入场动画：统一初始隐藏态 ─────────────────────── */
+
+.entranceModule {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 350ms ease-out, transform 350ms ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Hero Card 背景展开 ──────────────────────────── */
+
 .hero {
   width: 100%;
   display: flex;
@@ -17,23 +32,51 @@
   align-items: center;
   padding: 48px var(--sp-lg) 36px;
   color: var(--text-white);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.hero.heroExpanded {
+  max-height: 500px;
+}
+
+/* ─── Hero Emoji：弹性缩放 ──────────────────────────── */
 
 .heroEmoji {
   font-size: 64px;
   line-height: 1;
   margin-bottom: var(--sp-sm);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 300ms ease-out,
+              transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.heroName {
+.heroEmoji.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── Hero 名称：fade + slide-up ───────────────────── */
+
+.heroNameModule {
   font-size: 28px;
   font-weight: 800;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
 }
 
-/* 吐槽卡片 */
+.heroNameModule.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── 吐槽卡片 ────────────────────────────────────── */
+
 .roastCard {
   width: calc(100% - 32px);
   margin: -16px auto 0;
@@ -54,7 +97,8 @@
   border-left: 3px solid var(--brand-primary);
 }
 
-/* 通用区块 */
+/* ─── 通用区块 ────────────────────────────────────── */
+
 .section {
   width: calc(100% - 32px);
   margin: var(--sp-md) auto 0;
@@ -71,7 +115,8 @@
   margin-bottom: var(--sp-sm);
 }
 
-/* 特征列表 */
+/* ─── 特征列表 ────────────────────────────────────── */
+
 .traitList {
   list-style: none;
   padding: 0;
@@ -94,14 +139,8 @@
   margin-top: 2px;
 }
 
-/* 建议文字 */
-.adviceText {
-  font-size: var(--fs-body);
-  color: var(--text-secondary);
-  line-height: 1.8;
-}
+/* ─── 按钮区 ──────────────────────────────────────── */
 
-/* 按钮区 */
 .actions {
   width: calc(100% - 32px);
   margin: var(--sp-lg) auto 0;
@@ -114,7 +153,8 @@
   font-size: var(--fs-body);
 }
 
-/* 公众号关注引导 */
+/* ─── 公众号关注引导 ────────────────────────────────── */
+
 .wechatCard {
   margin: 28px 20px 40px;
   padding: 24px 20px;
@@ -151,7 +191,8 @@
   margin: 0;
 }
 
-/* 跑者金句（v3.1 Phase1） */
+/* ─── 跑者金句（v3.1 Phase1） ────────────────────────── */
+
 .quoteSection {
   font-style: italic;
   font-size: 16px;
@@ -160,9 +201,16 @@
   padding: 24px 28px;
   text-align: center;
   letter-spacing: 0.3px;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
 }
 
-/* 最佳搭档区块（v3.1 Phase1） */
+.quoteSection.visible {
+  opacity: 1;
+}
+
+/* ─── 最佳搭档区块（v3.1 Phase1） ────────────────────── */
+
 .buddySection {
   width: calc(100% - 32px);
   margin: 32px auto 0;
@@ -235,7 +283,8 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* 错误状态 */
+/* ─── 错误状态 ────────────────────────────────────── */
+
 .error {
   display: flex;
   flex-direction: column;
@@ -252,12 +301,54 @@
   max-width: 240px;
 }
 
-/* 响应式微调 */
+/* ─── 响应式微调 ──────────────────────────────────── */
+
 @media (min-width: 480px) {
   .hero {
     padding: 56px var(--sp-xl) 40px;
   }
-  .heroName {
+  .hero.heroExpanded {
+    max-height: 560px;
+  }
+  .heroNameModule {
     font-size: 32px;
+  }
+}
+
+/* ─── prefers-reduced-motion：所有动画跳过 ───────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .entranceModule {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero {
+    max-height: none;
+    transition: none;
+  }
+
+  .heroEmoji {
+    opacity: 1;
+    transform: scale(1);
+    transition: none;
+  }
+
+  .heroNameModule {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .quoteSection {
+    opacity: 1;
+    transition: none;
+  }
+
+  .visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

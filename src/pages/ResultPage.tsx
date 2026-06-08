@@ -1,5 +1,6 @@
 // ResultPage - 跑步人格测试结果页
-// PRD §7.1 信息层级: 人格名称→关键词→吐槽→特征→分享按钮→公众号引导→再测+隐私
+// PRD §7.1 信息层级 + Phase 2 入场动画、雷达图、粒子效果
+
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPersonalityByTypeId } from '../engine/personalities';
@@ -10,7 +11,10 @@ import { findBestBuddy } from '../engine/buddyMatching';
 import ShareSheet from '../components/ShareSheet';
 import KeywordTags from '../components/KeywordTags';
 import PrivacyLink from '../components/PrivacyLink';
+import RadarChart from '../components/RadarChart';
+import ParticleBackground from '../components/ParticleBackground';
 import { useToast } from '../components/Toast';
+import { useEntranceAnimation } from '../hooks/useEntranceAnimation';
 import wechatQrPlaceholder from '../assets/wechat-qr-placeholder.png';
 import type { PersonalityTypeId, PersonalityResult } from '../engine/types';
 import styles from '../styles/pages/ResultPage.module.css';
@@ -73,8 +77,24 @@ export default function ResultPage() {
     navigate('/');
   }, [reset, navigate]);
 
-  // 图片 URL（用于预览）
+  // 图片 URL
   const imageUrl = imageBlob ? URL.createObjectURL(imageBlob) : null;
+
+  // ─── 入场动画 Hook ─────────────────────────────────
+
+  const heroVisible = useEntranceAnimation(200);
+  const emojiVisible = useEntranceAnimation(300);
+  const nameVisible = useEntranceAnimation(500);
+  const quoteVisible = useEntranceAnimation(600);
+  const tagVisible = useEntranceAnimation(700);
+  const roastVisible = useEntranceAnimation(950);
+  const radarVisible = useEntranceAnimation(1100);
+  const buddyVisible = useEntranceAnimation(1350);
+  const trait0 = useEntranceAnimation(1600);
+  const trait1 = useEntranceAnimation(1750);
+  const trait2 = useEntranceAnimation(1900);
+  const actionsVisible = useEntranceAnimation(2000);
+  const wechatVisible = useEntranceAnimation(2100);
 
   if (!personality) {
     return (
@@ -94,51 +114,85 @@ export default function ResultPage() {
   // 最佳搭档（v3.1 Phase1）
   const bestBuddy = useMemo(() => findBestBuddy(personality.code), [personality.code]);
 
-
   return (
     <div className={`page ${styles.page}`} style={{
       background: `linear-gradient(180deg, ${color}18 0%, ${color}06 40%, #f8f9fa 100%)`,
     }}>
+      {/* Phase 2 模块五：背景粒子 */}
+      <ParticleBackground color={color} />
+
       {/* 隐藏 Canvas 预生成器 */}
       <CanvasRenderer personality={personality} onGenerated={handleCanvasGenerated} />
 
-      {/* 1. 顶部：Emoji + 名称 */}
-      <div className={styles.hero} style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}>
-        <span className={styles.heroEmoji}>{personality.emoji}</span>
-        <h1 className={styles.heroName}>{personality.name}</h1>
+      {/* 1. Hero Card：背景展开 + Emoji + 名称 + 金句 */}
+      <div
+        className={`${styles.hero} ${heroVisible ? styles.heroExpanded : ''}`}
+        style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}
+      >
+        <span className={`${styles.heroEmoji} ${emojiVisible ? styles.visible : ''}`}>
+          {personality.emoji}
+        </span>
+        <h1 className={`${styles.heroNameModule} ${nameVisible ? styles.visible : ''}`}>
+          {personality.name}
+        </h1>
         {personality.quote && (
-          <p className={styles.quoteSection}>「{personality.quote}」</p>
+          <p className={`${styles.quoteSection} ${quoteVisible ? styles.visible : ''}`}>
+            「{personality.quote}」
+          </p>
         )}
       </div>
 
       {/* 2. 关键词标签 */}
-      <KeywordTags keywords={personality.keywords} color={color} />
+      <div
+        className={tagVisible ? styles.visible : styles.entranceModule}
+        style={{ width: 'calc(100% - 32px)', margin: '0 auto' }}
+      >
+        <KeywordTags keywords={personality.keywords} color={color} />
+      </div>
 
       {/* 3. 吐槽区 */}
-      <div className={styles.roastCard}>
+      <div className={`${styles.roastCard} ${roastVisible ? styles.visible : styles.entranceModule}`}>
         <div className={styles.roastQuote}>
           「{personality.roast}」
         </div>
       </div>
 
-      {/* 3.5 最佳跑团搭档（v3.1 Phase1） */}
-      {bestBuddy && <BestBuddy bestBuddy={bestBuddy} userColor={color} />}
+      {/* 3.5 Phase 2 模块三：四维雷达图（在 Roast 与 Buddy 之间） */}
+      {radarVisible && (
+        <RadarChart
+          dimensionScores={personality.dimensionScores}
+          color={color}
+          animate={true}
+          visible={radarVisible}
+        />
+      )}
 
-      {/* 4. 核心特征 */}
-      <div className={styles.section}>
+      {/* 4. 最佳跑团搭档（v3.1 Phase1） */}
+      {bestBuddy && buddyVisible && (
+        <BestBuddy bestBuddy={bestBuddy} userColor={color} />
+      )}
+
+      {/* 5. 核心特征 - stagger slideLeft */}
+      <div className={`${styles.section} ${trait0 ? styles.visible : styles.entranceModule}`}>
         <h2 className={styles.sectionTitle}>核心特征</h2>
         <ol className={styles.traitList}>
-          {personality.traits.map((trait, i) => (
-            <li key={i} className={styles.traitItem}>
-              <span className={styles.traitIcon}>📌</span>
-              <span>{trait}</span>
-            </li>
-          ))}
+          {personality.traits.map((trait, i) => {
+            const traitVisible = i === 0 ? trait0 : i === 1 ? trait1 : trait2;
+            return (
+              <li
+                key={i}
+                className={`${styles.traitItem} ${traitVisible ? styles.visible : styles.entranceModule}`}
+              >
+                <span className={styles.traitIcon}>📌</span>
+                <span>{trait}</span>
+              </li>
+            );
+          })}
         </ol>
       </div>
 
-      {/* 5. 操作按钮 */}
-      <div className={styles.actions}>
+      {/* 6. 操作按钮 */}
+      <div className={`${styles.actions} ${actionsVisible ? styles.visible : styles.entranceModule}`}>
         <button
           className={`btn-primary ${styles.shareBtn}`}
           onClick={handleShare}
@@ -152,8 +206,11 @@ export default function ResultPage() {
         </button>
       </div>
 
-      {/* 6. 公众号关注引导 */}
-      <div className={styles.wechatCard} style={{ borderColor: `${color}40` }}>
+      {/* 7. 公众号关注引导 */}
+      <div
+        className={`${styles.wechatCard} ${wechatVisible ? styles.visible : styles.entranceModule}`}
+        style={{ borderColor: `${color}40` }}
+      >
         <p className={styles.wechatText}>
           📱 关注「跑步人格测试」
         </p>

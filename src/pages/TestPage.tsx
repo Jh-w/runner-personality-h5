@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTestEngine } from '../hooks/useTestEngine';
 import { QuestionCard } from '../components/QuestionCard';
-import { ProgressIndicator } from '../components/ProgressIndicator';
+import { RunwayProgress } from '../components/RunwayProgress';
 import PrivacyLink from '../components/PrivacyLink';
 import { questions } from '../engine/questions';
 import type { Option } from '../engine/types';
+import type { SelectPhase } from '../components/OptionItem';
 import styles from '../styles/pages/TestPage.module.css';
 
 export default function TestPage() {
@@ -14,8 +15,9 @@ export default function TestPage() {
   const questionIndex = parseInt(qid || '0', 10);
   const { state, selectAnswer } = useTestEngine();
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [selectPhase, setSelectPhase] = useState<SelectPhase>('idle');
+  const selectTimer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const selectTimer2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Guard: redirect if not in testing phase
   useEffect(() => {
@@ -40,15 +42,17 @@ export default function TestPage() {
     }
   }, [questionIndex, state.currentQuestionIndex, state.phase, navigate]);
 
-  // Reset selected option when question changes
+  // Reset selected option and phase when question changes
   useEffect(() => {
     setSelectedOptionId(null);
+    setSelectPhase('idle');
   }, [questionIndex]);
 
-  // Cleanup transition timer on unmount
+  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      if (transitionTimer.current) clearTimeout(transitionTimer.current);
+      if (selectTimer1.current) clearTimeout(selectTimer1.current);
+      if (selectTimer2.current) clearTimeout(selectTimer2.current);
     };
   }, []);
 
@@ -69,34 +73,31 @@ export default function TestPage() {
   const answeredCount = Object.keys(state.answers).length;
 
   const handleSelect = useCallback((optionId: string) => {
-    if (isTransitioning || selectedOptionId) return;
+    if (selectPhase !== 'idle' || selectedOptionId) return;
 
     const option = question?.options.find(o => o.id === optionId);
     if (!option) return;
 
+    // Phase 1: selecting (press-in)
     setSelectedOptionId(optionId);
-    setIsTransitioning(true);
+    setSelectPhase('selecting');
 
-    // After 0.3s highlight, move to next question
-    transitionTimer.current = setTimeout(() => {
+    // Phase 2: bouncing (start after 100ms)
+    selectTimer1.current = setTimeout(() => {
+      setSelectPhase('bouncing');
+    }, 100);
+
+    // Phase 3: stable + select answer (after 250ms total)
+    selectTimer2.current = setTimeout(() => {
+      setSelectPhase('stable');
       selectAnswer(questionIndex, optionId, option.dimensionScore);
 
       // Check if this was the last question (index 7 = Q8)
       if (questionIndex >= 7) {
         navigate('/calculating');
       }
-      // Navigation to next question happens via the useEffect
-      // that watches currentQuestionIndex
-    }, 300);
-  }, [questionIndex, question, selectedOptionId, isTransitioning, selectAnswer, navigate]);
-
-  // Navigate when engine advances to next question
-  useEffect(() => {
-    if (isTransitioning && state.currentQuestionIndex !== questionIndex && state.phase === 'testing') {
-      setIsTransitioning(false);
-      navigate(`/test/${state.currentQuestionIndex}`);
-    }
-  }, [state.currentQuestionIndex, questionIndex, state.phase, isTransitioning, navigate]);
+    }, 250);
+  }, [questionIndex, question, selectedOptionId, selectPhase, selectAnswer, navigate]);
 
   if (!question) {
     return (
@@ -108,10 +109,11 @@ export default function TestPage() {
 
   return (
     <div className={`page ${styles.page}`}>
-      <ProgressIndicator
+      <RunwayProgress
         total={8}
         current={questionIndex}
         answered={answeredCount}
+        color="#FF6B35"
       />
 
       <div className={styles.cardWrapper} key={questionIndex}>
@@ -120,8 +122,9 @@ export default function TestPage() {
           questionNumber={question.id}
           options={orderedOptions}
           selectedOptionId={selectedOptionId}
-          disabled={isTransitioning}
+          disabled={selectPhase !== 'idle'}
           onSelect={handleSelect}
+          selectPhase={selectPhase}
         />
       </div>
 

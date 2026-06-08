@@ -1,3 +1,6 @@
+/* OptionItem.module.css - 选项组件样式 */
+/* Phase 2 模块一：三段式弹性微动效 */
+
 .option {
   display: flex;
   align-items: center;
@@ -9,7 +12,7 @@
   border: 2px solid #e8e8e8;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease, opacity 200ms ease;
   -webkit-tap-highlight-color: transparent;
   text-align: left;
   font-size: var(--fs-body);
@@ -28,10 +31,36 @@
   transform: none;
 }
 
-.option.selected {
-  border-color: #4CAF50;
-  background: #f0fdf4;
-  animation: selectPulse 0.3s ease-out;
+/* Phase 1: 按压缩入 (0-100ms) */
+.option.selecting {
+  border-color: var(--option-select-color, #FF6B35);
+  background: var(--option-select-bg, rgba(255, 107, 53, 0.1));
+  transform: scale(0.92);
+  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 100ms ease,
+              background 100ms ease;
+}
+
+/* Phase 2: 弹性弹出 (100-250ms) */
+.option.bouncing {
+  transform: scale(1.0);
+  box-shadow: 0 0 0 0 var(--option-select-color, #FF6B35);
+  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 150ms ease-out;
+}
+
+/* Phase 3: 保持选中态 (250ms+) */
+.option.selectedStable {
+  border-color: var(--option-select-color, #FF6B35);
+  background: var(--option-select-bg, rgba(255, 107, 53, 0.12));
+  box-shadow: 0 2px 8px var(--option-select-shadow, rgba(255, 107, 53, 0.15));
+  transition: border-color 100ms ease, background 100ms ease, box-shadow 200ms ease;
+}
+
+/* 未选中项淡化 */
+.option.dimmed {
+  opacity: 0.4;
+  transition: opacity 200ms ease;
 }
 
 .emoji {
@@ -45,15 +74,15 @@
   flex: 1;
 }
 
-@keyframes selectPulse {
-  0% {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+/* prefers-reduced-motion: 跳过弹性，直接stable */
+@media (prefers-reduced-motion: reduce) {
+  .option.selecting,
+  .option.bouncing {
+    transition: none;
+    transform: none;
   }
-  50% {
-    box-shadow: 0 0 0 6px rgba(76, 175, 80, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+
+  .option.dimmed {
+    transition: none;
   }
 }
