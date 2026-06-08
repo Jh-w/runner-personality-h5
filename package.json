@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "GIT_SSH_COMMAND=\"ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new\" gh-pages -d dist"
+    "predeploy": "npm run build -- --base=/runner-personality-h5/",
+    "deploy": "GIT_SSH_COMMAND=\"ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new\" gh-pages -d dist"
   },
   "dependencies": {
     "html2canvas": "^1.4.1",

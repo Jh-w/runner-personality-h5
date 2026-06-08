@@ -1,7 +1,7 @@
 // AC-10: localStorage 持久化逻辑单元测试
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { TestState, SavedProgress } from '../types';
-import { testReducer, saveProgress, loadProgress, clearProgress, PROGRESS_KEY } from '../../hooks/useTestEngine';
+import { testReducer, saveProgress, loadProgress, clearProgress, PROGRESS_KEY } from '../../hooks/progressStore';
 
 // Mock localStorage
 const store: Record<string, string> = {};
