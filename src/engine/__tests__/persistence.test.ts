@@ -147,14 +147,22 @@ describe('testReducer', () => {
   });
 
   it('SET_RESULT clears progress from localStorage', () => {
-    const progress = makeProgress();
     // First save progress
     saveProgress(makeTestState());
     expect(store[PROGRESS_KEY]).toBeDefined();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockResult: any = {
+      typeId: 5, code: 'SPMI', name: '竞速狂飙', emoji: '🏃',
+      keywords: ['速度', '竞技', '激情'] as [string, string, string],
+      roast: '跑这么快赶着去哪', traits: ['配速党', 'PB控', '赛霸'] as [string, string, string],
+      dimensionScores: { solo: 1, style: 1, distance: 1, surface: 0, climate: -1, ritual: 0, social: -1 },
+      color: '#E74C3C',
+    };
+
     const state = testReducer(makeTestState(), {
       type: 'SET_RESULT',
-      result: { typeId: 5, typeName: '竞速狂飙', emoji: '🏃', keywords: [], roast: '', traits: [], advice: '' },
+      result: mockResult,
     });
 
     expect(state.phase).toBe('completed');

@@ -36,14 +36,18 @@ function generateLocalSession(): SessionData {
   };
 }
 
-/** 从SCF获取session（优先），失败时降级 */
+/** 从SCF获取session（优先），2s硬超时 + 500ms AbortSignal，失败时降级 */
 async function fetchSession(): Promise<SessionData> {
+  const controller = new AbortController();
+  const hardTimeout = setTimeout(() => controller.abort(), 2000);
+
   try {
     const resp = await fetch(SCF_URL, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(500),
+      signal: controller.signal,
     });
+    clearTimeout(hardTimeout);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const json = await resp.json();
     if (json.code === 0 && json.data) {
@@ -56,6 +60,7 @@ async function fetchSession(): Promise<SessionData> {
     }
     throw new Error('Invalid response');
   } catch {
+    clearTimeout(hardTimeout);
     console.log('SCF unavailable, using local session');
     return generateLocalSession();
   }

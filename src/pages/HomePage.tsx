@@ -7,7 +7,7 @@ import styles from '../styles/pages/HomePage.module.css';
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { state, startTest } = useTestEngine();
+  const { startTest } = useTestEngine();
   const [participantCount, setParticipantCount] = useState<number>(54892);
   const pendingRef = useRef(false);
 
@@ -22,24 +22,23 @@ export default function HomePage() {
     return () => { cancelled = true; };
   }, []);
 
-  // 当 state 变为 testing 时跳转（确保 Context 已更新）
-  useEffect(() => {
-    if (state.phase === 'testing' && pendingRef.current) {
-      pendingRef.current = false;
-      navigate('/test/0');
-    }
-  }, [state.phase, navigate]);
-
   const handleStart = async () => {
     if (pendingRef.current) return; // 防止重复点击
-    let session = (window as any).__session;
-    if (!session) {
-      session = await getOrCreateSession();
-      (window as any).__session = session;
+    pendingRef.current = true;      // 先锁住，避免 await 期间重复触发
+
+    try {
+      let session = (window as any).__session;
+      if (!session) {
+        session = await getOrCreateSession();
+        (window as any).__session = session;
+      }
+      startTest(session);
+      // 直接导航，不依赖 useEffect 的 phase 监听（避免竞态）
+      navigate('/test/0');
+    } catch {
+      // 极端情况：getOrCreateSession 彻底失败，重置锁
+      pendingRef.current = false;
     }
-    pendingRef.current = true;
-    startTest(session);
-    // navigate 由上面的 useEffect 处理
   };
 
   const formatCount = (n: number) => {
