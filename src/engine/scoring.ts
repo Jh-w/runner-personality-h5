@@ -5,7 +5,8 @@
 
 import type { Answer, Dimension, DimensionScores, PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
 import { questionDimensionMap } from './questions';
-import { getAllPersonalities, getPersonality } from './personalities';
+import { getPersonalityByTypeId, getAllPersonalities } from './personalities';
+import { findBestBuddy } from './buddyMatching';
 
 // ─── 维度符号 → 类型ID 查找表（惰性构建） ─────────────
 
@@ -90,9 +91,11 @@ export function matchPersonality(scores: DimensionScores): PersonalityTypeId {
 export function calculateResult(answers: Answer[]): PersonalityResult {
   const dimensionScores = calculateScores(answers);
   const typeId = matchPersonality(dimensionScores);
-  const personality = getPersonality(typeId);
+  const personality = getPersonalityByTypeId(typeId);
+  const bestBuddy = findBestBuddy(personality.code);
   return {
     ...personality,
     dimensionScores,
+    bestBuddy,
   };
 }

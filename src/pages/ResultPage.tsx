@@ -2,9 +2,11 @@
 // PRD §7.1 信息层级: 人格名称→关键词→吐槽→特征→分享按钮→公众号引导→再测+隐私
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getPersonality } from '../engine/personalities';
+import { getPersonalityByTypeId } from '../engine/personalities';
 import { useTestEngine } from '../hooks/useTestEngine';
 import CanvasRenderer, { renderShareCard } from '../components/CanvasRenderer';
+import BestBuddy from '../components/BestBuddy';
+import { findBestBuddy } from '../engine/buddyMatching';
 import ShareSheet from '../components/ShareSheet';
 import KeywordTags from '../components/KeywordTags';
 import PrivacyLink from '../components/PrivacyLink';
@@ -30,7 +32,7 @@ export default function ResultPage() {
 
   const personality: PersonalityResult | null = useMemo(() => {
     try {
-      return getPersonality(typeId);
+      return getPersonalityByTypeId(typeId);
     } catch {
       return null;
     }
@@ -89,6 +91,9 @@ export default function ResultPage() {
 
   const color = personality.color;
 
+  // 最佳搭档（v3.1 Phase1）
+  const bestBuddy = useMemo(() => findBestBuddy(personality.code), [personality.code]);
+
 
   return (
     <div className={`page ${styles.page}`} style={{
@@ -101,6 +106,9 @@ export default function ResultPage() {
       <div className={styles.hero} style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}>
         <span className={styles.heroEmoji}>{personality.emoji}</span>
         <h1 className={styles.heroName}>{personality.name}</h1>
+        {personality.quote && (
+          <p className={styles.quoteSection}>「{personality.quote}」</p>
+        )}
       </div>
 
       {/* 2. 关键词标签 */}
@@ -112,6 +120,9 @@ export default function ResultPage() {
           「{personality.roast}」
         </div>
       </div>
+
+      {/* 3.5 最佳跑团搭档（v3.1 Phase1） */}
+      {bestBuddy && <BestBuddy bestBuddy={bestBuddy} userColor={color} />}
 
       {/* 4. 核心特征 */}
       <div className={styles.section}>

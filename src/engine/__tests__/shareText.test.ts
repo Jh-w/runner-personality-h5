@@ -35,9 +35,10 @@ describe('generateShareText', () => {
     it('赛道卷王微信文案示例', () => {
       const p = personalities[0]; // CSDG
       const text = generateShareText(p, 'wechat');
-      expect(text).toBe(
-        '我的跑步人格是【赛道卷王】！#数据狂魔 #PB焦虑症\n测测你是什么跑步人格 →'
-      );
+      expect(text).toContain('我不和别人比');
+      expect(text).toContain('我的跑步人格是【赛道卷王】');
+      expect(text).toContain('#数据狂魔');
+      expect(text).toContain('测测你是什么跑步人格');
     });
   });
 
@@ -59,19 +60,20 @@ describe('generateShareText', () => {
       }
     });
 
-    it('文案包含人格名称话题标签', () => {
+    it('文案包含人格的关键词标签（至少1个）', () => {
       for (const p of personalities) {
         const text = generateShareText(p, 'xiaohongshu');
-        expect(text).toContain(`#${p.name}`);
+        expect(text).toContain(`#${p.keywords[0]}`);
       }
     });
 
     it('快乐散步跑者小红书文案示例', () => {
       const p = personalities[15]; // EPGM
       const text = generateShareText(p, 'xiaohongshu');
-      expect(text).toBe(
-        '测出了跑步人格！我是【快乐散步跑者】🏃\n#跑步人格测试 #跑步 #快乐散步跑者'
-      );
+      expect(text).toContain('碳板还是薄底');
+      expect(text).toContain('快乐散步跑者');
+      expect(text).toContain('#跑步人格测试');
+      expect(text).toContain('#跑步');
     });
   });
 });

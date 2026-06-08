@@ -35,6 +35,21 @@ export interface PersonalityResult {
   traits: [string, string, string];   // 3条特征
   dimensionScores: DimensionScores;
   color: string;
+  quote: string;                      // 跑者金句（v3.1 Phase1）
+  colorDark?: string;                 // 深色变体，用于渐变（v3.1 Phase1）
+  bestBuddy?: BestBuddy;              // 最佳跑团搭档（v3.1 Phase1）
+}
+
+// ─── 最佳搭档（v3.1 Phase1）─────────────────────────────
+
+/** 最佳跑团搭档 */
+export interface BestBuddy {
+  typeId: PersonalityTypeId;
+  code: PersonalityCode;
+  name: string;
+  emoji: string;
+  quote: string;
+  pairDescription: string;  // 你们一起跑时的解读
 }
 
 // ─── 题目与选项 ───────────────────────────────────────
