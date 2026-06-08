@@ -10,7 +10,7 @@
     "test": "vitest run",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "GIT_SSH_COMMAND=\"ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new\" gh-pages -d dist"
   },
   "dependencies": {
     "html2canvas": "^1.4.1",
