@@ -30,6 +30,7 @@ function makeTestState(overrides: Partial<TestState> = {}): TestState {
 
 function makeProgress(overrides: Partial<SavedProgress> = {}): SavedProgress {
   return {
+    version: 3,
     sessionId: 'rp_test_session_001',
     currentQuestionIndex: 3,
     answers: {
