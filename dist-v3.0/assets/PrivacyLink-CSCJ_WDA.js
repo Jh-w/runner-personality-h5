@@ -1,1 +1,0 @@
-import{a as e,n as t}from"./index-p5m9dmZj.js";var n={container:`_container_1088k_2`,link:`_link_1088k_17`},r=t();function i(){return(0,r.jsx)(`div`,{className:n.container,children:(0,r.jsx)(e,{to:`/privacy`,className:n.link,children:`隐私政策`})})}export{i as t};

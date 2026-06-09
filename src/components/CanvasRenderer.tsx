@@ -1,5 +1,7 @@
-// CanvasRenderer — Phase 1+3 满幅高饱和渐变分享卡片 (1080×1440)
-// Phase 3: SVG drawImage + emoji fallback
+// CanvasRenderer — v4.0 深色底 + 弥散光分享卡片 (1080×1440)
+// Layer 1: 最深底色 #0d1117
+// Layer 2: 人格色弥散光球（左上 + 右下 radialGradient）
+// Layer 3: 线性渐变 overlay
 // 组件不渲染 DOM，仅提供 generateImage() 并在挂载时预生成
 import { useEffect, useRef, useCallback } from 'react';
 import QRCode from 'qrcode';
@@ -16,8 +18,8 @@ interface CanvasRendererProps {
 // ---------- 常量 ----------
 
 const W = 1080, H = 1440;
-const CARD_W = 880;          // 搭档卡片宽度
-const CARD_X = (W - CARD_W) / 2; // 100
+const CARD_W = 880;
+const CARD_X = (W - CARD_W) / 2;
 const JPEG_QUALITY = 0.92;
 
 // ---------- 绘制工具 ----------
@@ -55,7 +57,6 @@ function drawRoundedRect(
   ctx.closePath();
 }
 
-/** 绘制文字并返回占用的高度（行高 × 行数） */
 function drawTextLines(
   ctx: CanvasRenderingContext2D,
   lines: string[],
@@ -72,25 +73,35 @@ function drawTextLines(
   return lines.length * lineHeight;
 }
 
-// ---------- 背景绘制 ----------
+// ---------- 背景绘制 v4.0 — 深色底 + 弥散光 ═══
 
-function drawBackground(ctx: CanvasRenderingContext2D, color: string, colorDark: string) {
-  // 1. 满幅高饱和渐变 (135° 对角线: 左上→右下)
-  const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, color);
-  grad.addColorStop(1, colorDark);
-  ctx.fillStyle = grad;
+function drawBackground(ctx: CanvasRenderingContext2D, glowColor: string) {
+  // Layer 1: 最深底色
+  ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, W, H);
 
-  // 2. 弥散光球叠加 (径向渐变模拟)
-  const cx = W * 0.3;
-  const cy = H * 0.15;
-  const radius = 185;
-  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-  glow.addColorStop(0, 'rgba(255,255,255,0.12)');
-  glow.addColorStop(0.5, 'rgba(255,255,255,0.04)');
-  glow.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = glow;
+  // Layer 2: 左上弥散光球（人格色）
+  const orb1 = ctx.createRadialGradient(W * 0.15, H * 0.12, 0, W * 0.15, H * 0.12, 500);
+  orb1.addColorStop(0, glowColor);
+  orb1.addColorStop(0.5, glowColor.replace('0.25', '0.08'));
+  orb1.addColorStop(1, 'transparent');
+  ctx.fillStyle = orb1;
+  ctx.fillRect(0, 0, W, H);
+
+  // 右下弥散光球（人格色）
+  const orb2 = ctx.createRadialGradient(W * 0.85, H * 0.55, 0, W * 0.85, H * 0.55, 450);
+  orb2.addColorStop(0, glowColor);
+  orb2.addColorStop(0.5, glowColor.replace('0.25', '0.06'));
+  orb2.addColorStop(1, 'transparent');
+  ctx.fillStyle = orb2;
+  ctx.fillRect(0, 0, W, H);
+
+  // Layer 3: 线性渐变 overlay（底部加深）
+  const overlay = ctx.createLinearGradient(0, 0, 0, H);
+  overlay.addColorStop(0, 'rgba(13, 17, 23, 0)');
+  overlay.addColorStop(0.6, 'rgba(13, 17, 23, 0.3)');
+  overlay.addColorStop(1, 'rgba(13, 17, 23, 0.7)');
+  ctx.fillStyle = overlay;
   ctx.fillRect(0, 0, W, H);
 }
 
@@ -107,21 +118,20 @@ async function drawPersonalityIcon(
   const img = await loadPersonalitySvgImg(code);
 
   if (img) {
-    // SVG 绘制 + 底部弥散光效
     ctx.save();
-    ctx.shadowColor = 'rgba(255,255,255,0.3)';
-    ctx.shadowBlur = 32;
+    ctx.shadowColor = 'rgba(255,255,255,0.2)';
+    ctx.shadowBlur = 48;
     ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
     ctx.restore();
   } else {
     // Emoji fallback
     ctx.textAlign = 'center';
-    ctx.font = `${size * 0.83}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+    ctx.font = `${size * 0.7}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.3)';
-    ctx.shadowBlur = 32;
+    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+    ctx.shadowBlur = 40;
     ctx.shadowOffsetY = 8;
-    ctx.fillText(emoji, x, y + size * 0.35);
+    ctx.fillText(emoji, x, y + size * 0.3);
     ctx.restore();
   }
 }
@@ -133,16 +143,15 @@ function drawQuote(ctx: CanvasRenderingContext2D, quote: string, y: number, maxL
 
   const fontSize = 36;
   const lineHeight = 52;
-  const maxWidth = W - 200; // 左右留 100px
+  const maxWidth = W - 200;
   const text = `「${quote}」`;
 
   ctx.font = `italic ${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
 
   let lines = wrapText(ctx, text, maxWidth);
   if (lines.length > maxLines) {
     lines = lines.slice(0, maxLines);
-    // 最后一行加省略号
     const last = lines[lines.length - 1];
     while (ctx.measureText(last + '...').width > maxWidth && last.length > 0) {
       lines[lines.length - 1] = last.slice(0, -1);
@@ -154,30 +163,22 @@ function drawQuote(ctx: CanvasRenderingContext2D, quote: string, y: number, maxL
   return lines.length * lineHeight;
 }
 
-// ---------- 胶囊标签 ----------
-
-interface CapsuleMetrics { width: number; height: number }
-
-function measureCapsule(ctx: CanvasRenderingContext2D, text: string): CapsuleMetrics {
-  ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
-  const textWidth = ctx.measureText(text).width;
-  return {
-    width: textWidth + 28 * 2,   // 左右 padding 28px
-    height: 24 + 12 * 2,          // 上下 padding 12px
-  };
-}
+// ---------- 胶囊标签 v4.0 — 深色底半透明 ───────────
 
 function drawSingleCapsule(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
-  const { width, height } = measureCapsule(ctx, text);
-  const radius = 20;
+  ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
+  const textWidth = ctx.measureText(text).width;
+  const width = textWidth + 28 * 2;
+  const height = 24 + 12 * 2;
+  const radius = 24;
 
-  // 背景
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  // 背景 — rgba(255,255,255,0.12)
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
   drawRoundedRect(ctx, x, y, width, height, radius);
   ctx.fill();
 
   // 边框
-  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
   ctx.lineWidth = 1;
   drawRoundedRect(ctx, x, y, width, height, radius);
   ctx.stroke();
@@ -189,11 +190,17 @@ function drawSingleCapsule(ctx: CanvasRenderingContext2D, text: string, x: numbe
   ctx.textBaseline = 'middle';
   ctx.fillText(text, x + width / 2, y + height / 2);
   ctx.textBaseline = 'alphabetic';
+
+  return { width, height };
 }
 
-function drawCapsuleTags(ctx: CanvasRenderingContext2D, keywords: [string, string, string], y: number): number {
+function drawCapsuleTags(ctx: CanvasRenderingContext2D, keywords: string[], y: number): number {
   const gap = 16;
-  const metrics = keywords.map(k => measureCapsule(ctx, k));
+  const metrics = keywords.map(k => {
+    ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
+    const w = ctx.measureText(k).width + 28 * 2;
+    return { width: w, height: 24 + 12 * 2 };
+  });
   const totalWidth = metrics.reduce((sum, m) => sum + m.width, 0) + gap * (keywords.length - 1);
   let x = (W - totalWidth) / 2;
 
@@ -205,13 +212,13 @@ function drawCapsuleTags(ctx: CanvasRenderingContext2D, keywords: [string, strin
   return metrics[0].height;
 }
 
-// ---------- QR Code 相关 ----------
+// ---------- QR Code ----------
 
 async function generateQRDataUrl(url: string): Promise<string> {
   return QRCode.toDataURL(url, {
     width: 200,
     margin: 2,
-    color: { dark: '#1a1a2e', light: '#ffffff' },
+    color: { dark: '#0d1117', light: '#ffffff' },
   });
 }
 
@@ -224,7 +231,7 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-// ---------- 核心绘制 ----------
+// ---------- 核心绘制 v4.0 ═══
 
 export async function renderShareCard(personality: PersonalityResult): Promise<Blob> {
   const canvas = document.createElement('canvas');
@@ -232,35 +239,44 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   canvas.height = H;
   const ctx = canvas.getContext('2d')!;
 
-  const color = personality.color;
-  const colorDark = personality.colorDark ?? personality.color;
+  const code = personality.code as PersonalityCode;
+  // 使用 getComputedStyle 获取人格 glow 色
+  let glowColor = 'rgba(255, 107, 53, 0.25)';
+  try {
+    const { getTypeGlowValue } = await import('../utils/typeColorMap');
+    glowColor = getTypeGlowValue(code);
+  } catch { /* fallback */ }
+  // 确保 glowColor 是有效格式
+  if (!glowColor || !glowColor.startsWith('rgba')) {
+    glowColor = 'rgba(255, 107, 53, 0.25)';
+  }
 
-  // ═══ 1. 背景 ═══
-  drawBackground(ctx, color, colorDark);
+  // ═══ 1. 背景：深色底 + 弥散光 ═══
+  drawBackground(ctx, glowColor);
 
-  // ═══ 2. 人格图标（Phase 3: SVG 优先）═══
-  let curY = 250;
-  const iconSize = 180;
-  await drawPersonalityIcon(ctx, personality.code as PersonalityCode, personality.emoji, W / 2, curY + iconSize / 2, iconSize);
-  curY += iconSize + 20;
+  // ═══ 2. 人格图标（升级到 240px）═══
+  let curY = 220;
+  const iconSize = 240;
+  await drawPersonalityIcon(ctx, code, personality.emoji, W / 2, curY + iconSize / 2, iconSize);
+  curY += iconSize + 24;
 
   // ═══ 3. 人格名 ═══
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 56px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = 'bold 64px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.fillText(personality.name, W / 2, curY);
-  curY += 80;
+  curY += 90;
 
   // ═══ 4. 金句 ═══
   if (personality.quote) {
     const quoteH = drawQuote(ctx, personality.quote, curY);
-    curY += quoteH + 50;
+    curY += quoteH + 56;
   }
 
   // ═══ 5. 胶囊标签 ═══
-  if (personality.keywords?.length === 3) {
-    const tagH = drawCapsuleTags(ctx, personality.keywords, curY);
-    curY += tagH + 50;
+  if (personality.keywords && personality.keywords.length >= 3) {
+    const tagH = drawCapsuleTags(ctx, personality.keywords.slice(0, 3), curY);
+    curY += tagH + 56;
   }
 
   // ═══ 6. 最佳搭档卡片 ═══
@@ -281,7 +297,6 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
     curY = minQrTop;
   }
 
-  // CTA 文案
   const ctaY = curY;
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FFFFFF';
@@ -289,6 +304,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   const ctaText1 = `你是「${personality.name}」吗？`;
   ctx.fillText(ctaText1, W / 2, ctaY);
   ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
   ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 48);
   curY = ctaY + 80;
 
@@ -296,7 +312,6 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   const qrSubstrateY = curY;
   const qrSubstrateX = (W - qrSubstrateSize) / 2;
 
-  // 白色圆角衬底
   ctx.fillStyle = '#FFFFFF';
   drawRoundedRect(ctx, qrSubstrateX, qrSubstrateY, qrSubstrateSize, qrSubstrateSize, 10);
   ctx.fill();
@@ -309,10 +324,10 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
     const qrY = qrSubstrateY + qrPadding;
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
   } catch {
-    ctx.strokeStyle = '#CCCCCC';
+    ctx.strokeStyle = '#555555';
     ctx.lineWidth = 2;
     ctx.strokeRect(qrSubstrateX + qrPadding, qrSubstrateY + qrPadding, qrSize, qrSize);
-    ctx.fillStyle = '#999999';
+    ctx.fillStyle = '#888888';
     ctx.font = '20px "PingFang SC", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('扫码测试', W / 2, qrSubstrateY + qrPadding + qrSize / 2);
@@ -320,11 +335,11 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
 
   // ═══ 9. 品牌标识 ═══
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
   ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.fillText('跑步人格测试 · Running Personality', W / 2, brandY);
 
-  // ═══ 导出 JPEG ═══
+  // 导出 JPEG
   return new Promise((resolve, reject) => {
     canvas.toBlob(
       blob => (blob ? resolve(blob) : reject(new Error('toBlob failed'))),
@@ -334,7 +349,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   });
 }
 
-// ---------- 搭档卡片辅助函数 ----------
+// ---------- 搭档卡片辅助函数 v4.0 ═══
 
 function drawBuddyCardFull(
   ctx: CanvasRenderingContext2D,
@@ -348,55 +363,45 @@ function drawBuddyCardFull(
   const innerX = x + cardPadding;
   const innerW = CARD_W - cardPadding * 2;
 
-  // ── 预测量各部分高度 ──
   let estY = 0;
-
-  // 标题
-  estY += 50;
-
-  // 搭档 emoji + name 行
-  estY += 80;
-
-  // 搭档金句
+  estY += 50;       // 标题
+  estY += 80;       // emoji + name
   ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
   const quoteLines = wrapText(ctx, `「${buddy.quote}」`, innerW - 20);
   estY += quoteLines.length * 38;
-
-  // 搭档解读
   ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
   const descLines = wrapText(ctx, buddy.pairDescription, innerW - 20);
   estY += descLines.length * 34 + 16;
 
   const cardH = estY + cardPadding;
 
-  // ── 绘制卡片背景 ──
+  // v4.0: 半透明深色卡片
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
   ctx.shadowBlur = 32;
   ctx.shadowOffsetY = 8;
-  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
   drawRoundedRect(ctx, x, y, CARD_W, cardH, 24);
   ctx.fill();
   ctx.restore();
 
-  // ── 左侧色条 ──
+  // 左侧色条
   const barX = x + 30;
   const barW = 6;
   ctx.fillStyle = buddyColor;
   drawRoundedRect(ctx, barX, y + 30, barW, cardH - 60, 3);
   ctx.fill();
 
-  // ── 绘制内容 ──
   let cy = y + cardPadding;
 
   // 标题
-  ctx.fillStyle = '#333333';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
   ctx.font = 'bold 28px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('🤝 最佳跑团搭档', innerX, cy + 28);
   cy += 50;
 
-  // 搭档 emoji + 名称（同一行）
+  // 搭档 emoji + 名称
   ctx.font = '64px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
   ctx.fillText(buddy.emoji, innerX, cy + 48);
   ctx.fillStyle = buddyColor;
@@ -405,7 +410,7 @@ function drawBuddyCardFull(
   cy += 80;
 
   // 搭档金句
-  ctx.fillStyle = '#888888';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
   ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
   for (let i = 0; i < quoteLines.length; i++) {
     ctx.fillText(quoteLines[i], innerX, cy + i * 38);
@@ -413,7 +418,7 @@ function drawBuddyCardFull(
   cy += quoteLines.length * 38 + 16;
 
   // 搭档解读
-  ctx.fillStyle = '#555555';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
   ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
   for (let i = 0; i < descLines.length; i++) {
     ctx.fillText(descLines[i], innerX, cy + i * 34);
@@ -428,7 +433,6 @@ export default function CanvasRenderer({ personality, onGenerated }: CanvasRende
   const blobRef = useRef<Blob | null>(null);
   const generatedRef = useRef(false);
 
-  // 预生成策略：挂载时自动生成
   useEffect(() => {
     if (generatedRef.current) return;
     generatedRef.current = true;
@@ -448,11 +452,10 @@ export default function CanvasRenderer({ personality, onGenerated }: CanvasRende
     return blob;
   }, [personality]);
 
-  // 暴露方法给父组件
   useEffect(() => {
     (window as any).__shareGenerateImage = generateImage;
     return () => { delete (window as any).__shareGenerateImage; };
   }, [generateImage]);
 
-  return null; // 不渲染 DOM
+  return null;
 }

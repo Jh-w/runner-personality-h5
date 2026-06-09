@@ -1,99 +1,137 @@
+/* ═══════════════════════════════════════════════════════════════
+   HomePage v4.0 — 深色主题
+   深色底 + 弥散光球 + 毛玻璃 + 渐变标题
+   将原 inline style 全部迁移至 CSS Module
+   ═══════════════════════════════════════════════════════════════ */
+
 .page {
   position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(160deg, #FF8C42 0%, #FF6B35 40%, #E65100 100%);
+  background: var(--bg-deep);
   overflow: hidden;
+  animation: pageEnter 400ms var(--ease-standard);
 }
 
-/* 跑道纹理 - CSS重复渐变模拟 */
-.trackOverlay {
+/* ── 弥散光球容器（绝对定位，铺满页面） ───────────────── */
+.diffuseOrchestra {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 38px,
-      rgba(255, 255, 255, 0.06) 38px,
-      rgba(255, 255, 255, 0.06) 40px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 38px,
-      rgba(255, 255, 255, 0.04) 38px,
-      rgba(255, 255, 255, 0.04) 40px
-    );
-  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
 }
 
+.diffuseOrb1,
+.diffuseOrb2,
+.diffuseOrb3 {
+  position: absolute;
+  border-radius: var(--radius-round);
+  will-change: transform;
+}
+
+.diffuseOrb1 {
+  top: -10%;
+  left: 10%;
+  width: 600px;
+  height: 400px;
+  background: var(--diffuse-compete);
+}
+
+.diffuseOrb2 {
+  top: 20%;
+  right: -5%;
+  width: 500px;
+  height: 350px;
+  background: var(--diffuse-experience);
+}
+
+.diffuseOrb3 {
+  bottom: 10%;
+  left: 30%;
+  width: 400px;
+  height: 300px;
+  background: var(--diffuse-social);
+}
+
+/* ── 主内容区 ──────────────────────────────────────── */
 .main {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--sp-xl) var(--sp-md);
-  z-index: 1;
   gap: var(--sp-lg);
 }
 
+/* ── 标题区 ────────────────────────────────────────── */
 .header {
   text-align: center;
-}
-
-.title {
-  font-size: 32px;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 var(--sp-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-xs);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.emoji {
-  font-size: 52px;
-  animation: bounce 2s ease-in-out infinite;
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-display);
+  margin: 0;
+  background: linear-gradient(135deg, var(--brand-primary), #FF9800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
+  font-family: var(--font-body);
   font-size: var(--fs-body);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   margin: 0;
-  font-weight: 500;
+  font-weight: var(--fw-body);
 }
 
+/* ── 元数据栏（毛玻璃） ───────────────────────────── */
 .meta {
   display: flex;
   align-items: center;
   gap: var(--sp-sm);
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: var(--sp-xs) var(--sp-lg);
 }
 
+@supports not (backdrop-filter: blur(1px)) {
+  .meta {
+    background: rgba(30, 35, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
 .metaItem {
   font-size: var(--fs-small);
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: var(--fw-bold);
 }
 
 .metaDivider {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   font-weight: 300;
 }
 
+/* ── 参与人数 ─────────────────────────────────────── */
 .participants {
   font-size: var(--fs-small);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-secondary);
   text-align: center;
   margin: 0;
 }
@@ -101,39 +139,43 @@
 .participants strong {
   font-weight: 800;
   font-size: var(--fs-body);
-  color: #fff;
+  color: var(--text-primary);
 }
 
+/* ── 开始按钮 ─────────────────────────────────────── */
 .startBtn {
   display: block;
   width: 100%;
   max-width: 320px;
   padding: var(--sp-md) var(--sp-xl);
-  background: #fff;
-  color: var(--brand-primary);
+  background: linear-gradient(135deg, var(--brand-primary), #FF5722);
+  color: #FFFFFF;
   border: none;
   border-radius: var(--radius-lg);
+  font-family: var(--font-body);
   font-size: 20px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 30px rgba(255, 107, 53, 0.25);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+              opacity var(--transition-fast);
   -webkit-tap-highlight-color: transparent;
-  font-family: inherit;
   margin-top: var(--sp-md);
 }
 
 .startBtn:active {
   transform: scale(0.96);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 12px rgba(255, 107, 53, 0.15);
 }
 
 .startBtn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: wait;
 }
 
+/* ── 底部 ──────────────────────────────────────────── */
 .footer {
+  position: relative;
   z-index: 1;
   text-align: center;
   padding: var(--sp-md);
@@ -142,15 +184,6 @@
 
 .brand {
   font-size: var(--fs-caption);
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-tertiary);
   letter-spacing: 1px;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
 }

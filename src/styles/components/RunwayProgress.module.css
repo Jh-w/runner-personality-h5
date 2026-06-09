@@ -1,5 +1,5 @@
-/* RunwayProgress.module.css - 跑道进度条样式 */
-/* Phase 2 模块四 */
+/* RunwayProgress.module.css - 跑道进度条 v4.0 深色主题 */
+/* 深色底适配 */
 
 .runway {
   width: 100%;
@@ -10,7 +10,7 @@
 .runwayTrack {
   position: relative;
   height: 4px;
-  background: #e8e8e8;
+  background: var(--bg-secondary);
   border-radius: 2px;
   margin: 24px 0 8px;
 }
@@ -32,23 +32,23 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #e8e8e8;
-  border: 2px solid #e8e8e8;
+  background: var(--bg-elevated);
+  border: 2px solid var(--bg-elevated);
   transform: translate(-50%, -50%);
   transition: background 200ms ease, transform 200ms ease, border-color 200ms ease;
 }
 
 .runwayDot.answered {
-  background: var(--brand-primary, #FF6B35);
-  border-color: var(--brand-primary, #FF6B35);
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
 }
 
 .runwayDot.current {
   width: 14px;
   height: 14px;
-  background: #fff;
-  border: 3px solid var(--brand-primary, #FF6B35);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+  background: var(--bg-deep);
+  border: 3px solid var(--brand-primary);
+  box-shadow: 0 0 0 3px var(--brand-primary-glow);
   z-index: 2;
 }
 
@@ -60,15 +60,15 @@
   transform: translateX(-50%);
   transition: left 400ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 3;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
 }
 
 /* 数字标注 */
 .runwayLabel {
   display: block;
   text-align: center;
-  font-size: var(--fs-small, 14px);
-  color: var(--text-light, #999);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
 }
 
 /* prefers-reduced-motion */

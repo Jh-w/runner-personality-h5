@@ -1,4 +1,5 @@
-/* ResultPage 样式 — Phase 2 入场动画增强 */
+/* ResultPage 样式 — v4.0 深色主题 + 人格渐变 Hero + 毛玻璃卡片 */
+
 .page {
   padding: 0;
   min-height: 100vh;
@@ -8,82 +9,77 @@
   gap: 0;
   overflow-x: hidden;
   position: relative;
+  background: var(--bg-primary);
 }
 
-/* ─── 入场动画：统一初始隐藏态 ─────────────────────── */
-
-.entranceModule {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 350ms ease-out, transform 350ms ease-out;
-}
-
-.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── Hero Card 背景展开 ──────────────────────────── */
+/* ═══ Hero 区 — 人格专属渐变 + heroReveal 动画 ═══ */
 
 .hero {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px var(--sp-lg) 36px;
-  color: var(--text-white);
-  max-height: 0;
+  padding: 64px var(--sp-lg) 48px;
+  position: relative;
   overflow: hidden;
-  transition: max-height 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hero.heroExpanded {
-  max-height: 500px;
+.heroReveal {
+  animation: heroReveal 800ms var(--ease-standard, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
 }
 
-/* ─── Hero Emoji：弹性缩放 ──────────────────────────── */
-
-.heroEmoji {
-  font-size: 64px;
-  line-height: 1;
-  margin-bottom: var(--sp-sm);
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity 300ms ease-out,
-              transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+/* Hero 内的弥散光球叠加层 */
+.heroGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.heroEmoji.visible {
-  opacity: 1;
-  transform: scale(1);
+/* Hero 插图 */
+.heroIllustration {
+  margin-bottom: var(--sp-md);
+  position: relative;
+  z-index: 1;
 }
 
-/* ─── Hero 名称：fade + slide-up ───────────────────── */
-
-.heroNameModule {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 300ms ease-out, transform 300ms ease-out;
+/* Hero 人格名 */
+.heroName {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-hero);
+  color: var(--text-on-color, #fff);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
 }
 
-.heroNameModule.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Hero 金句 */
+.heroQuote {
+  font-style: italic;
+  font-size: var(--fs-subtitle);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: var(--lh-subtitle);
+  padding: var(--sp-md) var(--sp-lg);
+  text-align: center;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ─── 吐槽卡片 ────────────────────────────────────── */
+/* ═══ 关键词标签区 ═══ */
+
+.tagSection {
+  width: calc(100% - 32px);
+  margin: var(--sp-xl) auto 0;
+}
+
+/* ═══ 吐槽卡片 — 毛玻璃 ═══ */
 
 .roastCard {
   width: calc(100% - 32px);
-  margin: -16px auto 0;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  margin: var(--sp-xl) auto 0;
   padding: var(--sp-lg);
-  box-shadow: var(--shadow-md);
   position: relative;
   z-index: 2;
 }
@@ -97,15 +93,12 @@
   border-left: 3px solid var(--brand-primary);
 }
 
-/* ─── 通用区块 ────────────────────────────────────── */
+/* ═══ 通用 Section — 毛玻璃卡片 ═══ */
 
 .section {
   width: calc(100% - 32px);
-  margin: var(--sp-md) auto 0;
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
+  margin: var(--sp-lg) auto 0;
   padding: var(--sp-lg);
-  box-shadow: var(--shadow-sm);
 }
 
 .sectionTitle {
@@ -115,7 +108,7 @@
   margin-bottom: var(--sp-sm);
 }
 
-/* ─── 特征列表 ────────────────────────────────────── */
+/* ═══ 特征列表 ═══ */
 
 .traitList {
   list-style: none;
@@ -139,11 +132,11 @@
   margin-top: 2px;
 }
 
-/* ─── 按钮区 ──────────────────────────────────────── */
+/* ═══ 按钮区 ═══ */
 
 .actions {
   width: calc(100% - 32px);
-  margin: var(--sp-lg) auto 0;
+  margin: 40px auto 0;
   display: flex;
   flex-direction: column;
   gap: var(--sp-sm);
@@ -153,27 +146,38 @@
   font-size: var(--fs-body);
 }
 
-/* ─── 公众号关注引导 ────────────────────────────────── */
+/* ═══ 公众号关注引导 — 深色适配 ═══ */
 
 .wechatCard {
   margin: 28px 20px 40px;
   padding: 24px 20px;
-  background: #fff;
-  border: 2px dashed #ccc;
-  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   text-align: center;
+}
+
+/* 微信不支持 backdrop-filter 的降级（wechatCard + buddyCard） */
+@supports not (backdrop-filter: blur(1px)) {
+  .wechatCard,
+  .buddyCard {
+    background: rgba(30, 35, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
 }
 
 .wechatText {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
 }
 
 .wechatSubText {
   font-size: 14px;
-  color: #888;
+  color: var(--text-tertiary);
   margin: 0 0 16px 0;
 }
 
@@ -187,39 +191,23 @@
 
 .wechatHint {
   font-size: 13px;
-  color: #666;
+  color: var(--text-tertiary);
   margin: 0;
 }
 
-/* ─── 跑者金句（v3.1 Phase1） ────────────────────────── */
-
-.quoteSection {
-  font-style: italic;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-  padding: 24px 28px;
-  text-align: center;
-  letter-spacing: 0.3px;
-  opacity: 0;
-  transition: opacity 300ms ease-out;
-}
-
-.quoteSection.visible {
-  opacity: 1;
-}
-
-/* ─── 最佳搭档区块（v3.1 Phase1） ────────────────────── */
+/* ═══ 最佳搭档区块（v3.1）深色适配 ═══ */
 
 .buddySection {
   width: calc(100% - 32px);
-  margin: 32px auto 0;
+  margin: var(--sp-lg) auto 0;
 }
 
 .buddyCard {
-  background: var(--bg-card);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 20px;
   margin: 0 16px;
   text-align: center;
@@ -251,7 +239,7 @@
 .buddyQuote {
   font-style: italic;
   font-size: 14px;
-  color: #888;
+  color: var(--text-tertiary);
   margin: 8px 0;
   line-height: 1.5;
 }
@@ -283,7 +271,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* ─── 错误状态 ────────────────────────────────────── */
+/* ═══ 错误状态 ═══ */
 
 .error {
   display: flex;
@@ -301,54 +289,72 @@
   max-width: 240px;
 }
 
-/* ─── 响应式微调 ──────────────────────────────────── */
+/* ═══ PK Banner / CTA（保持来自 PkCard.module.css） ═══ */
+/* 以下样式引用自 PkCard.module.css，此处不再重复 */
+/* pkCta 仍然保留在 ResultPage 中 */
+
+/* ═══ PK 全屏预览 ═══ */
+
+.pkPreview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pkPreviewImg {
+  max-width: 90vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.pkPreviewActions {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pkCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ 响应式微调 ═══ */
 
 @media (min-width: 480px) {
   .hero {
-    padding: 56px var(--sp-xl) 40px;
+    padding: 72px var(--sp-xl) 56px;
   }
-  .hero.heroExpanded {
-    max-height: 560px;
-  }
-  .heroNameModule {
-    font-size: 32px;
+  .heroName {
+    font-size: 38px;
   }
 }
 
-/* ─── prefers-reduced-motion：所有动画跳过 ───────────── */
+/* ═══ prefers-reduced-motion ═══ */
 
 @media (prefers-reduced-motion: reduce) {
-  .entranceModule {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .hero {
-    max-height: none;
-    transition: none;
-  }
-
-  .heroEmoji {
-    opacity: 1;
-    transform: scale(1);
-    transition: none;
-  }
-
-  .heroNameModule {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .quoteSection {
-    opacity: 1;
-    transition: none;
-  }
-
-  .visible {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  .heroReveal {
+    animation: none;
   }
 }

@@ -1,9 +1,12 @@
+/* TestPage.module.css - 测试页 v4.0 深色主题 */
+/* 深色底 + 弥散光背景 */
+
 .page {
   display: flex;
   flex-direction: column;
   padding: var(--sp-md);
   padding-top: var(--sp-lg);
-  background: var(--bg-page);
+  background: var(--bg-deep);
   min-height: 100vh;
 }
 
@@ -15,6 +18,7 @@
   animation: slideIn 0.35s ease-out;
 }
 
+/* 使用与 QuestionCard slideIn 不同的 X 轴入场 */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -38,8 +42,8 @@
 .halfwayHint span {
   font-size: 16px;
   font-weight: 600;
-  color: #FF6B35;
-  background: rgba(255, 107, 53, 0.1);
+  color: var(--brand-primary);
+  background: rgba(255, 107, 53, 0.12);
   padding: 8px 20px;
   border-radius: 20px;
 }

@@ -1,0 +1,40 @@
+/* DiffuseBackground — 弥散光球容器 */
+.container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.orb1 {
+  width: 500px;
+  height: 400px;
+  top: 5%;
+  left: -10%;
+  animation: diffuseFloat1 25s ease-in-out infinite;
+}
+
+.orb2 {
+  width: 400px;
+  height: 300px;
+  bottom: 15%;
+  right: -5%;
+  animation: diffuseFloat2 20s ease-in-out infinite reverse;
+}
+
+.orb3 {
+  width: 350px;
+  height: 250px;
+  top: 40%;
+  left: 30%;
+  animation: diffuseFloat3 22s ease-in-out infinite;
+}

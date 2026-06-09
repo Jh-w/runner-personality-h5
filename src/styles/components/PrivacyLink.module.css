@@ -1,4 +1,4 @@
-/* PrivacyLink - 固定在页面底部的隐私政策链接 */
+/* PrivacyLink v4.0 — 固定在页面底部的隐私政策链接（深色主题适配） */
 .container {
   position: fixed;
   bottom: 0;
@@ -12,12 +12,13 @@
   justify-content: center;
   z-index: 10;
   pointer-events: none;
+  background: linear-gradient(to top, var(--bg-primary), transparent);
 }
 
 .link {
   display: inline-block;
   font-size: 11px;
-  color: rgba(153, 153, 153, 0.85);
+  color: var(--text-tertiary);
   text-decoration: none;
   pointer-events: auto;
   transition: color 0.2s ease;
@@ -27,6 +28,6 @@
 }
 
 .link:active {
-  color: rgba(102, 102, 102, 0.85);
-  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.06);
 }

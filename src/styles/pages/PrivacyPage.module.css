@@ -1,7 +1,7 @@
-/* PrivacyPage 样式 - 简洁文字页面，移动端适配 */
+/* PrivacyPage 样式 v4.0 — 深色主题适配 */
 .page {
   padding: 0;
-  background: var(--bg-page);
+  background: var(--bg-primary);
   min-height: 100vh;
 }
 
@@ -22,7 +22,7 @@
 
 .updateDate {
   font-size: var(--fs-caption);
-  color: var(--text-light);
+  color: var(--text-tertiary);
   margin-bottom: var(--sp-xl);
 }
 
@@ -72,23 +72,24 @@
   color: var(--text-primary);
 }
 
+/* 深色底适配：通知高亮条 */
 .notice {
-  background: #FFF3E0;
-  border-left: 3px solid #FF9800;
+  background: rgba(255, 152, 0, 0.12);
+  border-left: 3px solid var(--brand-primary);
   padding: var(--sp-sm);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: var(--fs-small) !important;
-  color: #E65100 !important;
+  color: var(--brand-primary) !important;
   margin-top: var(--sp-sm) !important;
 }
 
 .footer {
   text-align: center;
   font-size: var(--fs-caption);
-  color: var(--text-light);
+  color: var(--text-tertiary);
   margin-top: var(--sp-xl);
   padding-top: var(--sp-lg);
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--glass-border);
 }
 
 /* 响应式微调 - 大屏增加内边距 */

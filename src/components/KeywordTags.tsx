@@ -1,4 +1,4 @@
-// KeywordTags - 展示3个#关键词标签，横向排列，圆角标签样式
+// KeywordTags - v4.0 胶囊式关键词标签，深色主题
 import styles from '../styles/components/KeywordTags.module.css';
 
 interface KeywordTagsProps {
@@ -13,11 +13,7 @@ export default function KeywordTags({ keywords, color }: KeywordTagsProps) {
         <span
           key={i}
           className={styles.tag}
-          style={color ? {
-            background: `${color}18`,
-            color: color,
-            borderColor: `${color}40`,
-          } : undefined}
+          style={color ? { color } : undefined}
         >
           # {kw}
         </span>

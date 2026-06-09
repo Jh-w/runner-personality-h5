@@ -66,7 +66,7 @@ function drawBackgroundGrid(
   cy: number,
   radius: number
 ): void {
-  ctx.strokeStyle = '#e8e8e8';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 0.5;
 
   for (const ratio of [0.25, 0.5, 0.75]) {
@@ -157,7 +157,7 @@ function drawLabels(
   radius: number
 ): void {
   ctx.font = 'bold 14px "PingFang SC", "Helvetica Neue", sans-serif';
-  ctx.fillStyle = '#555';
+  ctx.fillStyle = '#9CA3AF';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
 

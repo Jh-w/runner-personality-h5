@@ -1,3 +1,4 @@
+/* Toast.module.css v4.0 — 深色主题适配 */
 .container {
   position: fixed;
   bottom: calc(var(--sp-xl) + var(--safe-bottom));
@@ -12,8 +13,9 @@
 }
 
 .toast {
-  background: var(--text-primary);
-  color: var(--text-white);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
   padding: var(--sp-sm) var(--sp-lg);
   border-radius: var(--radius-lg);
   font-size: var(--fs-small);

@@ -63,4 +63,41 @@ export async function preloadSvgIcons(codes: PersonalityCode[]): Promise<void> {
  */
 export function clearSvgCache(): void {
   imageCache.clear();
+  illustrationCache.clear();
+}
+
+// ─── v4.0 插图加载 ──────────────────────────────────────
+
+/** 插图 URL 缓存 */
+const illustrationCache = new Map<PersonalityCode, HTMLImageElement>();
+
+/**
+ * 加载 16 型角色插图 SVG（v4.0 几何扁平风角色）
+ * 返回 HTMLImageElement 或 null（插图文件尚未产出时）
+ */
+export async function loadPersonalityIllustration(code: PersonalityCode): Promise<HTMLImageElement | null> {
+  const cached = illustrationCache.get(code);
+  if (cached) return cached;
+
+  try {
+    // 动态导入插图 SVG（文件位于 src/assets/illustrations/）
+    // 如果文件不存在，import 会失败，catch 返回 null
+    const module = await import(`../assets/illustrations/type-${code}.svg?url`);
+    const dataUrl = module.default as string;
+    const img = new Image();
+    img.src = dataUrl;
+    await img.decode();
+    illustrationCache.set(code, img);
+    return img;
+  } catch {
+    // 插图尚未产出，静默降级为 emoji——不打印警告避免 console 污染
+    return null;
+  }
+}
+
+/**
+ * 预加载一组插图
+ */
+export async function preloadIllustrations(codes: PersonalityCode[]): Promise<void> {
+  await Promise.allSettled(codes.map(loadPersonalityIllustration));
 }

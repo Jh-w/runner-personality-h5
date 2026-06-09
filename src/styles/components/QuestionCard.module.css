@@ -1,12 +1,26 @@
+/* QuestionCard.module.css - 题目卡片 v4.0 深色主题 */
+/* 毛玻璃卡片适配 */
+
 .card {
   display: flex;
   flex-direction: column;
   gap: var(--sp-lg);
   padding: var(--sp-lg);
-  background: var(--bg-card);
+  background: var(--bg-secondary);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   animation: slideIn 0.35s ease-out;
+}
+
+/* 微信不支持 backdrop-filter 的降级 */
+@supports not (backdrop-filter: blur(1px)) {
+  .card {
+    background: rgba(30, 35, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
 }
 
 .questionNum {
@@ -31,6 +45,7 @@
   gap: var(--sp-sm);
 }
 
+/* 使用 animations.css 的 staggerFadeUp 相同 keyframe */
 @keyframes slideIn {
   from {
     opacity: 0;

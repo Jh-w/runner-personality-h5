@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTestEngine } from '../hooks/useTestEngine';
+import { loadProgress } from '../hooks/progressStore';
 import { QuestionCard } from '../components/QuestionCard';
 import { RunwayProgress } from '../components/RunwayProgress';
 import PrivacyLink from '../components/PrivacyLink';
@@ -25,7 +26,12 @@ export default function TestPage() {
   // Guard: redirect if not in testing phase
   useEffect(() => {
     if (state.phase === 'idle') {
-      navigate('/', { replace: true });
+      // AC-10: 检查 localStorage 是否有保存的进度，防止竞态
+      // Provider 的 useEffect 可能还没 dispatch RESTORE_PROGRESS，
+      // 如果直接跳转会打断进度恢复
+      if (!loadProgress()) {
+        navigate('/', { replace: true });
+      }
       return;
     }
     if (state.phase === 'completed') {

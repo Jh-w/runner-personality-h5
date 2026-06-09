@@ -1,4 +1,4 @@
-/* KeywordTags 样式 */
+/* KeywordTags 样式 — v4.0 胶囊式深色主题 */
 .container {
   display: flex;
   justify-content: center;
@@ -9,15 +9,22 @@
 
 .tag {
   display: inline-block;
-  padding: 4px 14px;
-  background: var(--brand-primary);
-  color: var(--text-white);
-  border: 1px solid transparent;
-  border-radius: 20px;
+  padding: 6px 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
   font-size: var(--fs-small);
   font-weight: 500;
   white-space: nowrap;
-  background: rgba(255, 107, 53, 0.12);
-  color: var(--brand-primary);
-  border-color: rgba(255, 107, 53, 0.30);
+  color: var(--text-primary);
+}
+
+/* 微信不支持 backdrop-filter 的降级 */
+@supports not (backdrop-filter: blur(1px)) {
+  .tag {
+    background: rgba(30, 35, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
 }
