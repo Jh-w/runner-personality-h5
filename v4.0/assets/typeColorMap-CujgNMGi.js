@@ -1,0 +1,1 @@
+import{n as e}from"./ResultPage-CxtH4pLh.js";export{e as getTypeGlowValue};
