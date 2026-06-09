@@ -1,0 +1,1 @@
+import{n as e}from"./ResultPage-BqwQ2NAS.js";export{e as getTypeGlowValue};
