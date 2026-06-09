@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>跑步人格测试 - 版本目录</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container { max-width: 600px; width: 100%; }
+    h1 {
+      font-size: 28px;
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    .version-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .version-card {
+      display: block;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .version-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    .version-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .version-tag {
+      font-weight: 700;
+      font-size: 20px;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-family: "SF Mono", "Fira Code", monospace;
+    }
+    .v30 { background: #37474f; color: #90a4ae; }
+    .v31 { background: #1b5e20; color: #81c784; }
+    .v32 { background: #0d47a1; color: #64b5f6; }
+    .v33 { background: #4a148c; color: #ce93d8; }
+    .version-label {
+      font-size: 14px;
+      color: #aaa;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .version-desc {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 32px 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏃 跑步人格测试</h1>
+    <p class="subtitle">Running Personality Test — 版本目录</p>
+    <div class="version-grid">
+      <a class="version-card" href="/runner-personality-h5/v3.3/">
+        <div class="version-header">
+          <span class="version-tag v33">v3.3</span>
+          <span class="version-label">Phase 3 · 最新</span>
+        </div>
+        <p class="version-desc">12 题版 + SVG 人格图标 + PK 对比卡片</p>
+      </a>
+      <a class="version-card" href="/runner-personality-h5/v3.2/">
+        <div class="version-header">
+          <span class="version-tag v32">v3.2</span>
+          <span class="version-label">Phase 2</span>
+        </div>
+        <p class="version-desc">选中动效 + 进场动画 + 雷达图 + 跑道进度条 + 粒子效果</p>
+      </a>
+      <a class="version-card" href="/runner-personality-h5/v3.1/">
+        <div class="version-header">
+          <span class="version-tag v31">v3.1</span>
+          <span class="version-label">Phase 1</span>
+        </div>
+        <p class="version-desc">跑者金句 + 最佳搭档 + 增强分享卡片</p>
+      </a>
+      <a class="version-card" href="/runner-personality-h5/">
+        <div class="version-header">
+          <span class="version-tag v30">v3.0</span>
+          <span class="version-label">基线</span>
+        </div>
+        <p class="version-desc">8 题版 · 16 型人格 · AC-10 断点续答 · Canvas 分享卡片</p>
+      </a>
+    </div>
+    <hr class="divider">
+    <p class="footer">Jh-w / runner-personality-h5</p>
+  </div>
+</body>
+</html>
