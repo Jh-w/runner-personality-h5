@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#8BC34A" opacity="0.06"/>
+  <!-- 蹲姿研究跑鞋 -->
+  <!-- 左腿（蹲） -->
+  <line x1="75" y1="145" x2="58" y2="175" stroke="#8BC34A" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="56" cy="177" rx="9" ry="4" fill="#689F38"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="140" x2="108" y2="175" stroke="#8BC34A" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="110" cy="177" rx="9" ry="4" fill="#689F38"/>
+  <!-- 身体半蹲前倾 -->
+  <rect x="68" y="95" width="32" height="48" rx="10" fill="#8BC34A" transform="rotate(-10, 84, 119)"/>
+  <!-- 左臂（拿放大镜） -->
+  <line x1="68" y1="100" x2="34" y2="120" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 放大镜 -->
+  <circle cx="28" cy="122" r="12" fill="none" stroke="#795548" stroke-width="3"/>
+  <circle cx="28" cy="122" r="9" fill="#B2DFDB" opacity="0.4"/>
+  <line x1="28" y1="134" x2="30" y2="145" stroke="#795548" stroke-width="3" stroke-linecap="round"/>
+  <!-- 右臂（触鞋） -->
+  <line x1="100" y1="100" x2="122" y2="38" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 手中拿鞋 -->
+  <ellipse cx="126" cy="34" rx="14" ry="6" fill="#FF6B35"/>
+  <rect x="116" y="32" width="20" height="4" rx="2" fill="#E65100"/>
+  <!-- 头部 -->
+  <circle cx="98" cy="80" r="17" fill="#C5E1A5"/>
+  <!-- 眼镜（研究款） -->
+  <rect x="84" y="74" width="28" height="10" rx="4" fill="none" stroke="#33691E" stroke-width="1.5"/>
+  <line x1="84" y1="79" x2="112" y2="79" stroke="#33691E" stroke-width="1"/>
+  <!-- 地面环绕的鞋 -->
+  <ellipse cx="35" cy="180" rx="11" ry="5" fill="#FF9800" opacity="0.6"/>
+  <ellipse cx="165" cy="178" rx="11" ry="5" fill="#2196F3" opacity="0.6"/>
+  <ellipse cx="100" cy="185" rx="10" ry="4" fill="#E91E63" opacity="0.5"/>
+</svg>

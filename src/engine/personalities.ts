@@ -1,5 +1,6 @@
-// 16种跑步人格完整数据 — PRD v3.3-Phase3 (svgIcon)
+// 16种跑步人格完整数据 — PRD v4.1 脱口秀内容重构
 // 按四维编码排序: CSDG → EPGM
+// v4.1: 新增 hook / dimensionComments / shareTagline / keywords→5标签 / roast→250-350字
 
 import type { PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
 
@@ -11,8 +12,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CSDG',
     name: '赛道卷王',
     emoji: '🏆',
-    keywords: ['数据狂魔', 'PB焦虑症', '装备测评师'],
-    roast: '你认识每一代Vaporfly的差别，也知道自己最近30天的配速曲线，但朋友只知道你周末没法约饭——你要跑LSD。',
+    keywords: ['数据教信徒', 'PB焦虑症晚期', '路段KOM复仇者', '补给站过门不入', '跑鞋理财产品持有者'],
+    roast:
+      '别人跑步为了健康，你跑步为了数据。Garmin 少记了 0.01 公里你能难受一整天，Strava 上有人抢了你的路段 KOM 你能记半年。朋友约你周末吃饭，你说"等一下我先看看我那天有没有 LSD"——这不叫热爱，这叫被配速绑架。\n\n你的生活是由间歇跑、节奏跑、LSD 和"今天状态不好不跑了"构成的无限循环。每次跑完第一件事不是拉伸不是喝水，是掏出手机盯着配速曲线反复品味，像一个刚交卷的学霸在看成绩单。PB 焦虑是你的出厂设置，你甚至会在睡梦里梦见自己忘关手表，醒来一身冷汗。\n\n但你确实快。别人在补给站喝水，你已经在下一个弯道了。跑团的人提起你都说"那个从来不等人的"。等？开什么玩笑，等一秒配速掉两秒，掉两秒今天白跑。',
     traits: [
       '每次跑完第一件事不是拉伸，是看数据',
       '买跑鞋前至少看了5篇测评',
@@ -23,6 +25,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '我不和别人比，我只和昨天的自己比——然后发现昨天的自己真菜。',
     colorDark: '#CC2222',
     svgIcon: 'CSDG',
+    animalEmoji: '🐆',
+    animalName: '猎豹',
+    animalImg: '/runner-personality-h5/animals/animal-type-01.png',
+    hook: '我跑步不是为了健康，是为了让昨天的自己无地自容。',
+    dimensionComments: {
+      motivation: '你跑的不是步，是跟自己较劲。昨天的自己是你永远的手下败将，明天的自己是你的假想敌。',
+      social: '没人跟你一起跑不是因为你不合群，是因为没人追得上你。说真的，你也懒得等。',
+      style: '训练课表比上班打卡还准时。缺一节间歇课，罪恶感比旷工三天还强烈。',
+      ritual: '你认识每一代 Vaporfly 的差别，你的鞋墙比你的人生规划还清晰。',
+    },
+    shareTagline: '确诊为赛道卷王',
   },
 
   // ═══ 2. CSDM | 沉默破风者 | 竞技+独狼+计划+极简 ═══
@@ -31,8 +44,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CSDM',
     name: '沉默破风者',
     emoji: '🌬️',
-    keywords: ['低调输出', '暗中观察', '稳定配速'],
-    roast: '从不发朋友圈，但Strava上全是PR。跑团群永远潜水，但比赛永远站台。',
+    keywords: ['潜水型站台选手', '配速巡航导弹', '只见背影不见人', '课表隐身执行者', '鞋底磨穿也不换'],
+    roast:
+      '跑团群永远潜水，朋友圈从不开张，但 Strava 上全是 PR。你以为他不跑，结果他在你没看见的时候跑了三个全马。合影永远站最边上，但只要你翻比赛照片——被拍得最多的那个背影就是他。\n\n他的装备极其朴素，一双鞋能穿到你怀疑鞋底是不是焊在脚上了。问他为什么不换鞋，他说"还能穿"。问他训练计划是什么，他说"随便跑跑"——然后配速稳定得像巡航导弹，误差不超过 2 秒。你开始怀疑他不是人类，是某个马拉松实验室逃出来的配速机器人。\n\n他不打卡不晒图不争辩，但每次比赛站台名单上都有他。你问他"你怎么这么快"，他想了想说"多跑就行"——这句话的杀伤力比任何炫耀都大，因为它意味着你快不起来纯粹是因为跑得不够。',
     traits: [
       '配速稳定得像巡航导弹',
       '训练计划写在备忘录里，不给你看',
@@ -43,6 +57,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '不说话，不打卡，不解释。只是在你没看见的时候，又跑了一个全马。',
     colorDark: '#37474F',
     svgIcon: 'CSDM',
+    animalEmoji: '🐆',
+    animalName: '黑豹',
+    animalImg: '/runner-personality-h5/animals/animal-type-05.png',
+    hook: '你永远不知道他有多快，因为他从不说。',
+    dimensionComments: {
+      motivation: '他嘴上说"随便跑跑"，脚下配速从不说谎。低调是最狠的炫耀。',
+      social: '一个人训练，一个人比赛，一个人回家。像武侠小说里独来独往的高手，只留下一地传说的配速。',
+      style: '训练计划写在备忘录里，不给你看。每一天的课表都严格执行，但绝不让你知道。',
+      ritual: '一双鞋穿到退役，一块表用到停产。唯一不简的是跑量。',
+    },
+    shareTagline: '沉默是金，配速是钻',
   },
 
   // ═══ 3. CPDG | 装备型冲刺怪 | 竞技+独狼+随性+装备 ═══
@@ -51,8 +76,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CPDG',
     name: '装备型冲刺怪',
     emoji: '⚡',
-    keywords: ['间歇狂魔', '新款必入', '即兴发挥'],
-    roast: '训练计划？不需要。新款碳板鞋到了？冲！结果是跑完3组间歇后蹲在路边刷鞋。',
+    keywords: ['间歇成瘾患者', '跑鞋开箱博主', '碳板教徒', '鞋墙资产管理人', '永远在刷鞋的男人/女人'],
+    roast:
+      '你的训练没有规律，但你的鞋柜有。每一双碳板鞋的到货时间对你来说是节日，开箱那一刻的仪式感远超马拉松起跑线。你坚信"没有不好的状态，只有不对的鞋"——所以每次状态不好就买鞋，现在鞋墙比跑步里程增长快三倍。\n\n间歇跑是你的信仰，每组必须跑到怀疑人生才算完成。你跑完三组 800 米后蹲在路边不是拉伸，是在刷鞋。因为新鞋跑间歇脏了，不能忍。你比品牌 PR 还快知道新品信息，比 KOL 还早拿到首发——然后跑三公里就写一篇"初步体验"发群里。\n\n问题是你永远在间歇，从不跑节奏。所以你五公里贼快，十公里还行，半马开始骂街，全马？那是别的运动。',
     traits: [
       '间歇跑是信仰，每组必须跑到怀疑人生',
       '对最新装备了如指掌，比品牌PR还快',
@@ -63,6 +89,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '鞋墙比我的人生规划还整齐，间歇跑比我的情绪还稳定。',
     colorDark: '#CC4400',
     svgIcon: 'CPDG',
+    animalEmoji: '🦈',
+    animalName: '虎鲨',
+    animalImg: '/runner-personality-h5/animals/animal-type-03.png',
+    hook: '新款碳板到了，训练计划可以等一下——鞋不能等。',
+    dimensionComments: {
+      motivation: '快是唯一指标。慢一秒都算输，不管对手是谁——有没有人跟你比都不重要，你在跟表比。',
+      social: '跟人一起跑会影响你间歇的节奏，所以你选择一个人跑。其实是没人受得了你的间歇。',
+      style: '训练计划？不存在的。今天想跑什么跑什么，想穿哪双穿哪双。唯一确定的是跑完一定累趴。',
+      ritual: '新款必入，限量必抢，评测必写。你的鞋墙是一本跑鞋进化史。',
+    },
+    shareTagline: '间歇是我的信仰，碳板是我的圣经',
   },
 
   // ═══ 4. CPDM | 野生竞速者 | 竞技+独狼+随性+极简 ═══
@@ -71,8 +108,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CPDM',
     name: '野生竞速者',
     emoji: '😎',
-    keywords: ['天赋碾压', '随性取胜', '从不焦虑'],
-    roast: '从不刻意训练，但比赛从不掉链子。你怀疑他是外星人，他只是说"跑就完了"。',
+    keywords: ['天赋碾压执行者', '凡尔赛式随便跑跑', '热身是什么', '不练也能站台', '手表电量永远1%'],
+    roast:
+      '这类人的存在是对整个科学训练体系的挑衅。不热身不拉伸，穿着两年前的旧鞋，到了起点还在打哈欠——然后起跑就把你甩了。赛前不紧张，赛后不酸痛，你问他怎么做到的，他说"跑就完了"。你气得想打他，但你知道打不过他，因为他跑得快。\n\n他从不在意配速分区、心率区间、步频步幅这些你每天死磕的数据。他的手表可能没电了，他的 Strava 账号可能忘了密码。但他就是快——那是一种你无法企及的天赋，像猫科动物一样不讲道理。你知道自己每周跑四天间歇、两天 LSD、一天力量，而他就是"今天天气不错出去跑跑"——然后比你快两分钟。\n\n最气人的是什么？他真的不在意。他不是装不在意，是真不在意。你破了 PB 你发九宫格，他破了 PB 他甚至没按暂停。',
     traits: [
       '不热身不拉伸，直接开跑',
       '比赛前不紧张，比赛后不酸痛',
@@ -83,6 +121,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '赛前不练，赛中不乱，赛后不酸——别问，问就是天赋。',
     colorDark: '#2E7D32',
     svgIcon: 'CPDM',
+    animalEmoji: '🦊',
+    animalName: '狐',
+    animalImg: '/runner-personality-h5/animals/animal-type-15.png',
+    hook: '他不练，他不卷，他只是跑——然后你快不过他。',
+    dimensionComments: {
+      motivation: '随随便便就跑赢你的赛前三个月训练。天赋是一种你无法通过努力复制的魔法。',
+      social: '你们跑团所有人加起来也跑不过他一个人。问题是他从来没加入过你们跑团。',
+      style: '训练计划是他最不需要的东西。状态？不需要。心情？不需要。随便跑跑就是你的 PB。',
+      ritual: '不买装备不是因为穷，是因为他觉得你不快跟鞋没关系。',
+    },
+    shareTagline: '凡尔赛本体：我随便跑跑',
   },
 
   // ═══ 5. CGDG | 跑团结算官 | 竞技+社群+计划+装备 ═══
@@ -91,8 +140,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CGDG',
     name: '跑团结算官',
     emoji: '🧮',
-    keywords: ['数据管家', '规则捍卫者', '装备顾问'],
-    roast: '跑完第一句话不是"好累"，是"今天的平均配速是5:23，心率区间分布..."。跑团的最强大脑，配速的警察叔叔，团费的财务总监。',
+    keywords: ['配速警察局长', 'Excel马拉松选手', '心率区间布道者', '团费守护神', '人类Strava数据库'],
+    roast:
+      '跑团里可以没有团长，但不能没有你。你是一个行走的数据库，记住了所有人的历史成绩、最近状态、上次什么时候偷懒了。跑完第一句话不是"好累"，是"今天的平均配速是 5:23，心率区间分布是……"——还没说完大家已经散了。\n\n你的装备测评写得比品牌官方还详细，每次跑团有新鞋出现，你就会凑过去问"脚感怎么样？回弹如何？前掌还是后掌？"——你不是在聊天，你是在收集数据样本。跑团的团费你管着，账目比你自己的工作报表都清楚。\n\n你最大的痛苦是：你能精确计算每一个人的理想配速，但没人听你的。你建议 A 控速，A 起跑就冲出去了；你建议 B 保守，B 跑崩在 30 公里。你看着数据叹了口气，默默记录，下次继续建议，继续被无视。',
     traits: [
       '跑完立刻发数据分析到群里',
       '记住所有人的PB，比本人还清楚',
@@ -103,6 +153,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '跑团的数据中心，配速的警察叔叔，团费的财务总监。',
     colorDark: '#0D47A1',
     svgIcon: 'CGDG',
+    animalEmoji: '🐘',
+    animalName: '大象',
+    animalImg: '/runner-personality-h5/animals/animal-type-09.png',
+    hook: '你忘了自己的 PB，但他记得——精确到秒。',
+    dimensionComments: {
+      motivation: '你对竞速的理解超越了身体的极限——你用 Excel 跑马拉松。别人跑步靠腿，你靠数据。',
+      social: '跑团的数据中心、财务总监、配速警察局。没你跑团也能跑，但跑完之后没有数据分析了就很空虚。',
+      style: '你为团队制定的计划精确到秒。唯一的问题是没人执行——除了你自己。',
+      ritual: '你对装备的了解程度可以开一家跑鞋买手店。每一双鞋的优缺点你都在 Excel 里有记录。',
+    },
+    shareTagline: '跑团唯一指定数据中心',
   },
 
   // ═══ 6. CGDM | 团练教官 | 竞技+社群+计划+极简 ═══
@@ -111,8 +172,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CGDM',
     name: '团练教官',
     emoji: '🫡',
-    keywords: ['课表执行者', '纪律严明', '配速机器'],
-    roast: '课表就是法律，天气不是借口。下雨？跑。下雪？跑。世界末日？跑完再说。',
+    keywords: ['课表原教旨主义者', '铁血教官', '配速法西斯', '拉爆你不是目的是被迫的', '天气免疫体质'],
+    roast:
+      '对你来说，训练课表是写在石头上的十诫。下雨？跑。下雪？跑。台风天？跑，不过换个方向。世界末日？跑完再说，反正课表还没结束。你不是在跑步，你是在执行军事任务——区别是你没有军饷，还得自己买鞋。\n\n你带新人温柔但严格。"前两公里慢一点，别着急"——说这话的时候你已经在第三公里加速了。新人喘不过气想停，你说"再坚持一下，就一下"——这一下就是十公里。你不是在鼓励，你是在驯化，把每一个跑步小白变成配速机器。\n\n装备？够用就行。一双鞋能穿到你记不清什么时候买的。你相信速度跟钱没关系，跟你有没有执行课表有关系。这是你最可怕的信念，因为它多半是真的。',
     traits: [
       '训练课表从不缺席，风雨无阻',
       '带新人耐心但要求严苛',
@@ -123,6 +185,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '课表就是课表，风雨无阻。拉爆你不是目的，是被迫的。',
     colorDark: '#006064',
     svgIcon: 'CGDM',
+    animalEmoji: '🐺',
+    animalName: '狼',
+    animalImg: '/runner-personality-h5/animals/animal-type-10.png',
+    hook: '课表就是法律。下雨？那是你的事，不是课表的事。',
+    dimensionComments: {
+      motivation: '风雨无阻不是口号，是你的日常。天气是你课表里最小的变量。',
+      social: '你是跑团的灵魂，因为你不在的时候大家跑得特别轻松。但没你他们也不会进步，所以你是被需要的，虽然被骂。',
+      style: '课表就是课表。没有"今天状态不好"，只有"今天这组配速慢了 5 秒"。',
+      ritual: '最好的装备是你的意志力。鞋？消耗品。表？参考而已。',
+    },
+    shareTagline: '为人不识团练教官，跑遍跑团也枉然',
   },
 
   // ═══ 7. CPGG | 社交竞速家 | 竞技+社群+随性+装备 ═══
@@ -131,8 +204,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CPGG',
     name: '社交竞速家',
     emoji: '🎭',
-    keywords: ['两面派', '装备控', '社交达人'],
-    roast: '对跑团说"今天慢摇"，对竞速组说"今天冲PB"。装备是通行证，比赛是社交场。',
+    keywords: ['跑圈双面胶', '人设切换大师', '各群通用MVP', '配速P图专家', '赛后面基第一人'],
+    roast:
+      '你拥有跑圈最灵活的人设切换系统。慢摇组面前你是佛系养生达人，跑两步拍三张照，配速 7 分还嫌快。竞速组面前你是间歇战士，配速 4 分半还嫌慢，跑完还要加两组冲刺。两边的群你都在，两边的活动你都去，两边的聊天记录你都不敢给对方看。\n\n你的装备是一张精密计算的社交名片。什么跑团穿什么鞋，什么场合戴什么表，你都安排得明明白白。比赛对你来说是大型社交现场——PB 是顺便的，合影是必须的，赛后聚餐才是真正目的。\n\n你是跑圈的社交润滑剂，所有跑团都欢迎你，因为你在哪，哪就热闹。唯一的问题是：当两个跑团同时约你周末跑步的时候，你的焦虑指数超过赛前。',
     traits: [
       '装备和社交两手抓，两手都硬',
       '不同跑团切换不同人设',
@@ -143,6 +217,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '装备是通行证，比赛是社交场，PB 是顺便的事。',
     colorDark: '#AD1457',
     svgIcon: 'CPGG',
+    animalEmoji: '🪶',
+    animalName: '极乐鸟',
+    animalImg: '/runner-personality-h5/animals/animal-type-04.png',
+    hook: '对慢摇组说"今天养生"，对竞速组说"今天干"——你不是两面派，你是双面胶。',
+    dimensionComments: {
+      motivation: '你在人前说"随便跑"，人后偷偷冲 PB。竞技的快乐分两种：公开的和低调的。',
+      social: '你不是加了太多跑团，你是把每一个跑团都当成了你的第二个家。每个跑团都是亲生的。',
+      style: '今天的配速取决于今天跟谁跑。跟慢摇组 7 分配，跟竞速组 4 分配，切换自如。',
+      ritual: '你的装备体系是按社交场景划分的。这不是装备，这是社交货币。',
+    },
+    shareTagline: '跑团交际花，各个群都拿 MVP',
   },
 
   // ═══ 8. CPGM | 佛系跟跑王 | 竞技+社群+随性+极简 ═══
@@ -151,8 +236,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'CPGM',
     name: '佛系跟跑王',
     emoji: '😌',
-    keywords: ['群跑达人', '快乐至上', '随叫随到'],
-    roast: '一个人能鸽，但群里一喊立马到。PB不重要，重要的是跑完去哪儿喝豆浆。',
+    keywords: ['出勤率影帝', '终点美食导航员', '跑团气氛粘合剂', '不争不抢快乐王', '鸽王变群王'],
+    roast:
+      '你是跑团的出勤率冠军，但不是因为自律——是因为你不想当唯一缺席的那个。一个人跑步你有一万个理由不去：太热、太冷、太累、鞋子看起来心情不好。但群里一喊"明早六点滨江"，你秒回"111"，比上班打卡还积极。\n\n你不争第一，不追 PB，不理解为什么有人跑完会立刻看手表像中了彩票一样激动。你跑完之后最关心的数据不是配速，是哪家早餐铺的豆浆油条最新鲜。你是跑团的终点导航——跟着你跑意味着跑完后一定有好吃的地方。\n\n你的装备极其精简，一双鞋穿到你忘了什么时候买的——因为跑步对你来说不是竞技，是社交和快乐。你可能是全队最快的吗？不是。但你是全队最快乐的跑者，没有之一。',
     traits: [
       '跑团出勤率最高，但从不争第一',
       '享受跑步的社交属性而非竞技',
@@ -163,6 +249,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '一个人不跑，一群人跑开心。PB 不重要，重要的是跑完去哪吃。',
     colorDark: '#E65100',
     svgIcon: 'CPGM',
+    animalEmoji: '🦦',
+    animalName: '水獭',
+    animalImg: '/runner-personality-h5/animals/animal-type-12.png',
+    hook: '一个人能鸽，群里一喊立马到。不是爱跑步，是爱跑完那顿早饭。',
+    dimensionComments: {
+      motivation: '虽然编码写了竞技，但你内心住着一个快乐的散步者。快慢不重要，重要的是开心。',
+      social: '跑步的社交属性远大于运动属性。你不是来跑的，你是来聚的。',
+      style: '不纠结配速，不焦虑跑量。比你跑得快的都在愁数据，你只觉得今天的豆浆真好喝。',
+      ritual: '一双鞋、一个人、一群朋友。你需要的东西很少，快乐很多。',
+    },
+    shareTagline: '确诊为佛系跟跑——跑完去哪吃？',
   },
 
   // ═══ 9. ESDG | 精致漫跑者 | 体验+独狼+计划+装备 ═══
@@ -171,8 +268,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'ESDG',
     name: '精致漫跑者',
     emoji: '🎩',
-    keywords: ['穿搭博主', '路线艺术家', '仪式感拉满'],
-    roast: '跑步10分钟，自拍20张。今天的穿搭必须配今天的天气，今天的路线必须有今天的审美。',
+    keywords: ['穿搭博主型跑者', '光线猎手', '3公里出片王', '跑鞋色卡收集者', '路线审美委员会'],
+    roast:
+      '你跑步 30 分钟，自拍用掉 20 分钟。步没跑几步，相册满了。你的跑鞋和穿搭必须颜色呼应、风格匹配，阳光下不能有色差，阴天里不能太沉闷。别人看天气预报是为了确认能不能跑，你看天气预报是为了确认今天的光线适不适合出片。\n\n你的跑步路线需要有"审美价值"——江边、林荫道、古城墙、或者至少有一面好看的涂鸦墙。田径场？太丑了不去。跑步对你来说不是运动，是一种带汗的生活方式。跑完的朋友圈文案你可能在路上就开始想了，有时候想文案比跑步本身还累。\n\n但这种精致不是矫情——这是一种把生活过成诗的执念，是你对抗平庸的跑步方式。虽然有时候你跑了 3 公里，但照片看起来像跑了全马。',
     traits: [
       '跑鞋和穿搭必须配套，颜色不搭不跑',
       '精选跑步路线，必须有好风景',
@@ -183,6 +281,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '配速可以慢，但穿搭必须在线。今天的光线和今天的鞋，必须配。',
     colorDark: '#6A1B9A',
     svgIcon: 'ESDG',
+    animalEmoji: '🦩',
+    animalName: '火烈鸟',
+    animalImg: '/runner-personality-h5/animals/animal-type-24.png',
+    hook: '配速不重要。重要的是今天的穿搭、今天的光线、和今天的我——完美。',
+    dimensionComments: {
+      motivation: '跑步是形式，体验是本质。每一步都要有风景，每一帧都要能发朋友圈。',
+      social: '一个人跑是因为不需要等人的审美也等人。你的节奏自己定，你的画面自己构。',
+      style: '跑步路线提前规划好了——不是按距离，是按出片率。哪个弯道是金色光，哪个路口有樱花，你心里都有地图。',
+      ritual: '穿搭是跑步的一部分。鞋的颜色配袜子、袜子的长度配裤子，这套系统复杂度高于你的工作。',
+    },
+    shareTagline: '跑得不多，但每张照片都是大片',
   },
 
   // ═══ 10. ESDM | 修行式跑者 | 体验+独狼+计划+极简 ═══
@@ -191,8 +300,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'ESDM',
     name: '修行式跑者',
     emoji: '🧘',
-    keywords: ['冥想跑者', '固定路线', '极简主义'],
-    roast: '跑步不为比赛不为数据，只为那一刻的平静。固定路线、固定时间、固定自己。',
+    keywords: ['跑步冥想家', '固定路线信仰者', '心流捕手', '配速旁观者', '跑圈隐士'],
+    roast:
+      '你是跑步界的隐士。固定路线、固定时间、固定配速——你的跑步像一首重复播放却不腻的歌。别人换路线是为了新鲜感，你不换是因为路线只是背景，你在跟自己对话。跑步时不听歌不听播客，只听自己的呼吸和心跳。这不是跑步，这是移动的冥想。\n\n你不需要 Strava 的点赞，不需要跑团的喝彩，甚至不需要别人知道你在跑步。你的满足感来自于跑完那一刻的平静——世界安静了，你也安静了。这种快乐有门槛，那些每天追着配速跑的人永远体会不到。\n\n但你要小心——当你跟跑友说"配速不重要，心流才重要"的时候，对方的表情像在看一个禅师，但其实内心在翻白眼。',
     traits: [
       '同一条路线跑了三年不腻',
       '跑步时不听歌，听自己的呼吸',
@@ -203,6 +313,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '固定的路线，固定的时间，固定的自己。跑步是我的移动冥想室。',
     colorDark: '#1A237E',
     svgIcon: 'ESDM',
+    animalEmoji: '🕊️',
+    animalName: '丹顶鹤',
+    animalImg: '/runner-personality-h5/animals/animal-type-06.png',
+    hook: '同一条路跑了三年，不是没别的路，是这条路刚好够想清楚一切。',
+    dimensionComments: {
+      motivation: '跑步不是运动，是修心。不是你跑得越远，是你沉得越深。',
+      social: '跑步是你和自己独处的唯一方式。不需要陪伴，不需要鼓励，只需要一条路。',
+      style: '固定的时间、固定的路线、固定的节奏——你的生活可能充满变数，但这一刻是确定的。',
+      ritual: '你在用减法跑步。鞋、路、你——三样东西就够。其他都是噪音。',
+    },
+    shareTagline: '我的跑步是移动冥想，你的跑步是数据焦虑',
   },
 
   // ═══ 11. EPDG | 装备体验师 | 体验+独狼+随性+装备 ═══
@@ -211,8 +332,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EPDG',
     name: '装备体验师',
     emoji: '🔬',
-    keywords: ['开箱博主', '科技控', '收藏家'],
-    roast: '鞋柜比衣柜大，每双鞋都有一段故事——虽然有的故事只有3公里长。',
+    keywords: ['跑鞋收藏家', '开箱即巅峰', '3公里测评博主', '鞋墙资产管理人', '中底回弹率学研究者'],
+    roast:
+      '你的鞋柜是家里的主要固定资产。每一双鞋都有故事——虽然有的故事只有 3 公里长。你买装备的理由不是"我需要"，是"我想感受一下"。新款到货你比品牌方还激动，开箱视频发在群里，大家已经习惯了你的"又双叒叕买了"系列。\n\n你对装备的了解已经达到科研级别：中底材料回弹率、鞋面透气性、大底湿地抓地力——这些参数你烂熟于心，但你穿它们跑步的总里程加起来可能还没你研究它们花的时间多。你不是在跑步，你是在做产品体验评测，只不过没有厂商付费给你。\n\n你最大的矛盾是：买了这么多装备，你最爱穿的还是最开始那两双。剩下的？它们在鞋柜里静静等待那场永远不会来的"下次一定"。',
     traits: [
       '新款跑鞋发布时比品牌方还激动',
       '家里鞋墙是主要资产',
@@ -223,6 +345,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '买的装备比跑的路多，但每一双都试过——试了三公里。',
     colorDark: '#7B1FA2',
     svgIcon: 'EPDG',
+    animalEmoji: '🐿️',
+    animalName: '松鼠',
+    animalImg: '/runner-personality-h5/animals/animal-type-23.png',
+    hook: '鞋墙比衣柜大，跑量比购物量小——我买的是一种可能性。',
+    dimensionComments: {
+      motivation: '跑步的快感不止在路上，也在开箱的那一瞬间。拆塑封的仪式感不亚于冲过终点线。',
+      social: '一个人买、一个人试、一个人写测评。你的装备世界不需要别人的意见，你已经是意见领袖。',
+      style: '今天跑不跑取决于今天快递到没到。鞋到了就跑，没到就等鞋到了再跑。',
+      ritual: '鞋墙 = 个人净资产。买装备的速度远超消耗装备的速度，这是一个永远在扩张的帝国。',
+    },
+    shareTagline: '不是我跑得少，是我鞋太多试不过来',
   },
 
   // ═══ 12. EPDM | 自由流浪跑者 | 体验+独狼+随性+极简 ═══
@@ -231,8 +364,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EPDM',
     name: '自由流浪跑者',
     emoji: '🗺️',
-    keywords: ['无计划派', '自由灵魂', '探索者'],
-    roast: '没有训练计划，没有配速目标，没有固定路线——但有风，有路，有自由。',
+    keywords: ['无计划流浪者', '跑圈游侠', '方向感大于配速感', '跑步原教旨主义', '数据免疫体质'],
+    roast:
+      '你是跑圈真正的流浪者。别人的跑步有起点和终点，你的跑步只有方向——出门左转还是右转完全随机，跑到哪算哪。不看表、不算配速、不在意距离。10 公里和 15 公里对你来说的区别只是"天还亮着就多跑一会"。你不是在训练，你是在用脚步认识世界。\n\n你觉得跑步被数据绑架是一种悲哀。当大家低头看表的时候，你在看路边的花开了；当大家在讨论间歇配速的时候，你在想刚才那个路口的风吹得好舒服。你可能不是最快的跑者，但你一定是最自由的。不需要跟任何人比，不需要向任何人证明——你只是想在风里跑一会儿。',
     traits: [
       '出门方向随机，跑到哪算哪',
       '从不看表，只看风景',
@@ -243,6 +377,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '没有计划，没有 App，没有目标。但有风，有路，有自由。',
     colorDark: '#4E342E',
     svgIcon: 'EPDM',
+    animalEmoji: '🕊️',
+    animalName: '信天翁',
+    animalImg: '/runner-personality-h5/animals/animal-type-32.png',
+    hook: '没有计划，没有目标，没有路线——但有风，有路，有自由。',
+    dimensionComments: {
+      motivation: '跑步是探索，不是运动。每一公里都是新的风景，每一个路口都可能改变方向。',
+      social: '一个人的奔跑才是真正的自由。不需要等人，不需要追人，节奏完全随心。',
+      style: '计划是你最不需要的东西。出门方向看心情，跑多远看天色，跑多快看风吹得大不大。',
+      ritual: '手表？不需要。App？多余。装备？一双鞋就行。你不是极简，你是回归跑步的本质。',
+    },
+    shareTagline: '跑步不需要KPI，需要的是方向感',
   },
 
   // ═══ 13. EGDG | 跑团气氛组 | 体验+社群+计划+装备 ═══
@@ -251,8 +396,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EGDG',
     name: '跑团气氛组',
     emoji: '🎉',
-    keywords: ['气氛担当', '社交引擎', '后勤部长'],
-    roast: '跑团没你跑不起来——不是因为你快，是因为没你没人张罗。补给站站长、合影导演、群聊焦点。',
+    keywords: ['跑团基建狂魔', '补给站站长', '合影总导演', '荧光色重度依赖', '赛后聚餐选店委员会委员长'],
+    roast:
+      '你是跑团的 CEO、COO、CMO——但全是义务劳动。每周的通知是你发的，路线是你踩的，补给是你买的，合影是你拍的，赛后聚餐的馆子是你定的。你最忙的时候不是跑步的时候，是跑步前后——像个婚礼策划师，只不过这场婚礼每周都有。\n\n你装备不一定最贵，但一定最骚——荧光色上衣、彩虹袜子、头顶一只发光发箍。你不是在追求性能，你是在追求辨识度。你是跑团的 LOGO，走在路上路人会多看一眼的那种。\n\n你的痛苦在于：当你说"这周我不来了"的时候，群里会突然安静，然后有人问"那谁张罗啊"。你不是跑团的一员，你是跑团的基建。',
     traits: [
       '跑团活动组织者，出勤率靠你维持',
       '总能找到跑完聚餐的好馆子',
@@ -263,6 +409,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '跑步不重要，重要的是跑团里有你。没你，他们跑不起来。',
     colorDark: '#B71C1C',
     svgIcon: 'EGDG',
+    animalEmoji: '🦜',
+    animalName: '金刚鹦鹉',
+    animalImg: '/runner-personality-h5/animals/animal-type-18.png',
+    hook: '跑团没你就跑不起来——不是因为你快，是因为没你没人张罗。',
+    dimensionComments: {
+      motivation: '跑步的快乐不在配速，在大家一起跑完哈哈大笑的那一刻。热闹比快慢重要。',
+      social: '你是跑团的灵魂——跑团存在的意义你定义了一半。另一半是大家跑完去哪吃。',
+      style: '你的计划不是给自己做的，是给全团做的。路线规划、补给安排、合影站位——全是你的项目管理。',
+      ritual: '骚是第一生产力。功能？跑得快不快不重要，看起来快就行。',
+    },
+    shareTagline: '跑团编外CEO，义务劳动终身成就奖',
   },
 
   // ═══ 14. EGDM | 社区慢跑队长 | 体验+社群+计划+极简 ═══
@@ -271,8 +428,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EGDM',
     name: '社区慢跑队长',
     emoji: '🐢',
-    keywords: ['新人导师', '慢跑推广者', '社区支柱'],
-    roast: '配速不快，但从不错过每次活动。最成功的PB不是破3，是陪新人跑完第一个五公里。',
+    keywords: ['新人守护神', '慢跑传教士', '队伍最后的灯塔', '鞋底磨平专家', '破不了的人生PB——陪伴'],
+    roast:
+      '你的配速不快，但出勤率极高；你的装备不贵，但里程数最高。你永远在队伍最后面，不是因为你跑得慢，而是因为有一个新人说"我怕跟不上"，你说"没事我陪你。"\n\n你的跑步不是为了刷新成绩，而是刷新别人对跑步的认知——让害怕跑步的人知道，有人会在终点等你；让觉得自己不行的人发现，有人在旁边说"再跑一分钟"。你教的不是配速，是信心；你给的不仅是陪伴，是一种跑步的信仰。\n\n一双鞋穿三年，橡胶底都磨平了，但你的跑量是全团最高的——因为你在队伍后面陪了一趟又一趟。你不是跑得最快的人，但你是影响最多人开始跑步的人。这个 PB，没人能破。',
     traits: [
       '永远在队伍最后面陪着最慢的人',
       '跑步只为健康和陪伴',
@@ -283,6 +441,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '配速不快，但从不缺席。最成功的 PB，是陪新人跑完第一个五公里。',
     colorDark: '#558B2F',
     svgIcon: 'EGDM',
+    animalEmoji: '🐕',
+    animalName: '金毛犬',
+    animalImg: '/runner-personality-h5/animals/animal-type-26.png',
+    hook: '最成功的 PB 不是破 3，是陪一个新人跑完人生第一个五公里。',
+    dimensionComments: {
+      motivation: '跑步的价值不在秒数上，在人身上。你用一双旧鞋跑出了最多的温暖。',
+      social: '你是社区跑者的定义者。没你，很多人永远不会迈出第一步。',
+      style: '每周的活动你从不缺席。不是计划在推你，是责任感在推你。',
+      ritual: '一双鞋穿到退役，一块表用到没电。你的装备不是炫的，是默默陪你跑了上千公里的老伙计。',
+    },
+    shareTagline: '跑不快，但能让你跑起来',
   },
 
   // ═══ 15. EPGG | 潮流跟跑员 | 体验+社群+随性+装备 ═══
@@ -291,8 +460,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EPGG',
     name: '潮流跟跑员',
     emoji: '🌟',
-    keywords: ['潮流风向标', '热门雷达', '打卡达人'],
-    roast: '什么火跑什么，哪热闹去哪。跑圈热门路线的第一批打卡者，跑团朋友圈的封面人物。',
+    keywords: ['潮流前线雷达', '跑步自媒体达人', '新款必入先锋', '热门路线收割机', '跑圈信息枢纽'],
+    roast:
+      '你是跑圈的信息枢纽和热度雷达。新路线刚火你就去打了卡，新活动刚出你就报了名，新跑鞋刚发售你就上了脚。你的朋友圈就是一份跑步潮流周报，想了解跑圈最近在玩什么，看你一个人的动态就够了。\n\n你对装备的嗅觉比品牌市场部还灵敏，新款必须第一时间拥有。你对路线的前瞻性比城市绿道规划局还强——那条还没火的滨江步道，你已经跑了三遍了。\n\n你跑步不完全是为了体验，更多是为了"这个我得有"——这是一种跑步生活方式的内容创作。你是跑圈的自媒体，不用签约不用流量费，纯凭一腔热情在运营。',
     traits: [
       '城市最火的跑步活动你永远在现场',
       '新路线、新装备、新趋势统统第一时间体验',
@@ -303,6 +473,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '什么火跑什么，哪热闹去哪。跑圈潮流的风向标，跑团朋友圈的封面。',
     colorDark: '#BF360C',
     svgIcon: 'EPGG',
+    animalEmoji: '🦋',
+    animalName: '蝴蝶',
+    animalImg: '/runner-personality-h5/animals/animal-type-20.png',
+    hook: '什么火跑什么，哪热闹去哪——跑圈热搜榜，你永远在前排。',
+    dimensionComments: {
+      motivation: '新鲜感是你跑步的燃料。重复的事情做不了，重复的路线跑不了——下一个热门才是你的方向。',
+      social: '跑步社交圈的中心节点。哪热闹去哪，哪火跟哪——你在哪，热度就在哪。',
+      style: '计划不重要，趋势才重要。看到群里说"新路线好美"，你明天就会出现在那里。',
+      ritual: '新款是你跑步的触发器。没有新鞋的日子，跑步动力会下降 50%。',
+    },
+    shareTagline: '跑圈热搜常驻嘉宾',
   },
 
   // ═══ 16. EPGM | 快乐散步跑者 | 体验+社群+随性+极简 ═══
@@ -311,8 +492,9 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     code: 'EPGM',
     name: '快乐散步跑者',
     emoji: '☀️',
-    keywords: ['快乐至上', '真诚分享', '无压力派'],
-    roast: '跑步？更像是散步快了一点。碳板还是薄底、前掌还是后跟——有差吗？开心就好。',
+    keywords: ['跑圈向日葵', '反内卷先锋', '摸狗型跑者', '今天不想跑就不跑协会会长', '初代跑步初心持有者'],
+    roast:
+      '你是跑步界的反内卷先锋。别人在纠结配速、跑量、步频、垂直振幅——你在纠结路边那只小狗好可爱要不要摸一下。跑步对你来说不是运动，是移动的快乐。跑跑走走，走走停停，像一棵会移动的向日葵——阳光在哪，你往哪跑。\n\n你的 KPI 只有一个：今天开心吗？跑得开心就跑久一点，不开心就回家。数据？不看。课表？没有。焦虑？不存在的。你已经悟到了跑步的终极真理——一个不让你开心的跑步，跑得再快也是浪费时间。\n\n跑团的人对你又爱又恨。爱是因为你永远乐呵呵，不制造焦虑；恨是因为你这种"无所谓"的态度让他们觉得自己的 PB 焦虑如此荒谬。',
     traits: [
       '跑步的唯一KPI是开心',
       '从不纠结配速和跑量',
@@ -323,6 +505,17 @@ const personalityData: Record<PersonalityCode, PersonalityResult> = {
     quote: '碳板还是薄底？前掌还是后跟？——有差吗？开心就好。',
     colorDark: '#FF8F00',
     svgIcon: 'EPGM',
+    animalEmoji: '🦫',
+    animalName: '水豚',
+    animalImg: '/runner-personality-h5/animals/animal-type-28.png',
+    hook: '碳板还是薄底？前掌还是后跟？——有差吗？开心就好。',
+    dimensionComments: {
+      motivation: '跑步的终极意义不是速度，是快乐。你已经提前抵达了这个终点。',
+      social: '一个人开心不如一群人开心。你在跑团的作用是——提醒所有人跑步的初心。',
+      style: '计划是什么？你的人生字典里只有"看心情"三个字。今天跑哪？看心情。跑多远？看心情。',
+      ritual: '碳板？薄底？你穿着拖鞋在公园散步的心态和穿跑鞋一模一样——开心。',
+    },
+    shareTagline: '跑步界反卷斗士，KPI只有开心',
   },
 };
 

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#BDBDBD" opacity="0.06"/>
+  <!-- 左腿（跑姿） -->
+  <line x1="78" y1="128" x2="52" y2="160" stroke="#9E9E9E" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="93" y1="128" x2="108" y2="162" stroke="#9E9E9E" stroke-width="7" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="70" y="82" width="32" height="46" rx="10" fill="#BDBDBD"/>
+  <!-- 右臂（自拍高举手机） -->
+  <line x1="104" y1="88" x2="132" y2="45" stroke="#9E9E9E" stroke-width="7" stroke-linecap="round"/>
+  <!-- 手机 -->
+  <rect x="126" y="32" width="14" height="22" rx="3" fill="#424242"/>
+  <rect x="128" y="34" width="10" height="14" rx="1" fill="#00BCD4"/>
+  <circle cx="133" cy="51" r="1.5" fill="#757575"/>
+  <!-- 左臂 -->
+  <line x1="70" y1="90" x2="50" y2="72" stroke="#9E9E9E" stroke-width="7" stroke-linecap="round"/>
+  <!-- 变装道具（面具/胡子） -->
+  <circle cx="88" cy="65" r="14" fill="none" stroke="#424242" stroke-width="2" stroke-dasharray="3,3"/>
+  <!-- 头部 -->
+  <circle cx="88" cy="65" r="18" fill="#E0E0E0"/>
+  <!-- 眨眼表情 -->
+  <circle cx="82" cy="63" r="2.5" fill="#424242"/>
+  <path d="M94,62 Q96,60 98,62" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round"/>
+  <!-- 微笑 -->
+  <path d="M83,73 Q88,77 93,73" fill="none" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- 闪光效果 -->
+  <circle cx="140" cy="26" r="8" fill="#FFC107" opacity="0.3"/>
+  <circle cx="140" cy="26" r="4" fill="#FFC107" opacity="0.5"/>
+</svg>

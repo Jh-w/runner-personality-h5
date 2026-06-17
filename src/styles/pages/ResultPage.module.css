@@ -67,6 +67,23 @@
   z-index: 1;
 }
 
+/* ═══ v4.1 Hero Hook — 开屏暴击金句 ═══ */
+
+.heroHook {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 var(--sp-md);
+  margin-bottom: var(--sp-lg);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.5px;
+}
+
 /* ═══ 关键词标签区 ═══ */
 
 .tagSection {
@@ -91,6 +108,54 @@
   line-height: 1.8;
   padding-left: var(--sp-sm);
   border-left: 3px solid var(--brand-primary);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* ═══ v4.1 维度解读 — 跑者成分解析 ═══ */
+
+.dimensionSection {
+  width: calc(100% - 32px);
+  margin: var(--sp-xl) auto 0;
+  padding: var(--sp-lg);
+  position: relative;
+  z-index: 2;
+}
+
+.dimensionTitle {
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-md);
+  text-align: center;
+}
+
+.dimensionGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+.dimensionItem {
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.dimensionLabel {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2xs);
+}
+
+.dimensionComment {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ═══ 通用 Section — 毛玻璃卡片 ═══ */

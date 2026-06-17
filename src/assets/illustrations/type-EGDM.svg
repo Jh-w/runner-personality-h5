@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#8BC34A" opacity="0.06"/>
+  <!-- 慢跑+招手 -->
+  <!-- 左腿 -->
+  <line x1="78" y1="130" x2="62" y2="158" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="130" x2="105" y2="158" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="72" y="82" width="32" height="48" rx="10" fill="#8BC34A"/>
+  <!-- 左臂（招手） -->
+  <line x1="72" y1="88" x2="40" y2="52" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 招手手掌 -->
+  <circle cx="38" cy="50" r="6" fill="#C5E1A5"/>
+  <!-- 招手动态线 -->
+  <path d="M28,44 Q24,40 28,36" fill="none" stroke="#8BC34A" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <path d="M32,48 Q28,44 32,40" fill="none" stroke="#8BC34A" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <!-- 右臂（持小旗） -->
+  <line x1="104" y1="88" x2="128" y2="72" stroke="#8BC34A" stroke-width="6" stroke-linecap="round"/>
+  <!-- 小旗子 -->
+  <line x1="128" y1="36" x2="128" y2="82" stroke="#689F38" stroke-width="2.5"/>
+  <polygon points="130,38 155,48 130,58" fill="#FF9800" opacity="0.9"/>
+  <text x="138" y="52" font-size="6" fill="#fff" font-family="sans-serif" font-weight="bold">❤</text>
+  <!-- 头部 -->
+  <circle cx="92" cy="65" r="18" fill="#C5E1A5"/>
+  <!-- 社区袖标 -->
+  <rect x="68" y="94" width="36" height="12" rx="3" fill="#FF9800" opacity="0.4"/>
+  <text x="86" y="103" font-size="6" fill="#E65100" font-family="sans-serif" font-weight="bold">COM</text>
+  <!-- 微笑 -->
+  <circle cx="86" cy="63" r="2" fill="#33691E"/>
+  <circle cx="98" cy="63" r="2" fill="#33691E"/>
+  <path d="M87,71 Q92,75 97,71" fill="none" stroke="#33691E" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

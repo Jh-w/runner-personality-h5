@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#4CAF50" opacity="0.06"/>
+  <!-- 跳跃姿态 -->
+  <!-- 左腿（屈膝跳） -->
+  <line x1="78" y1="132" x2="55" y2="155" stroke="#4CAF50" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右腿（外展） -->
+  <line x1="95" y1="132" x2="130" y2="150" stroke="#4CAF50" stroke-width="7" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="72" y="78" width="32" height="54" rx="11" fill="#4CAF50"/>
+  <!-- 左臂（高举啦啦球） -->
+  <line x1="72" y1="86" x2="38" y2="52" stroke="#4CAF50" stroke-width="7" stroke-linecap="round"/>
+  <!-- 啦啦球左 -->
+  <circle cx="34" cy="48" r="10" fill="#FF9800"/>
+  <line x1="26" y1="40" x2="22" y2="36" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>
+  <line x1="34" y1="38" x2="34" y2="32" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>
+  <line x1="42" y1="40" x2="46" y2="36" stroke="#FF9800" stroke-width="2" stroke-linecap="round"/>
+  <!-- 右臂（高举啦啦球） -->
+  <line x1="104" y1="86" x2="140" y2="48" stroke="#4CAF50" stroke-width="7" stroke-linecap="round"/>
+  <!-- 啦啦球右 -->
+  <circle cx="144" cy="44" r="10" fill="#E91E63"/>
+  <line x1="136" y1="36" x2="132" y2="32" stroke="#E91E63" stroke-width="2" stroke-linecap="round"/>
+  <line x1="144" y1="34" x2="144" y2="28" stroke="#E91E63" stroke-width="2" stroke-linecap="round"/>
+  <line x1="152" y1="36" x2="156" y2="32" stroke="#E91E63" stroke-width="2" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="92" cy="62" r="18" fill="#A5D6A7"/>
+  <!-- 大笑表情 -->
+  <ellipse cx="92" cy="66" rx="6" ry="4" fill="#2E7D32"/>
+  <path d="M84,58 L88,62 L92,58" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M92,58 L96,62 L100,58" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- 彩带 -->
+  <path d="M30,30 Q25,20 35,15" fill="none" stroke="#FFC107" stroke-width="2" opacity="0.6"/>
+  <path d="M150,26 Q160,18 155,10" fill="none" stroke="#FFC107" stroke-width="2" opacity="0.6"/>
+  <!-- 地面阴影 -->
+  <ellipse cx="92" cy="172" rx="40" ry="6" fill="#4CAF50" opacity="0.1"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#4CAF50" opacity="0.06"/>
+  <!-- 优雅跑姿 -->
+  <!-- 左腿 -->
+  <line x1="78" y1="130" x2="50" y2="160" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右腿（高抬腿） -->
+  <line x1="95" y1="128" x2="118" y2="152" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/>
+  <!-- 身体挺直 -->
+  <rect x="70" y="80" width="34" height="50" rx="12" fill="#4CAF50"/>
+  <!-- 品牌标志 (勾) -->
+  <path d="M78,100 Q82,106 86,100 L92,106" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <!-- 左臂（优雅摆臂） -->
+  <line x1="70" y1="88" x2="42" y2="78" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右臂 -->
+  <line x1="104" y1="88" x2="132" y2="70" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="95" cy="65" r="18" fill="#A5D6A7"/>
+  <!-- 墨镜（精致款） -->
+  <rect x="78" y="58" width="34" height="11" rx="5" fill="#1B5E20"/>
+  <rect x="80" y="60" width="13" height="7" rx="2" fill="#388E3C"/>
+  <rect x="97" y="60" width="13" height="7" rx="2" fill="#388E3C"/>
+  <!-- 小红唇/微笑 -->
+  <path d="M89,76 Q95,80 101,76" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- 手腕装饰 -->
+  <circle cx="40" cy="78" r="5" fill="none" stroke="#FFC107" stroke-width="2"/>
+  <!-- 运动鞋 -->
+  <ellipse cx="48" cy="162" rx="10" ry="4" fill="#fff" opacity="0.8"/>
+  <ellipse cx="120" cy="154" rx="10" ry="4" fill="#fff" opacity="0.8"/>
+</svg>

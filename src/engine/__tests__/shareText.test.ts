@@ -37,7 +37,7 @@ describe('generateShareText', () => {
       const text = generateShareText(p, 'wechat');
       expect(text).toContain('我不和别人比');
       expect(text).toContain('我的跑步人格是【赛道卷王】');
-      expect(text).toContain('#数据狂魔');
+      expect(text).toContain('#数据教信徒');
       expect(text).toContain('测测你是什么跑步人格');
     });
   });

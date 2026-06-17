@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#2196F3" opacity="0.06"/>
+  <!-- 冥想跑姿 - 慢速，手臂合十 -->
+  <!-- 左腿（慢走） -->
+  <line x1="80" y1="130" x2="68" y2="160" stroke="#2196F3" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="130" x2="100" y2="162" stroke="#2196F3" stroke-width="6" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="74" y="82" width="30" height="48" rx="10" fill="#2196F3"/>
+  <!-- 手臂合十 -->
+  <line x1="82" y1="86" x2="82" y2="52" stroke="#2196F3" stroke-width="6" stroke-linecap="round"/>
+  <line x1="96" y1="86" x2="96" y2="52" stroke="#2196F3" stroke-width="6" stroke-linecap="round"/>
+  <!-- 手掌 -->
+  <circle cx="82" cy="50" r="5" fill="#90CAF9"/>
+  <circle cx="96" cy="50" r="5" fill="#90CAF9"/>
+  <!-- 头部 -->
+  <circle cx="89" cy="66" r="18" fill="#90CAF9"/>
+  <!-- 闭眼 -->
+  <path d="M81,64 L85,66 L89,64" fill="none" stroke="#1565C0" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M89,64 L93,66 L97,64" fill="none" stroke="#1565C0" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- 眉心点 -->
+  <circle cx="89" cy="60" r="2" fill="#FF9800"/>
+  <!-- 瑜伽垫卷（背在身后） -->
+  <rect x="56" y="78" width="8" height="44" rx="4" fill="#E91E63" opacity="0.7"/>
+  <rect x="58" y="80" width="4" height="40" rx="2" fill="#F48FB1" opacity="0.7"/>
+  <!-- 光轮 -->
+  <circle cx="89" cy="56" r="28" fill="none" stroke="#FFC107" stroke-width="1" opacity="0.2"/>
+</svg>

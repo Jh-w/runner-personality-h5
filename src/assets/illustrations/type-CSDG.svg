@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="80" fill="#FF4444" opacity="0.08"/>
+  <!-- 速度线 -->
+  <line x1="145" y1="55" x2="170" y2="48" stroke="#FF4444" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+  <line x1="143" y1="70" x2="172" y2="68" stroke="#FF4444" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+  <line x1="145" y1="85" x2="165" y2="87" stroke="#FF4444" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+  <line x1="140" y1="100" x2="158" y2="103" stroke="#FF4444" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
+  <!-- 左腿后蹬 -->
+  <line x1="78" y1="130" x2="48" y2="160" stroke="#FF4444" stroke-width="8" stroke-linecap="round"/>
+  <!-- 右腿前跨 -->
+  <line x1="90" y1="130" x2="108" y2="168" stroke="#FF4444" stroke-width="8" stroke-linecap="round"/>
+  <!-- 身体前倾 -->
+  <rect x="68" y="80" width="32" height="50" rx="12" fill="#FF4444" transform="rotate(-8, 84, 105)"/>
+  <!-- 左臂后摆 -->
+  <line x1="68" y1="88" x2="38" y2="112" stroke="#FF4444" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右臂前冲 -->
+  <line x1="100" y1="88" x2="135" y2="55" stroke="#FF4444" stroke-width="7" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="100" cy="68" r="18" fill="#FF6B6B"/>
+  <!-- 号码布 -->
+  <rect x="77" y="97" width="22" height="16" rx="3" fill="#fff" opacity="0.9"/>
+  <text x="88" y="108" text-anchor="middle" font-size="7" fill="#FF4444" font-weight="bold" font-family="sans-serif">001</text>
+  <!-- 腕表 -->
+  <rect x="30" y="106" width="10" height="14" rx="3" fill="#333"/>
+  <rect x="32" y="108" width="6" height="8" rx="1" fill="#fff"/>
+  <!-- 终点线暗示 -->
+  <line x1="175" y1="40" x2="175" y2="175" stroke="#FF4444" stroke-width="4" opacity="0.15" stroke-dasharray="8,6"/>
+</svg>

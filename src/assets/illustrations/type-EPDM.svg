@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#00BCD4" opacity="0.06"/>
+  <!-- 探索姿态 - 一手拿地图，身体微侧 -->
+  <!-- 左腿 -->
+  <line x1="78" y1="130" x2="60" y2="160" stroke="#00BCD4" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="130" x2="108" y2="162" stroke="#00BCD4" stroke-width="6" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="72" y="82" width="32" height="48" rx="10" fill="#00BCD4"/>
+  <!-- 背包 -->
+  <rect x="60" y="88" width="16" height="36" rx="6" fill="#00838F"/>
+  <rect x="63" y="92" width="10" height="8" rx="2" fill="#006064"/>
+  <rect x="63" y="108" width="10" height="8" rx="2" fill="#006064"/>
+  <!-- 背带 -->
+  <line x1="72" y1="88" x2="76" y2="82" stroke="#006064" stroke-width="2"/>
+  <!-- 左臂 -->
+  <line x1="72" y1="90" x2="48" y2="82" stroke="#00BCD4" stroke-width="6" stroke-linecap="round"/>
+  <!-- 右臂（拿地图） -->
+  <line x1="104" y1="88" x2="128" y2="58" stroke="#00BCD4" stroke-width="6" stroke-linecap="round"/>
+  <!-- 地图 -->
+  <rect x="124" y="42" width="22" height="16" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="1"/>
+  <path d="M128,46 L134,50 L128,54" fill="none" stroke="#F44336" stroke-width="1.5"/>
+  <circle cx="138" cy="48" r="2" fill="#F44336"/>
+  <!-- 头部 -->
+  <circle cx="92" cy="65" r="18" fill="#80DEEA"/>
+  <!-- 探索者帽子 -->
+  <rect x="74" y="47" width="36" height="10" rx="5" fill="#00838F"/>
+  <rect x="68" y="54" width="48" height="4" rx="2" fill="#006064"/>
+  <!-- 眼睛 -->
+  <circle cx="86" cy="64" r="2.5" fill="#006064"/>
+  <circle cx="98" cy="64" r="2.5" fill="#006064"/>
+  <!-- 望远镜挂在胸前 -->
+  <rect x="80" y="92" width="16" height="6" rx="3" fill="#546E7A"/>
+  <line x1="80" y1="100" x2="76" y2="110" stroke="#78909C" stroke-width="1.5"/>
+  <line x1="96" y1="100" x2="100" y2="110" stroke="#78909C" stroke-width="1.5"/>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#607D8B" opacity="0.07"/>
+  <!-- 风线 -->
+  <line x1="155" y1="50" x2="180" y2="45" stroke="#607D8B" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+  <line x1="158" y1="65" x2="185" y2="62" stroke="#607D8B" stroke-width="2" opacity="0.35" stroke-linecap="round"/>
+  <line x1="155" y1="78" x2="178" y2="77" stroke="#607D8B" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+  <!-- 左腿 -->
+  <line x1="82" y1="128" x2="62" y2="165" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="128" x2="112" y2="165" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="72" y="82" width="30" height="46" rx="10" fill="#607D8B"/>
+  <!-- 左臂摆 -->
+  <line x1="72" y1="90" x2="48" y2="115" stroke="#607D8B" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右臂摆 -->
+  <line x1="102" y1="90" x2="128" y2="65" stroke="#607D8B" stroke-width="7" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="94" cy="68" r="18" fill="#90A4AE"/>
+  <!-- 防风眼镜 -->
+  <ellipse cx="94" cy="66" rx="16" ry="7" fill="#37474F" opacity="0.85"/>
+  <ellipse cx="94" cy="66" rx="12" ry="4.5" fill="#4DD0E1" opacity="0.5"/>
+  <line x1="78" y1="66" x2="110" y2="66" stroke="#455A64" stroke-width="1.5"/>
+  <!-- 帽檐 -->
+  <path d="M76,62 Q80,50 94,50 Q108,50 112,62" fill="#455A64"/>
+  <rect x="76" y="50" width="36" height="14" rx="6" fill="#546E7A"/>
+  <!-- T恤条纹 -->
+  <line x1="72" y1="108" x2="102" y2="108" stroke="#90A4AE" stroke-width="2" opacity="0.5"/>
+</svg>

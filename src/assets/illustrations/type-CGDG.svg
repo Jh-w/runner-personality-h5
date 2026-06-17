@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#546E7A" opacity="0.06"/>
+  <!-- 站立姿态 - 未在跑 -->
+  <!-- 左腿 -->
+  <line x1="80" y1="130" x2="72" y2="168" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="130" x2="102" y2="168" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="70" y="82" width="34" height="48" rx="10" fill="#546E7A"/>
+  <!-- 左臂拿旗帜 -->
+  <line x1="70" y1="90" x2="48" y2="108" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 跑团旗帜 -->
+  <line x1="48" y1="58" x2="48" y2="135" stroke="#795548" stroke-width="3"/>
+  <rect x="50" y="60" width="35" height="24" rx="2" fill="#FF9800" opacity="0.8"/>
+  <text x="67" y="76" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold" font-family="sans-serif">RUN</text>
+  <!-- 右臂（掐表） -->
+  <line x1="104" y1="88" x2="128" y2="78" stroke="#546E7A" stroke-width="7" stroke-linecap="round"/>
+  <!-- 秒表 -->
+  <circle cx="132" cy="76" r="10" fill="#ECEFF1"/>
+  <circle cx="132" cy="76" r="7" fill="#fff"/>
+  <line x1="132" y1="76" x2="132" y2="71" stroke="#F44336" stroke-width="1.5"/>
+  <line x1="132" y1="76" x2="136" y2="77" stroke="#333" stroke-width="1"/>
+  <circle cx="132" cy="76" r="1.5" fill="#333"/>
+  <!-- 头部 -->
+  <circle cx="92" cy="67" r="18" fill="#90A4AE"/>
+  <!-- 哨子 -->
+  <ellipse cx="118" cy="62" rx="6" ry="4" fill="#FFC107"/>
+  <rect x="112" y="60" width="8" height="3" rx="1" fill="#FFC107"/>
+  <line x1="110" y1="62" x2="104" y2="68" stroke="#FFC107" stroke-width="2"/>
+  <!-- 眼镜 -->
+  <rect x="78" y="62" width="28" height="10" rx="4" fill="none" stroke="#455A64" stroke-width="1.5"/>
+  <line x1="78" y1="67" x2="106" y2="67" stroke="#455A64" stroke-width="1"/>
+</svg>

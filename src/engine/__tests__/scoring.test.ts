@@ -153,8 +153,8 @@ describe('calculateResult', () => {
     expect(result.typeId).toBe(1);
     expect(result.name).toBe('赛道卷王');
     expect(result.code).toBe('CSDG');
-    expect(result.keywords).toHaveLength(3);
-    expect(result.keywords).toContain('数据狂魔');
+    expect(result.keywords.length).toBeGreaterThanOrEqual(5);
+    expect(result.keywords).toContain('数据教信徒');
   });
 
   it('typeId 16 → 快乐散步跑者', () => {
@@ -172,7 +172,7 @@ describe('calculateResult', () => {
     expect(result.code).toBeTruthy();
     expect(result.roast).toBeTruthy();
     expect(result.traits).toHaveLength(3);
-    expect(result.keywords).toHaveLength(3);
+    expect(result.keywords.length).toBeGreaterThanOrEqual(5);
     expect(result.emoji).toBeTruthy();
     expect(result.color).toMatch(/^#/);
     expect(result.dimensionScores.motivation).toBeLessThan(0);

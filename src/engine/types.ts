@@ -30,8 +30,8 @@ export interface PersonalityResult {
   code: PersonalityCode;          // 四字母编码
   name: string;
   emoji: string;
-  keywords: [string, string, string]; // 3个关键词
-  roast: string;                      // 一句话吐槽
+  keywords: string[];                  // v4.1: 3-5个荒诞标签
+  roast: string;                      // v4.1: 250-350字脱口秀解读
   traits: [string, string, string];   // 3条特征
   dimensionScores: DimensionScores;
   color: string;
@@ -39,6 +39,21 @@ export interface PersonalityResult {
   colorDark?: string;                 // 深色变体，用于渐变（v3.1 Phase1）
   bestBuddy?: BestBuddy;              // 最佳跑团搭档（v3.1 Phase1）
   svgIcon: string;                    // SVG 图标文件名（v3.3 Phase3）
+
+  // ═══ v4.2.5 动物插图字段 ═══
+  animalEmoji?: string;               // 动物 emoji（如 🐆），结果页展示 + 降级fallback
+  animalName?: string;                // 动物名（如 "猎豹"），用于 alt/title
+  animalImg?: string;                 // 动物 PNG 路径（如 "/runner-personality-h5/animals/animal-type-01.png"）
+
+  // ═══ v4.1 新增字段（全部 optional，向后兼容）═══
+  hook?: string;                      // 开屏暴击金句 ≤30字
+  dimensionComments?: {               // 四维度解读各一句
+    motivation: string;
+    social: string;
+    style: string;
+    ritual: string;
+  };
+  shareTagline?: string;              // 社交分享标语 ≤15字
 }
 
 // ─── 最佳搭档（v3.1 Phase1）─────────────────────────────

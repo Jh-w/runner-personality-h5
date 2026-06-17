@@ -206,7 +206,7 @@ describe('testReducer', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockResult: any = {
       typeId: 5, code: 'CGDG', name: '跑团结算官', emoji: '🧮',
-      keywords: ['数据', '规则', '装备'] as [string, string, string],
+      keywords: ['数据', '规则', '装备'],
       roast: '最强大脑', traits: ['配速党', 'PB控', '赛霸'] as [string, string, string],
       dimensionScores: { motivation: -1, social: 1, style: -1, ritual: -1 },
       color: '#2196F3',

@@ -36,20 +36,24 @@ export function generateAllShareTexts(personality: PersonalityResult): ShareText
 
 function generateWechatText(personality: PersonalityResult): string {
   const [k1, k2] = personality.keywords;
+  const hook = personality.hook ? `「${personality.hook}」\n` : '';
   const quote = personality.quote ? `「${personality.quote}」\n` : '';
+  const shareTagline = personality.shareTagline ? `${personality.shareTagline}\n` : '';
   const buddy = personality.bestBuddy
     ? `我的最佳跑团搭档是【${personality.bestBuddy.name}】！\n`
     : '';
-  return `${quote}${buddy}我的跑步人格是【${personality.name}】！#${k1} #${k2}\n测测你是什么跑步人格 →`;
+  return `${hook}${quote}${shareTagline}${buddy}我的跑步人格是【${personality.name}】！#${k1} #${k2}\n测测你是什么跑步人格 →`;
 }
 
 // ─── 小红书文案模板 ───────────────────────────────
 
 function generateXiaohongshuText(personality: PersonalityResult): string {
   const tags = personality.keywords.map(k => `#${k}`).join(' ');
+  const hook = personality.hook ? `「${personality.hook}」\n` : '';
   const quote = personality.quote ? `「${personality.quote}」\n` : '';
+  const shareTagline = personality.shareTagline ? `${personality.shareTagline}\n` : '';
   const buddy = personality.bestBuddy
     ? `@你最想一起跑的跑友，来测测你们是不是最佳跑团搭档！\n`
     : '';
-  return `${quote}测出了跑步人格！我是【${personality.name}】${personality.emoji}\n${buddy}${tags}\n#跑步人格测试 #跑步`;
+  return `${hook}${quote}测出了跑步人格！我是【${personality.name}】${personality.emoji}\n${shareTagline}${buddy}${tags}\n#跑步人格测试 #跑步`;
 }

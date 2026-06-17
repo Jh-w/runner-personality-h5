@@ -207,8 +207,12 @@ export default function ResultPage() {
           background: `var(${colorTokens.gradientVar})`,
         }}
       >
+        {/* v4.1: Hook 开屏暴击金句 */}
+        {personality.hook && (
+          <p className={styles.heroHook}>「{personality.hook}」</p>
+        )}
         <div className={styles.heroIllustration}>
-          <TypeIllustration code={code} emoji={personality.emoji} size={200} />
+          <TypeIllustration animalImg={personality.animalImg} animalEmoji={personality.animalEmoji} animalName={personality.animalName} size={200} color={color} />
         </div>
         <h1 className={styles.heroName}>
           {personality.name}
@@ -238,7 +242,43 @@ export default function ResultPage() {
         </div>
       </GlassCard>
 
-      {/* ═══ 4. 四维雷达图 — 48px gap ═══ */}
+      {/* ═══ 4. v4.1 维度解读 — 跑者成分解析 ═══ */}
+      {personality.dimensionComments && (
+        <GlassCard
+          className={styles.dimensionSection}
+          style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '200ms' }}
+        >
+          <h2 className={styles.dimensionTitle}>🔍 你的跑者成分解析</h2>
+          <div className={styles.dimensionGrid}>
+            <div className={styles.dimensionItem}>
+              <span className={styles.dimensionLabel}>
+                💥 竞技驱动 · {personality.dimensionScores.motivation < 0 ? '偏竞技' : '偏体验'}
+              </span>
+              <p className={styles.dimensionComment}>{personality.dimensionComments.motivation}</p>
+            </div>
+            <div className={styles.dimensionItem}>
+              <span className={styles.dimensionLabel}>
+                👥 社交模式 · {personality.dimensionScores.social < 0 ? '偏独狼' : '偏社群'}
+              </span>
+              <p className={styles.dimensionComment}>{personality.dimensionComments.social}</p>
+            </div>
+            <div className={styles.dimensionItem}>
+              <span className={styles.dimensionLabel}>
+                🎨 跑步风格 · {personality.dimensionScores.style < 0 ? '偏计划' : '偏随性'}
+              </span>
+              <p className={styles.dimensionComment}>{personality.dimensionComments.style}</p>
+            </div>
+            <div className={styles.dimensionItem}>
+              <span className={styles.dimensionLabel}>
+                🎒 仪式感 · {personality.dimensionScores.ritual < 0 ? '偏装备' : '偏极简'}
+              </span>
+              <p className={styles.dimensionComment}>{personality.dimensionComments.ritual}</p>
+            </div>
+          </div>
+        </GlassCard>
+      )}
+
+      {/* ═══ 5. 四维雷达图 — 48px gap ═══ */}
       <div style={{ width: '100%', animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '240ms' }}>
         <RadarChart
           dimensionScores={personality.dimensionScores}
@@ -248,7 +288,7 @@ export default function ResultPage() {
         />
       </div>
 
-      {/* ═══ 5. 最佳跑团搭档 — 32px gap ═══ */}
+      {/* ═══ 6. 最佳跑团搭档 — 32px gap ═══ */}
       {bestBuddy && (
         <div
           className={styles.buddySection}

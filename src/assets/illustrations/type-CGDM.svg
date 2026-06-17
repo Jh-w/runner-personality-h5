@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="78" fill="#795548" opacity="0.06"/>
+  <!-- 左腿（稳定跑姿） -->
+  <line x1="80" y1="128" x2="55" y2="162" stroke="#795548" stroke-width="7" stroke-linecap="round"/>
+  <!-- 右腿 -->
+  <line x1="95" y1="128" x2="112" y2="160" stroke="#795548" stroke-width="7" stroke-linecap="round"/>
+  <!-- 身体 -->
+  <rect x="72" y="82" width="32" height="46" rx="10" fill="#795548"/>
+  <!-- 左臂（持训练计划板） -->
+  <line x1="72" y1="90" x2="48" y2="82" stroke="#795548" stroke-width="7" stroke-linecap="round"/>
+  <!-- 训练计划板 -->
+  <rect x="32" y="62" width="20" height="28" rx="3" fill="#EFEBE9" stroke="#8D6E63" stroke-width="1.5"/>
+  <line x1="36" y1="70" x2="48" y2="70" stroke="#795548" stroke-width="1.5"/>
+  <line x1="36" y1="75" x2="48" y2="75" stroke="#795548" stroke-width="1.5"/>
+  <line x1="36" y1="80" x2="45" y2="80" stroke="#795548" stroke-width="1.5"/>
+  <!-- 右臂（扩音器） -->
+  <line x1="104" y1="88" x2="128" y2="58" stroke="#795548" stroke-width="7" stroke-linecap="round"/>
+  <!-- 扩音器 -->
+  <rect x="126" y="52" width="8" height="16" rx="3" fill="#5D4037"/>
+  <polygon points="132,52 140,48 152,50 152,72 140,70 132,68" fill="#8D6E63"/>
+  <!-- 声波 -->
+  <path d="M155,52 Q160,60 155,68" fill="none" stroke="#795548" stroke-width="2" opacity="0.5"/>
+  <path d="M160,48 Q167,60 160,72" fill="none" stroke="#795548" stroke-width="1.5" opacity="0.3"/>
+  <!-- 头部 -->
+  <circle cx="94" cy="66" r="18" fill="#BCAAA4"/>
+  <!-- 教官帽 -->
+  <rect x="76" y="48" width="36" height="12" rx="5" fill="#5D4037"/>
+  <rect x="71" y="56" width="46" height="4" rx="1" fill="#5D4037"/>
+</svg>

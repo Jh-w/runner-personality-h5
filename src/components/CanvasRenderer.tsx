@@ -1,4 +1,5 @@
-// CanvasRenderer — v4.0 深色底 + 弥散光分享卡片 (1080×1440)
+// CanvasRenderer — v4.1 深色底 + 弥散光分享卡片 (1080×1440)
+// v4.1: 新增 hook / roast 卡片 / 5标签 / shareTagline
 // Layer 1: 最深底色 #0d1117
 // Layer 2: 人格色弥散光球（左上 + 右下 radialGradient）
 // Layer 3: 线性渐变 overlay
@@ -136,6 +137,97 @@ async function drawPersonalityIcon(
   }
 }
 
+// ---------- v4.1 Hook 金句绘制 ----------
+
+function drawHook(ctx: CanvasRenderingContext2D, hook: string, y: number): number {
+  if (!hook) return 0;
+  const fontSize = 36;
+  const lineHeight = 52;
+  const maxWidth = W - 160;
+  const text = `「${hook}」`;
+
+  ctx.font = `bold ${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.textAlign = 'center';
+
+  let lines = wrapText(ctx, text, maxWidth);
+  if (lines.length > 2) lines = lines.slice(0, 2);
+
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], W / 2, y + i * lineHeight);
+  }
+  return lines.length * lineHeight;
+}
+
+// ---------- v4.1 Roast 脱口秀卡片绘制 ----------
+
+function drawRoastCard(
+  ctx: CanvasRenderingContext2D,
+  roast: string,
+  x: number,
+  y: number,
+): number {
+  if (!roast) return 0;
+
+  const cardPadding = 32;
+  const cardW = CARD_W;
+  const textMaxWidth = cardW - cardPadding * 2;
+  const fontSize = 22;
+  const lineHeight = 36;
+  const maxLines = 7;
+
+  ctx.font = `${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+
+  let lines: string[] = [];
+  const paragraphs = roast.split('\n');
+  for (const para of paragraphs) {
+    if (!para.trim()) continue;
+    const wrapped = wrapText(ctx, para, textMaxWidth);
+    lines.push(...wrapped);
+  }
+
+  if (lines.length > maxLines) {
+    lines = lines.slice(0, maxLines - 1);
+    // add ellipsis
+    const lastLine = lines[lines.length - 1];
+    while (ctx.measureText(lastLine + '…').width > textMaxWidth && lastLine.length > 0) {
+      lines[lines.length - 1] = lastLine.slice(0, -1);
+    }
+    lines[lines.length - 1] += '…';
+  }
+
+  const textHeight = lines.length * lineHeight;
+  const cardH = textHeight + cardPadding * 2;
+
+  // 半透明深色卡片背景
+  ctx.save();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 4;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+  drawRoundedRect(ctx, x, y, cardW, cardH, 20);
+  ctx.fill();
+  ctx.restore();
+
+  // 边框
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 1;
+  drawRoundedRect(ctx, x, y, cardW, cardH, 20);
+  ctx.stroke();
+
+  // 文字
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.78)';
+  ctx.font = `${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.textAlign = 'left';
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x + cardPadding, y + cardPadding + (i + 1) * lineHeight - 8);
+  }
+  ctx.textAlign = 'center';
+
+  return cardH;
+}
+
 // ---------- 金句绘制 ----------
 
 function drawQuote(ctx: CanvasRenderingContext2D, quote: string, y: number, maxLines = 3): number {
@@ -163,14 +255,14 @@ function drawQuote(ctx: CanvasRenderingContext2D, quote: string, y: number, maxL
   return lines.length * lineHeight;
 }
 
-// ---------- 胶囊标签 v4.0 — 深色底半透明 ───────────
+// ---------- 胶囊标签 v4.1 — 深色底半透明，最多5个 ───────────
 
 function drawSingleCapsule(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
-  ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = 'bold 20px "PingFang SC", "Helvetica Neue", sans-serif';
   const textWidth = ctx.measureText(text).width;
-  const width = textWidth + 28 * 2;
-  const height = 24 + 12 * 2;
-  const radius = 24;
+  const width = textWidth + 24 * 2;
+  const height = 20 + 10 * 2;
+  const radius = 20;
 
   // 背景 — rgba(255,255,255,0.12)
   ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
@@ -185,7 +277,7 @@ function drawSingleCapsule(ctx: CanvasRenderingContext2D, text: string, x: numbe
 
   // 文字
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = 'bold 20px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(text, x + width / 2, y + height / 2);
@@ -195,11 +287,11 @@ function drawSingleCapsule(ctx: CanvasRenderingContext2D, text: string, x: numbe
 }
 
 function drawCapsuleTags(ctx: CanvasRenderingContext2D, keywords: string[], y: number): number {
-  const gap = 16;
+  const gap = 14;
   const metrics = keywords.map(k => {
-    ctx.font = 'bold 24px "PingFang SC", "Helvetica Neue", sans-serif';
-    const w = ctx.measureText(k).width + 28 * 2;
-    return { width: w, height: 24 + 12 * 2 };
+    ctx.font = 'bold 20px "PingFang SC", "Helvetica Neue", sans-serif';
+    const w = ctx.measureText(k).width + 24 * 2;
+    return { width: w, height: 20 + 10 * 2 };
   });
   const totalWidth = metrics.reduce((sum, m) => sum + m.width, 0) + gap * (keywords.length - 1);
   let x = (W - totalWidth) / 2;
@@ -254,44 +346,56 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   // ═══ 1. 背景：深色底 + 弥散光 ═══
   drawBackground(ctx, glowColor);
 
-  // ═══ 2. 人格图标（升级到 240px）═══
-  let curY = 220;
+  // ═══ 2. 人格图标 ═══
+  let curY = 200;
   const iconSize = 240;
   await drawPersonalityIcon(ctx, code, personality.emoji, W / 2, curY + iconSize / 2, iconSize);
-  curY += iconSize + 24;
+  curY += iconSize + 20;
 
   // ═══ 3. 人格名 ═══
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FFFFFF';
   ctx.font = 'bold 64px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.fillText(personality.name, W / 2, curY);
-  curY += 90;
+  curY += 84;
 
-  // ═══ 4. 金句 ═══
+  // ═══ 4. v4.1 Hook 金句 ═══
+  if (personality.hook) {
+    const hookH = drawHook(ctx, personality.hook, curY);
+    curY += hookH + 48;
+  }
+
+  // ═══ 5. 金句 ═══
   if (personality.quote) {
     const quoteH = drawQuote(ctx, personality.quote, curY);
-    curY += quoteH + 56;
+    curY += quoteH + 44;
   }
 
-  // ═══ 5. 胶囊标签 ═══
-  if (personality.keywords && personality.keywords.length >= 3) {
-    const tagH = drawCapsuleTags(ctx, personality.keywords.slice(0, 3), curY);
-    curY += tagH + 56;
+  // ═══ 6. v4.1 Roast 脱口秀卡片 ═══
+  if (personality.roast) {
+    const cardH = drawRoastCard(ctx, personality.roast, CARD_X, curY);
+    curY += cardH + 44;
   }
 
-  // ═══ 6. 最佳搭档卡片 ═══
+  // ═══ 7. v4.1 胶囊标签 (最多5个) ═══
+  if (personality.keywords && personality.keywords.length > 0) {
+    const tagH = drawCapsuleTags(ctx, personality.keywords.slice(0, 5), curY);
+    curY += tagH + 48;
+  }
+
+  // ═══ 8. 最佳搭档卡片 ═══
   if (personality.bestBuddy) {
-    const cardY = curY + 30;
+    const cardY = curY + 20;
     const cardH = drawBuddyCardFull(ctx, personality.bestBuddy, CARD_X, cardY);
-    curY = cardY + cardH + 60;
+    curY = cardY + cardH + 48;
   }
 
-  // ═══ 7. CTA 引导语 ═══
+  // ═══ 9. v4.1 ShareTagline + CTA 引导语 ═══
   const brandY = 1400;
   const qrSize = 200;
   const qrPadding = 16;
   const qrSubstrateSize = qrSize + qrPadding * 2;
-  const minQrTop = brandY - qrSubstrateSize - 80 - 60;
+  const minQrTop = brandY - qrSubstrateSize - 80 - 60 - (personality.shareTagline ? 40 : 0);
 
   if (curY > minQrTop) {
     curY = minQrTop;
@@ -303,12 +407,24 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   ctx.font = 'bold 32px "PingFang SC", "Helvetica Neue", sans-serif';
   const ctaText1 = `你是「${personality.name}」吗？`;
   ctx.fillText(ctaText1, W / 2, ctaY);
-  ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 48);
-  curY = ctaY + 80;
 
-  // ═══ 8. QR Code ═══
+  // v4.1: shareTagline
+  if (personality.shareTagline) {
+    ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.fillText(`"${personality.shareTagline}"`, W / 2, ctaY + 44);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
+    ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 80);
+    curY = ctaY + 108;
+  } else {
+    ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 48);
+    curY = ctaY + 76;
+  }
+
+  // ═══ 10. QR Code ═══
   const qrSubstrateY = curY;
   const qrSubstrateX = (W - qrSubstrateSize) / 2;
 
@@ -333,7 +449,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
     ctx.fillText('扫码测试', W / 2, qrSubstrateY + qrPadding + qrSize / 2);
   }
 
-  // ═══ 9. 品牌标识 ═══
+  // ═══ 11. 品牌标识 ═══
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
   ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
