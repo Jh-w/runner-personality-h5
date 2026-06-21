@@ -1,0 +1,1 @@
+import{n as e}from"./ResultPage-DumOXZ24.js";export{e as getTypeGlowValue};
