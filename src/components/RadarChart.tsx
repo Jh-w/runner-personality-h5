@@ -1,13 +1,17 @@
 // RadarChart - Canvas 四维雷达图组件
 // Phase 2 模块三：四维雷达图
 // Canvas 四边形雷达图 + DOM 维度表格
+// 注意: 仅展示4个维度（motivation/social/style/ritual），expression另作展示
 
 import { useRef, useEffect } from 'react';
-import type { Dimension, DimensionScores } from '../engine/types';
+import type { DimensionScores } from '../engine/types';
 import { dimensionLabels } from '../engine/dimensionLabels';
 import styles from '../styles/components/RadarChart.module.css';
 
 // ─── 类型定义 ────────────────────────────────────────
+
+/** 雷达图使用4维（排除expression，该维度单独展示） */
+export type RadarDimension = 'motivation' | 'social' | 'style' | 'ritual';
 
 interface RadarChartProps {
   dimensionScores: DimensionScores;
@@ -32,11 +36,11 @@ export function scoreToPercent(score: number): number {
 
 /** 计算四维顶点坐标 */
 export function computeVertices(
-  percents: Record<Dimension, number>,
+  percents: Record<RadarDimension, number>,
   cx: number,
   cy: number,
   radius: number
-): Record<Dimension, Vertex> {
+): Record<RadarDimension, Vertex> {
   // 四边形顶点：上=右=下=左
   return {
     motivation: {
@@ -94,11 +98,11 @@ function drawBackgroundGrid(
 
 function drawDataPolygon(
   ctx: CanvasRenderingContext2D,
-  vertices: Record<Dimension, Vertex>,
+  vertices: Record<RadarDimension, Vertex>,
   color: string,
   progress: number
 ): void {
-  const dims: Dimension[] = ['motivation', 'social', 'style', 'ritual'];
+  const dims: RadarDimension[] = ['motivation', 'social', 'style', 'ritual'];
   const cx = vertices.motivation.x; // 圆心 x（motivation 顶点 x 即 centerX）
   const cy = (vertices.motivation.y + vertices.style.y) / 2; // 圆心 y
 
@@ -129,11 +133,11 @@ function drawDataPolygon(
 
 function drawVertexDots(
   ctx: CanvasRenderingContext2D,
-  vertices: Record<Dimension, Vertex>,
+  vertices: Record<RadarDimension, Vertex>,
   color: string,
   progress: number
 ): void {
-  const dims: Dimension[] = ['motivation', 'social', 'style', 'ritual'];
+  const dims: RadarDimension[] = ['motivation', 'social', 'style', 'ritual'];
   const cx = vertices.motivation.x;
   const cy = (vertices.motivation.y + vertices.style.y) / 2;
 
@@ -189,8 +193,8 @@ export default function RadarChart({
   const progressRef = useRef(0);
   const startTimeRef = useRef(0);
 
-  const dims: Dimension[] = ['motivation', 'social', 'style', 'ritual'];
-  const percents: Record<Dimension, number> = {
+  const dims: RadarDimension[] = ['motivation', 'social', 'style', 'ritual'];
+  const percents: Record<RadarDimension, number> = {
     motivation: scoreToPercent(dimensionScores.motivation),
     social: scoreToPercent(dimensionScores.social),
     style: scoreToPercent(dimensionScores.style),

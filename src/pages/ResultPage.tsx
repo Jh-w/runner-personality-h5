@@ -1,5 +1,5 @@
 // ResultPage - 跑步人格测试结果页
-// v4.0: 深色主题 + 人格渐变 Hero + 毛玻璃卡片 + stagger 入场
+// v4.3: 浅色主题 + 动物PNG Hero + 5维段子 + 风味标签卡片
 // PRD §7.1 信息层级 + Phase 2+3
 
 import { useState, useMemo, useCallback, useRef } from 'react';
@@ -22,7 +22,8 @@ import { getTypeColorTokens, getTypeGlowValue } from '../utils/typeColorMap';
 import wechatQrPlaceholder from '../assets/wechat-qr-placeholder.png';
 import { calculatePkResult } from '../engine/pkMatching';
 import { getStoredPkParams, clearPkParams, generatePkUrl } from '../utils/pkUrlParams';
-import type { PersonalityTypeId, PersonalityResult, PkResult } from '../engine/types';
+import { calculateFlavor, getAllFlavorCards } from '../engine/flavorScoring';
+import type { PersonalityTypeId, PersonalityResult, PkResult, Answer } from '../engine/types';
 import type { PersonalityCode } from '../engine/types';
 import styles from '../styles/pages/ResultPage.module.css';
 
@@ -183,6 +184,18 @@ export default function ResultPage() {
   // 最佳搭档（v3.1 Phase1）
   const bestBuddy = useMemo(() => findBestBuddy(personality.code), [personality.code]);
 
+  // v4.3: 风味标签卡片（基于Q2/Q10/Q13答案）
+  const flavorCards = useMemo(() => {
+    const answers = Object.values(state.answers) as Answer[];
+    if (answers.length === 0) return null;
+    try {
+      const flavor = calculateFlavor(answers);
+      return getAllFlavorCards(flavor);
+    } catch {
+      return null;
+    }
+  }, [state.answers]);
+
   return (
     <div className={`page ${styles.page}`}>
       {/* v4.0 弥散光球背景 */}
@@ -200,27 +213,21 @@ export default function ResultPage() {
         />
       )}
 
-      {/* ═══ 1. Hero 区：人格专属渐变 + heroReveal 动画 ═══ */}
+      {/* ═══ 1. Hero 区：动物PNG + 人格名 + Hook金句 ═══ */}
       <div
         className={`${styles.hero} ${styles.heroReveal}`}
         style={{
           background: `var(${colorTokens.gradientVar})`,
         }}
       >
-        {/* v4.1: Hook 开屏暴击金句 */}
-        {personality.hook && (
-          <p className={styles.heroHook}>「{personality.hook}」</p>
-        )}
         <div className={styles.heroIllustration}>
           <TypeIllustration animalImg={personality.animalImg} animalEmoji={personality.animalEmoji} animalName={personality.animalName} size={200} color={color} />
         </div>
         <h1 className={styles.heroName}>
           {personality.name}
         </h1>
-        {personality.quote && (
-          <p className={styles.heroQuote}>
-            「{personality.quote}」
-          </p>
+        {personality.hook && (
+          <p className={styles.heroHook}>「{personality.hook}」</p>
         )}
       </div>
 
@@ -242,7 +249,7 @@ export default function ResultPage() {
         </div>
       </GlassCard>
 
-      {/* ═══ 4. v4.1 维度解读 — 跑者成分解析 ═══ */}
+      {/* ═══ 4. v4.3 五维度段子 — 跑者成分解析 ═══ */}
       {personality.dimensionComments && (
         <GlassCard
           className={styles.dimensionSection}
@@ -274,6 +281,12 @@ export default function ResultPage() {
               </span>
               <p className={styles.dimensionComment}>{personality.dimensionComments.ritual}</p>
             </div>
+            <div className={styles.dimensionItem}>
+              <span className={styles.dimensionLabel}>
+                📊 表达方式 · {personality.dimensionScores.expression < 0 ? '偏数据' : '偏文艺'}
+              </span>
+              <p className={styles.dimensionComment}>{personality.dimensionComments.expression}</p>
+            </div>
           </div>
         </GlassCard>
       )}
@@ -287,6 +300,33 @@ export default function ResultPage() {
           visible={true}
         />
       </div>
+
+      {/* ═══ 6. v4.3 风味标签卡片 — 3张卡片（时间/伤痛/饮食） ═══ */}
+      {flavorCards && (
+        <div className={styles.flavorSection} style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '280ms' }}>
+          <h2 className={styles.flavorTitle}>🍜 你的跑步风味标签</h2>
+          <div className={styles.flavorGrid}>
+            <div className={styles.flavorCard}>
+              <span className={styles.flavorEmoji}>{flavorCards.time.emoji}</span>
+              <span className={styles.flavorCardTitle}>{flavorCards.time.title}</span>
+              <span className={styles.flavorCardSubtitle}>{flavorCards.time.subtitle}</span>
+              <p className={styles.flavorCardBody}>{flavorCards.time.body}</p>
+            </div>
+            <div className={styles.flavorCard}>
+              <span className={styles.flavorEmoji}>{flavorCards.injury.emoji}</span>
+              <span className={styles.flavorCardTitle}>{flavorCards.injury.title}</span>
+              <span className={styles.flavorCardSubtitle}>{flavorCards.injury.subtitle}</span>
+              <p className={styles.flavorCardBody}>{flavorCards.injury.body}</p>
+            </div>
+            <div className={styles.flavorCard}>
+              <span className={styles.flavorEmoji}>{flavorCards.diet.emoji}</span>
+              <span className={styles.flavorCardTitle}>{flavorCards.diet.title}</span>
+              <span className={styles.flavorCardSubtitle}>{flavorCards.diet.subtitle}</span>
+              <p className={styles.flavorCardBody}>{flavorCards.diet.body}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══ 6. 最佳跑团搭档 — 32px gap ═══ */}
       {bestBuddy && (

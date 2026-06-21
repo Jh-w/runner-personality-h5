@@ -88,8 +88,8 @@ export function testReducer(state: TestState, action: TestAction): TestState {
       if (state.phase !== 'testing') return state;
       const { questionIndex, optionId, dimensionScore } = action;
       const newAnswers = { ...state.answers, [questionIndex]: { questionId: questionIndex + 1, optionId, dimensionScore } };
-      // v3.3: 12题模式，最后一题 index=11
-      const isLast = questionIndex >= 11;
+      // v4.2: 18题模式，最后一题 index=17
+      const isLast = questionIndex >= 17;
       return {
         ...state,
         answers: newAnswers,

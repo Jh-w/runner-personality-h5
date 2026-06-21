@@ -50,8 +50,8 @@ export function TestEngineProvider({ children }: { children: ReactNode }) {
 
   const setResult = useCallback(() => {
     const answersArray = Object.values(state.answers);
-    // v3.3: 12题模式
-    if (answersArray.length < 12) return;
+    // v4.2: 18题模式（15计分+3风味）
+    if (answersArray.length < 18) return;
     const result = calculateResult(answersArray);
     dispatch({ type: 'SET_RESULT', result });
   }, [state.answers]);

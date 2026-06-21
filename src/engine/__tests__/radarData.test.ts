@@ -1,10 +1,10 @@
 // 雷达图数据转换单元测试 — Phase 2 模块三
-// 覆盖 scoreToPercent / computeVertices / 16型全量快照
+// 覆盖 scoreToPercent / computeVertices / 32型全量快照
 
 import { describe, it, expect } from 'vitest';
 import { scoreToPercent, computeVertices } from '../../components/RadarChart';
+import type { RadarDimension } from '../../components/RadarChart';
 import { getAllPersonalities } from '../personalities';
-import type { Dimension } from '../types';
 
 // ─── scoreToPercent ─────────────────────────────────
 
@@ -41,13 +41,13 @@ describe('scoreToPercent', () => {
 // ─── computeVertices ────────────────────────────────
 
 describe('computeVertices', () => {
-  const dims: Dimension[] = ['motivation', 'social', 'style', 'ritual'];
+  const dims: RadarDimension[] = ['motivation', 'social', 'style', 'ritual'];
   const cx = 140;
   const cy = 140;
   const radius = 98; // 280 * 0.35
 
   it('all 50% → diamond shape (square rotated 45°)', () => {
-    const percents: Record<Dimension, number> = {
+    const percents: Record<RadarDimension, number> = {
       motivation: 50,
       social: 50,
       style: 50,
@@ -69,7 +69,7 @@ describe('computeVertices', () => {
   });
 
   it('all 0% → all vertices at center', () => {
-    const percents: Record<Dimension, number> = {
+    const percents: Record<RadarDimension, number> = {
       motivation: 0,
       social: 0,
       style: 0,
@@ -84,7 +84,7 @@ describe('computeVertices', () => {
   });
 
   it('all 100% → full diamond', () => {
-    const percents: Record<Dimension, number> = {
+    const percents: Record<RadarDimension, number> = {
       motivation: 100,
       social: 100,
       style: 100,
@@ -99,7 +99,7 @@ describe('computeVertices', () => {
   });
 
   it('asymmetric scores produce deformed quadrilateral', () => {
-    const percents: Record<Dimension, number> = {
+    const percents: Record<RadarDimension, number> = {
       motivation: 75,
       social: 25,
       style: 60,
@@ -114,17 +114,18 @@ describe('computeVertices', () => {
   });
 });
 
-// ─── 16 型全量快照测试 ──────────────────────────────
+// ─── 32 型全量快照测试 ──────────────────────────────
 
-describe('16-type dimension data snapshot', () => {
+describe('32-type dimension data snapshot', () => {
   const personalities = getAllPersonalities();
 
   personalities.forEach((p) => {
     it(`typeId ${p.typeId}: ${p.name} has valid dimensionScores`, () => {
       const ds = p.dimensionScores;
 
-      // 所有得分在 -2 到 +2 范围内
-      for (const dim of ['motivation', 'social', 'style', 'ritual'] as Dimension[]) {
+      // 所有得分在 -2 到 +2 范围内（检查所有5维）
+      const allDims = ['motivation', 'social', 'style', 'ritual', 'expression'] as const;
+      for (const dim of allDims) {
         expect(ds[dim]).toBeGreaterThanOrEqual(-2);
         expect(ds[dim]).toBeLessThanOrEqual(2);
       }
@@ -134,9 +135,9 @@ describe('16-type dimension data snapshot', () => {
       expect(hasNonZero).toBe(true);
     });
 
-    it(`typeId ${p.typeId}: vertices computed without NaN`, () => {
+    it(`typeId ${p.typeId}: radar vertices computed without NaN`, () => {
       const ds = p.dimensionScores;
-      const percents: Record<Dimension, number> = {
+      const percents: Record<RadarDimension, number> = {
         motivation: scoreToPercent(ds.motivation),
         social: scoreToPercent(ds.social),
         style: scoreToPercent(ds.style),
@@ -145,7 +146,8 @@ describe('16-type dimension data snapshot', () => {
 
       const vertices = computeVertices(percents, 140, 140, 98);
 
-      for (const dim of ['motivation', 'social', 'style', 'ritual'] as Dimension[]) {
+      const radarDims: RadarDimension[] = ['motivation', 'social', 'style', 'ritual'];
+      for (const dim of radarDims) {
         expect(Number.isFinite(vertices[dim].x)).toBe(true);
         expect(Number.isFinite(vertices[dim].y)).toBe(true);
       }

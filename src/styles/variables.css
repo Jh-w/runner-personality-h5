@@ -6,12 +6,12 @@
 
 :root {
   /* ═══════════════════════════════════════════════════════════════
-     1. 深色底色系统（page / card / overlay 三层）
+     1. 浅色底色系统（page / card / overlay 三层）
      ═══════════════════════════════════════════════════════════════ */
-  --bg-deep: #0d1117;                      /* 最深底色 — 分享卡片、全局背景 */
-  --bg-primary: #111827;                   /* 主深色底 — 页面通用背景 */
-  --bg-secondary: #1a1f2e;                /* 次级深色底 — 卡片/模块容器 */
-  --bg-elevated: #1f2937;                  /* 悬浮层底色 — hover / active 态 */
+  --bg-deep: #f0ebe3;                      /* 最深底色 — 分享卡片 */
+  --bg-primary: #f5f0eb;                   /* 主浅色底 — 页面通用背景 */
+  --bg-secondary: #faf8f5;                /* 次级浅色底 — 卡片/模块容器 */
+  --bg-elevated: #ffffff;                  /* 悬浮层底色 — hover / active 态 */
   --bg-overlay: rgba(0, 0, 0, 0.65);       /* 遮罩层 — 弹窗/Sheet 背景 */
 
   /* ═══════════════════════════════════════════════════════════════
@@ -23,11 +23,11 @@
   --brand-secondary-glow: rgba(79, 195, 247, 0.20);
 
   /* ═══════════════════════════════════════════════════════════════
-     3. 文字色阶（深色底适配）
+     3. 文字色阶（浅色底适配）
      ═══════════════════════════════════════════════════════════════ */
-  --text-primary: #F0F0F5;                /* 主文字 — 白但不刺眼 */
-  --text-secondary: #9CA3AF;              /* 次级文字 */
-  --text-tertiary: #6B7280;               /* 三级文字 / 禁用态 */
+  --text-primary: #1a1a2e;                /* 主文字 — 深色 */
+  --text-secondary: #555555;              /* 次级文字 */
+  --text-tertiary: #999999;               /* 三级文字 / 禁用态 */
   --text-accent: var(--brand-primary);    /* 强调文字 — 跟随品牌色 */
   --text-on-color: #FFFFFF;               /* 彩色底上的文字 */
 
@@ -113,12 +113,12 @@
   --color-info: #2196F3;
 
   /* ═══════════════════════════════════════════════════════════════
-     6. 毛玻璃系统
+     6. 毛玻璃系统（浅色底适配）
      ═══════════════════════════════════════════════════════════════ */
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-bg-strong: rgba(255, 255, 255, 0.10);
-  --glass-border: rgba(255, 255, 255, 0.10);
-  --glass-border-strong: rgba(255, 255, 255, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg-strong: rgba(255, 255, 255, 0.90);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-strong: rgba(0, 0, 0, 0.12);
   --glass-blur: 20px;
 
   /* ═══════════════════════════════════════════════════════════════
@@ -194,11 +194,11 @@
   --radius-full: 9999px;
 
   /* ═══════════════════════════════════════════════════════════════
-     11. 阴影系统（深色底适配）
+     11. 阴影系统（浅色底适配）
      ═══════════════════════════════════════════════════════════════ */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.30);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.40);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.50);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
   --shadow-glow: 0 0 30px var(--brand-primary-glow);
   --shadow-glow-sm: 0 0 15px var(--brand-primary-glow);
 
@@ -324,8 +324,8 @@ body {
 /* 微信不支持 backdrop-filter 的降级 */
 @supports not (backdrop-filter: blur(1px)) {
   .glass-card {
-    background: rgba(30, 35, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.90);
+    border: 1px solid rgba(0, 0, 0, 0.10);
   }
 }
 

@@ -1,6 +1,7 @@
-// AC-10: localStorage 持久化逻辑单元测试
+// AC-10: localStorage 持久化逻辑单元测试 — v4.2 (18题/32型)
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { TestState, SavedProgress } from '../types';
+import { CURRENT_VERSION } from '../types';
 import { testReducer, saveProgress, loadProgress, clearProgress, PROGRESS_KEY } from '../../hooks/progressStore';
 
 // Mock localStorage
@@ -30,7 +31,7 @@ function makeTestState(overrides: Partial<TestState> = {}): TestState {
 
 function makeProgress(overrides: Partial<SavedProgress> = {}): SavedProgress {
   return {
-    version: 3,
+    version: CURRENT_VERSION,
     sessionId: 'rp_test_session_001',
     currentQuestionIndex: 3,
     answers: {
@@ -110,10 +111,10 @@ describe('saveProgress / loadProgress', () => {
     expect(localStorageMock.removeItem).toHaveBeenCalledWith(PROGRESS_KEY);
   });
 
-  it('loadProgress discards progress with old version (v2)', () => {
+  it('loadProgress discards progress with old version (v3)', () => {
     const oldProgress = {
-      version: 2,
-      sessionId: 'rp_old_v2',
+      version: 3,
+      sessionId: 'rp_old_v3',
       currentQuestionIndex: 3,
       answers: { 0: { questionId: 1, optionId: 'A', dimensionScore: 1 } },
       randomizedOptions: [],
@@ -124,10 +125,10 @@ describe('saveProgress / loadProgress', () => {
     expect(result).toBeNull();
   });
 
-  it('loadProgress keeps progress with current version (v3)', () => {
+  it('loadProgress keeps progress with current version', () => {
     const currentProgress = {
-      version: 3,
-      sessionId: 'rp_current_v3',
+      version: CURRENT_VERSION,
+      sessionId: 'rp_current',
       currentQuestionIndex: 5,
       answers: { 0: { questionId: 1, optionId: 'A', dimensionScore: 1 } },
       randomizedOptions: [],
@@ -136,14 +137,14 @@ describe('saveProgress / loadProgress', () => {
     store[PROGRESS_KEY] = JSON.stringify(currentProgress);
     const result = loadProgress();
     expect(result).not.toBeNull();
-    expect(result!.sessionId).toBe('rp_current_v3');
+    expect(result!.sessionId).toBe('rp_current');
   });
 
-  it('saveProgress writes version field', () => {
+  it('saveProgress writes version field matching CURRENT_VERSION', () => {
     const state = makeTestState();
     saveProgress(state);
     const raw = JSON.parse(store[PROGRESS_KEY]);
-    expect(raw.version).toBe(3);
+    expect(raw.version).toBe(CURRENT_VERSION);
   });
 
   it('does NOT save when phase is completed', () => {
@@ -205,12 +206,12 @@ describe('testReducer', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockResult: any = {
-      typeId: 5, code: 'CGDG', name: '跑团结算官', emoji: '🧮',
-      keywords: ['数据', '规则', '装备'],
-      roast: '最强大脑', traits: ['配速党', 'PB控', '赛霸'] as [string, string, string],
-      dimensionScores: { motivation: -1, social: 1, style: -1, ritual: -1 },
-      color: '#2196F3',
-      svgIcon: 'CGDG',
+      typeId: 5, code: 'CGLP_D', name: '暗影破风者', emoji: '🐆',
+      keywords: ['潜水', '隐身', '数据', '课表', '低调'],
+      roast: '跑团群永远潜水...', traits: ['低调', '精确', '沉默'] as [string, string, string],
+      dimensionScores: { motivation: -1, social: -1, style: -1, ritual: -1, expression: -1 },
+      color: '#607D8B',
+      svgIcon: 'CGLD',
     };
 
     const state = testReducer(makeTestState(), {
@@ -244,8 +245,8 @@ describe('testReducer', () => {
     expect(result).toBe(idle); // Same reference — no change
   });
 
-  it('SELECT_ANSWER transitions to calculating on last question (index 11)', () => {
-    const state = makeTestState({ currentQuestionIndex: 11, answers: {
+  it('SELECT_ANSWER transitions to calculating on last question (index 17)', () => {
+    const state = makeTestState({ currentQuestionIndex: 17, answers: {
       0: { questionId: 1, optionId: 'A', dimensionScore: 1 },
       1: { questionId: 2, optionId: 'B', dimensionScore: 0.5 },
       2: { questionId: 3, optionId: 'A', dimensionScore: 1 },
@@ -257,9 +258,15 @@ describe('testReducer', () => {
       8: { questionId: 9, optionId: 'D', dimensionScore: 1 },
       9: { questionId: 10, optionId: 'A', dimensionScore: 0.5 },
       10: { questionId: 11, optionId: 'B', dimensionScore: 1 },
+      11: { questionId: 12, optionId: 'C', dimensionScore: -1 },
+      12: { questionId: 13, optionId: 'D', dimensionScore: 1 },
+      13: { questionId: 14, optionId: 'A', dimensionScore: 0.5 },
+      14: { questionId: 15, optionId: 'B', dimensionScore: 1 },
+      15: { questionId: 16, optionId: 'C', dimensionScore: -1 },
+      16: { questionId: 17, optionId: 'D', dimensionScore: 1 },
     }});
-    const result = testReducer(state, { type: 'SELECT_ANSWER', questionIndex: 11, optionId: 'C', dimensionScore: -1 });
+    const result = testReducer(state, { type: 'SELECT_ANSWER', questionIndex: 17, optionId: 'C', dimensionScore: -1 });
     expect(result.phase).toBe('calculating');
-    expect(Object.keys(result.answers)).toHaveLength(12);
+    expect(Object.keys(result.answers)).toHaveLength(18);
   });
 });

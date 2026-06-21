@@ -1,5 +1,5 @@
 // pkMatching.ts — PK 匹配度引擎
-// v3.3-Phase3: 4维比较 256对全覆盖，互补判定 + 评级 + 解读
+// v4.2: 5维比较 1024对全覆盖，互补判定 + 评级 + 解读
 // 纯函数，无副作用
 
 import type { PersonalityCode, DimensionScores, PkResult, PkRating, DimensionComparison } from './types';
@@ -9,16 +9,17 @@ import { getPersonality } from './personalities';
 
 const DIM_LABELS: Record<string, [string, string]> = {
   motivation: ['竞技驱动', '体验驱动'],
-  social: ['独狼', '社群动物'],
-  style: ['计划狂', '随性派'],
+  social: ['独狼', '社群跑者'],
+  style: ['计划型', '随性型'],
   ritual: ['装备党', '极简派'],
+  expression: ['数据派', '文艺派'],
 };
 
 const DIM_LEFT: Record<string, string> = {
-  motivation: 'C', social: 'S', style: 'D', ritual: 'G',
+  motivation: 'C', social: 'L', style: 'P', ritual: 'G', expression: 'D',
 };
 const DIM_RIGHT: Record<string, string> = {
-  motivation: 'E', social: 'G', style: 'P', ritual: 'M',
+  motivation: 'E', social: 'S', style: 'S', ritual: 'M', expression: 'A',
 };
 
 // ─── 维度符号提取 ────────────────────────────────────
@@ -47,10 +48,10 @@ function calcDimensionMatch(
 // ─── 评级与解读 ──────────────────────────────────────
 
 function getRating(complementCount: number): PkRating {
-  if (complementCount >= 4) return 5;
-  if (complementCount === 3) return 4;
-  if (complementCount === 2) return 3;
-  if (complementCount === 1) return 2;
+  if (complementCount >= 5) return 5;
+  if (complementCount >= 4) return 4;
+  if (complementCount >= 3) return 3;
+  if (complementCount >= 2) return 2;
   return 1;
 }
 
@@ -99,7 +100,7 @@ export function calculatePkResult(
   const dsA = pA.dimensionScores;
   const dsB = pB.dimensionScores;
 
-  const dimensions = ['motivation', 'social', 'style', 'ritual'] as const;
+  const dimensions = ['motivation', 'social', 'style', 'ritual', 'expression'] as const;
   const dimResults: { dim: string; signA: string; signB: string; score: number; complementary: boolean }[] = [];
 
   for (const dim of dimensions) {
@@ -110,7 +111,7 @@ export function calculatePkResult(
   }
 
   const totalScore = dimResults.reduce((s, r) => s + r.score, 0);
-  const matchPercentage = Math.round(totalScore / 4);
+  const matchPercentage = Math.round(totalScore / 5);
   const complementCount = dimResults.filter(r => r.complementary).length;
 
   const rating = getRating(complementCount);

@@ -3,11 +3,11 @@
 
 // ─── 维度与编码 ──────────────────────────────────────
 
-/** 四个维度 */
-export type Dimension = 'motivation' | 'social' | 'style' | 'ritual';
+/** 五个维度 */
+export type Dimension = 'motivation' | 'social' | 'style' | 'ritual' | 'expression';
 
-/** 四字母人格编码 (C/E × S/G × D/P × G/M) */
-export type PersonalityCode = string; // e.g. "CSDG", "EPGM"
+/** 五字母人格编码 (C/E × S/G × D/P × G/M × D/A) */
+export type PersonalityCode = string; // e.g. "CSGP_D", "EPGM_A"
 
 // ─── 维度得分 ─────────────────────────────────────────
 
@@ -17,12 +17,13 @@ export interface DimensionScores {
   social: number;     // >0=社群动物G, <0=独狼S
   style: number;      // >0=随性派P,   <0=计划狂D
   ritual: number;     // >0=极简派M,   <0=装备党G
+  expression: number; // >0=文艺派A,   <0=数据派D
 }
 
 // ─── 人格 ────────────────────────────────────────────
 
-/** 人格类型ID (1-16) */
-export type PersonalityTypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+/** 人格类型ID (1-32) */
+export type PersonalityTypeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32;
 
 /** 人格结果 */
 export interface PersonalityResult {
@@ -47,11 +48,12 @@ export interface PersonalityResult {
 
   // ═══ v4.1 新增字段（全部 optional，向后兼容）═══
   hook?: string;                      // 开屏暴击金句 ≤30字
-  dimensionComments?: {               // 四维度解读各一句
+  dimensionComments?: {               // 五维度解读各一句
     motivation: string;
     social: string;
     style: string;
     ritual: string;
+    expression: string;
   };
   shareTagline?: string;              // 社交分享标语 ≤15字
 }
@@ -84,6 +86,8 @@ export interface Question {
   text: string;
   dimension: Dimension;
   options: Option[];
+  /** 风味维度（仅风味题使用，不计入32型分类） */
+  flavorDimension?: 'time' | 'injury' | 'diet';
 }
 
 // ─── 答案与状态 ──────────────────────────────────────
@@ -145,7 +149,7 @@ export interface SavedProgress {
 
 /** 维度对比信息 */
 export interface DimensionComparison {
-  dimension: 'motivation' | 'social' | 'style' | 'ritual';
+  dimension: 'motivation' | 'social' | 'style' | 'ritual' | 'expression';
   typeA: string;
   typeB: string;
   isComplementary: boolean;
@@ -170,4 +174,4 @@ export interface PkResult {
 }
 
 /** 当前数据版本号 */
-export const CURRENT_VERSION = 3;
+export const CURRENT_VERSION = 4;

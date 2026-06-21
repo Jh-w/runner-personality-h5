@@ -1,4 +1,4 @@
-/* ResultPage 样式 — v4.0 深色主题 + 人格渐变 Hero + 毛玻璃卡片 */
+/* ResultPage 样式 — v4.3 浅色主题 + 动物PNG Hero + 风味标签卡片 */
 
 .page {
   padding: 0;
@@ -9,7 +9,7 @@
   gap: 0;
   overflow-x: hidden;
   position: relative;
-  background: var(--bg-primary);
+  background: #f5f0eb;
 }
 
 /* ═══ Hero 区 — 人格专属渐变 + heroReveal 动画 ═══ */
@@ -54,20 +54,7 @@
   z-index: 1;
 }
 
-/* Hero 金句 */
-.heroQuote {
-  font-style: italic;
-  font-size: var(--fs-subtitle);
-  color: rgba(255, 255, 255, 0.85);
-  line-height: var(--lh-subtitle);
-  padding: var(--sp-md) var(--sp-lg);
-  text-align: center;
-  letter-spacing: 0.3px;
-  position: relative;
-  z-index: 1;
-}
-
-/* ═══ v4.1 Hero Hook — 开屏暴击金句 ═══ */
+/* ═══ v4.3 Hero Hook — 开屏暴击金句 ═══ */
 
 .heroHook {
   font-family: var(--font-display);
@@ -77,7 +64,7 @@
   text-align: center;
   line-height: 1.5;
   padding: 0 var(--sp-md);
-  margin-bottom: var(--sp-lg);
+  margin-top: var(--sp-md);
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
   position: relative;
   z-index: 1;
@@ -104,7 +91,7 @@
 .roastQuote {
   font-style: italic;
   font-size: var(--fs-body);
-  color: var(--text-secondary);
+  color: #444;
   line-height: 1.8;
   padding-left: var(--sp-sm);
   border-left: 3px solid var(--brand-primary);
@@ -112,7 +99,7 @@
   word-break: break-word;
 }
 
-/* ═══ v4.1 维度解读 — 跑者成分解析 ═══ */
+/* ═══ v4.3 维度解读 — 跑者成分解析 (5维) ═══ */
 
 .dimensionSection {
   width: calc(100% - 32px);
@@ -125,7 +112,7 @@
 .dimensionTitle {
   font-size: var(--fs-subtitle);
   font-weight: 700;
-  color: var(--text-primary);
+  color: #333;
   margin-bottom: var(--sp-md);
   text-align: center;
 }
@@ -138,8 +125,8 @@
 
 .dimensionItem {
   padding: var(--sp-sm) var(--sp-md);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-md);
 }
 
@@ -147,15 +134,74 @@
   display: block;
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #333;
   margin-bottom: var(--sp-2xs);
 }
 
 .dimensionComment {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #666;
   line-height: 1.6;
   margin: 0;
+}
+
+/* ═══ v4.3 风味标签卡片 ═══ */
+
+.flavorSection {
+  width: calc(100% - 32px);
+  margin: var(--sp-xl) auto 0;
+  position: relative;
+  z-index: 2;
+}
+
+.flavorTitle {
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: var(--sp-md);
+  text-align: center;
+}
+
+.flavorGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.flavorCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-md);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.flavorEmoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.flavorCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.flavorCardSubtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
+.flavorCardBody {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 4px 0 0 0;
 }
 
 /* ═══ 通用 Section — 毛玻璃卡片 ═══ */
@@ -169,7 +215,7 @@
 .sectionTitle {
   font-size: var(--fs-title);
   font-weight: 700;
-  color: var(--text-primary);
+  color: #333;
   margin-bottom: var(--sp-sm);
 }
 
@@ -188,7 +234,7 @@
   align-items: flex-start;
   gap: var(--sp-xs);
   font-size: var(--fs-body);
-  color: var(--text-secondary);
+  color: #555;
   line-height: 1.6;
 }
 
@@ -211,38 +257,27 @@
   font-size: var(--fs-body);
 }
 
-/* ═══ 公众号关注引导 — 深色适配 ═══ */
+/* ═══ 公众号关注引导 — 浅色适配 ═══ */
 
 .wechatCard {
   margin: 28px 20px 40px;
   padding: 24px 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-lg);
   text-align: center;
-}
-
-/* 微信不支持 backdrop-filter 的降级（wechatCard + buddyCard） */
-@supports not (backdrop-filter: blur(1px)) {
-  .wechatCard,
-  .buddyCard {
-    background: rgba(30, 35, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-  }
 }
 
 .wechatText {
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #333;
   margin: 0 0 4px 0;
 }
 
 .wechatSubText {
   font-size: 14px;
-  color: var(--text-tertiary);
+  color: #999;
   margin: 0 0 16px 0;
 }
 
@@ -256,11 +291,11 @@
 
 .wechatHint {
   font-size: 13px;
-  color: var(--text-tertiary);
+  color: #999;
   margin: 0;
 }
 
-/* ═══ 最佳搭档区块（v3.1）深色适配 ═══ */
+/* ═══ 最佳搭档区块（v3.1）浅色适配 ═══ */
 
 .buddySection {
   width: calc(100% - 32px);
@@ -268,10 +303,8 @@
 }
 
 .buddyCard {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-lg);
   padding: 20px;
   margin: 0 16px;
@@ -279,12 +312,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .buddyTitle {
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #333;
   margin-bottom: 12px;
 }
 
@@ -304,7 +338,7 @@
 .buddyQuote {
   font-style: italic;
   font-size: 14px;
-  color: var(--text-tertiary);
+  color: #999;
   margin: 8px 0;
   line-height: 1.5;
 }
@@ -312,7 +346,7 @@
 .buddyDescription {
   font-size: 15px;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: #555;
   margin: 8px 0;
 }
 
@@ -347,16 +381,12 @@
   min-height: 60vh;
   text-align: center;
   font-size: var(--fs-body);
-  color: var(--text-secondary);
+  color: #666;
 }
 
 .error button {
   max-width: 240px;
 }
-
-/* ═══ PK Banner / CTA（保持来自 PkCard.module.css） ═══ */
-/* 以下样式引用自 PkCard.module.css，此处不再重复 */
-/* pkCta 仍然保留在 ResultPage 中 */
 
 /* ═══ PK 全屏预览 ═══ */
 

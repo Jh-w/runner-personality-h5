@@ -1,7 +1,7 @@
-// 计分引擎 v3.0 — PRD §5.4 累积计分规则
-// 每题 dimensionScore: ±1 (强倾向) / ±0.5 (弱倾向)
-// 每维度2题累加 → >0=右极, <0=左极, ==0 偏右极
-// 4维组合 → 16型人格匹配
+// 计分引擎 v4.2 — PRD §2.4 五维累积计分规则
+// 每维度3题，每题 dimensionScore: ±1
+// 3题总分 ≥ 2 → 右极, ≤ 1 → 左极 (signKey 用 < 0 判定)
+// 5维组合 → 2⁵=32型人格匹配
 
 import type { Answer, Dimension, DimensionScores, PersonalityCode, PersonalityResult, PersonalityTypeId } from './types';
 import { questionDimensionMap } from './questions';
@@ -24,20 +24,26 @@ function getSignToTypeId(): Map<string, PersonalityTypeId> {
   return _signToTypeId;
 }
 
-/** 将 DimensionScores 转为符号键 "CSPG" 等（按 [motivation][social][style][ritual]） */
+/**
+ * 将 DimensionScores 转为五字母符号键
+ * 编码: M(motivation) E(equipment/ritual) S(social) P(plan/style) X(expression)
+ * 左极(负): C=竞技 G=装备 L=独狼 P=计划 D=数据
+ * 右极(正): E=体验 M=极简 S=社群 S=随性 A=文艺
+ */
 function signKey(scores: DimensionScores): string {
-  const c1 = scores.motivation < 0 ? 'C' : 'E';
-  const c2 = scores.social < 0 ? 'S' : 'G';
-  const c3 = scores.style < 0 ? 'D' : 'P';
-  const c4 = scores.ritual < 0 ? 'G' : 'M';
-  return `${c1}${c2}${c3}${c4}`;
+  const c1 = scores.motivation < 0 ? 'C' : 'E';    // C=竞技 / E=体验
+  const c2 = scores.ritual < 0 ? 'G' : 'M';         // G=装备党 / M=极简派
+  const c3 = scores.social < 0 ? 'L' : 'S';         // L=独狼 / S=社群
+  const c4 = scores.style < 0 ? 'P' : 'S';          // P=计划型 / S=随性型
+  const c5 = scores.expression < 0 ? 'D' : 'A';     // D=数据派 / A=文艺派
+  return `${c1}${c2}${c3}${c4}_${c5}`;
 }
 
 // ─── 公开 API ───────────────────────────────────────
 
 /**
- * 根据8个答案计算维度累积得分
- * 返回每个维度的连续累积值（可为负）
+ * 根据15个计分题答案计算五维累积得分
+ * 风味题不在 questionDimensionMap 中，自动跳过
  */
 export function calculateScores(answers: Answer[]): DimensionScores {
   const scores: Record<Dimension, number> = {
@@ -45,6 +51,7 @@ export function calculateScores(answers: Answer[]): DimensionScores {
     social: 0,
     style: 0,
     ritual: 0,
+    expression: 0,
   };
 
   for (const answer of answers) {
@@ -58,14 +65,15 @@ export function calculateScores(answers: Answer[]): DimensionScores {
 }
 
 /**
- * 根据维度累积得分生成四字母人格编码（框架标准编码）
- * 规则: 维度总分 > 0 → 右极; < 0 → 左极; == 0 → 右极（兜底偏右）
+ * 根据维度累积得分生成五字母人格编码
+ * 规则: 维度总分 < 0 → 左极; ≥ 0 → 右极
  *
- * 编码位置（PRD §5.1 定义）:
- *   位1 (motivation): < 0 → 'C' (竞技驱动) | ≥ 0 → 'E' (体验驱动)
- *   位2 (social):     < 0 → 'S' (独狼)     | ≥ 0 → 'G' (社群动物)
- *   位3 (style):      < 0 → 'D' (计划狂)   | ≥ 0 → 'P' (随性派)
- *   位4 (ritual):     < 0 → 'G' (装备党)   | ≥ 0 → 'M' (极简派)
+ * 编码位置:
+ *   位1 (motivation):  < 0 → 'C' (竞技驱动) | ≥ 0 → 'E' (体验驱动)
+ *   位2 (ritual/equip): < 0 → 'G' (装备党)   | ≥ 0 → 'M' (极简派)
+ *   位3 (social):       < 0 → 'L' (独狼)     | ≥ 0 → 'S' (社群跑者)
+ *   位4 (style/plan):   < 0 → 'P' (计划型)   | ≥ 0 → 'S' (随性型)
+ *   位5 (expression):   < 0 → 'D' (数据派)   | ≥ 0 → 'A' (文艺派)
  */
 export function codeFromScores(scores: DimensionScores): PersonalityCode {
   return signKey(scores);
@@ -73,7 +81,7 @@ export function codeFromScores(scores: DimensionScores): PersonalityCode {
 
 /**
  * 根据维度得分匹配人格类型ID
- * 通过维度符号直接查找，不依赖 PRD 中可能不一致的四字母编码
+ * 通过维度符号直接查找 2⁵=32 型人格表
  */
 export function matchPersonality(scores: DimensionScores): PersonalityTypeId {
   const key = signKey(scores);

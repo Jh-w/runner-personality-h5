@@ -102,14 +102,14 @@ export default function TestPage() {
       setSelectPhase('stable');
       selectAnswer(questionIndex, optionId, option.dimensionScore);
 
-      // Phase 3: 中段激励提示（第6题=index 5 答完时）
-      if (questionIndex === 5) {
+      // Phase 3: 中段激励提示（第10题=index 9 答完时 → 18题的中段）
+      if (questionIndex === 9) {
         setShowHalfwayHint(true);
         hintTimer.current = setTimeout(() => setShowHalfwayHint(false), 2000);
       }
 
-      // Check if this was the last question (index 11 = Q12)
-      if (questionIndex >= 11) {
+      // Check if this was the last question (index 17 = Q18)
+      if (questionIndex >= 17) {
         navigate('/calculating');
       }
     }, 250);
@@ -126,7 +126,7 @@ export default function TestPage() {
   return (
     <div className={`page ${styles.page}`}>
       <RunwayProgress
-        total={12}
+        total={18}
         current={questionIndex}
         answered={answeredCount}
         color="#FF6B35"
