@@ -1,0 +1,1 @@
+import{n as e}from"./ResultPage-Dlui42S_.js";export{e as getTypeGlowValue};
