@@ -1,1 +1,0 @@
-import{n as e}from"./ResultPage-B4T6ui-n.js";export{e as getTypeGlowValue};
