@@ -1,1 +1,0 @@
-import{c as e,n as t}from"./index-BGOs-ySU.js";var n={container:`_container_1pjqv_2`,link:`_link_1pjqv_18`},r=t();function i(){return(0,r.jsx)(`div`,{className:n.container,children:(0,r.jsx)(e,{to:`/privacy`,className:n.link,children:`隐私政策`})})}export{i as t};

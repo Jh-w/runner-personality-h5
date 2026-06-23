@@ -1,0 +1,1 @@
+import{t as e}from"./ResultPage-D4eyuOHr.js";export{e as getTypeGlowValue};
