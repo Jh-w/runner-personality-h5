@@ -1,5 +1,5 @@
 // ResultPage - 跑步人格测试结果页
-// v5.4: Hero渐变光带 + emoji光晕圈 + 解读美化
+// v4.3: 浅色主题 + 动物PNG Hero + 5维段子 + 风味标签卡片
 // PRD §7.1 信息层级 + Phase 2+3
 
 import { useState, useMemo, useCallback, useRef } from 'react';
@@ -211,26 +211,10 @@ export default function ResultPage() {
         />
       )}
 
-      {/* ═══ 1. Hero 区：渐变光带 + emoji光晕圈 + Hook金句 + 荒诞标签 ═══ */}
+      {/* ═══ 1. Hero 区：emoji + 人格名 + English名 + Hook金句 + 荒诞标签 ═══ */}
       <div className={styles.hero}>
-        {/* 顶部渐变光带 */}
-        <div
-          className={styles.heroGradient}
-          style={{
-            background: `linear-gradient(180deg, ${color}18 0%, ${color}08 40%, transparent 100%)`,
-          }}
-        />
         <p className={styles.heroLabel}>你的跑者类型是：</p>
-        {/* emoji 光晕圈 */}
-        <div
-          className={styles.heroEmojiRing}
-          style={{
-            background: `radial-gradient(circle, ${color}22 0%, ${color}08 60%, transparent 70%)`,
-            boxShadow: `0 0 60px ${color}18`,
-          }}
-        >
-          <span className={styles.heroEmoji}>{personality.emoji}</span>
-        </div>
+        <div className={styles.heroEmoji}>{personality.emoji}</div>
         <h1 className={styles.heroName}>{personality.name}</h1>
         {personality.englishName && (
           <p className={styles.heroEnglish}>{personality.englishName}</p>
@@ -246,11 +230,7 @@ export default function ResultPage() {
       {/* ═══ 2. 简单解读（脱口秀吐槽） ═══ */}
       <GlassCard
         className={styles.roastCard}
-        style={{
-          '--roast-accent': color,
-          animation: 'staggerFadeUp 500ms var(--ease-standard) both',
-          animationDelay: '80ms',
-        } as React.CSSProperties}
+        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '80ms' }}
       >
         <h2 className={styles.sectionTitle}>简单解读</h2>
         <div className={styles.roastText}>{personality.roast}</div>
