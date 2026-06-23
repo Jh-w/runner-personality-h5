@@ -1,13 +1,34 @@
-/* TestPage.module.css - 测试页 v4.0 深色主题 */
-/* 深色底 + 弥散光背景 */
+/* TestPage.module.css - v5.1 暖米白主题 + 导航按钮 */
 
 .page {
   display: flex;
   flex-direction: column;
   padding: var(--sp-md);
   padding-top: var(--sp-lg);
-  background: var(--bg-deep);
+  background: #f5f0eb;
   min-height: 100vh;
+}
+
+/* v5.2: 顶部导航栏 — 仅后退按钮，左对齐 */
+.topNav {
+  min-height: 36px;
+  margin-bottom: var(--sp-sm);
+}
+
+.navBackBtn {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: var(--fs-small);
+  cursor: pointer;
+  padding: var(--sp-xs) var(--sp-sm);
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--transition-fast);
+  font-weight: 500;
+}
+
+.navBackBtn:active {
+  color: var(--text-secondary);
 }
 
 .cardWrapper {

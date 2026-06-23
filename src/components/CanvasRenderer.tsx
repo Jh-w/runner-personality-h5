@@ -144,73 +144,6 @@ async function drawAnimalPng(
   ctx.restore();
 }
 
-// ---------- v4.3 5维标签条 ----------
-
-const DIMENSION_LABELS: Record<string, { emoji: string; left: string; right: string }> = {
-  motivation: { emoji: '💥', left: '竞技驱动', right: '体验驱动' },
-  social: { emoji: '👥', left: '独狼', right: '社群跑者' },
-  style: { emoji: '🎨', left: '计划型', right: '随性型' },
-  ritual: { emoji: '🎒', left: '装备党', right: '极简派' },
-  expression: { emoji: '📊', left: '数据派', right: '文艺派' },
-};
-
-const DIMENSION_ORDER = ['motivation', 'social', 'style', 'ritual', 'expression'] as const;
-
-function drawDimensionStrip(
-  ctx: CanvasRenderingContext2D,
-  dimensionScores: { motivation: number; social: number; style: number; ritual: number; expression: number },
-  y: number,
-): number {
-  const tagHeight = 44;
-  const tagGap = 12;
-  const totalWidth = CARD_W;
-  const stripX = CARD_X;
-
-  // 计算所有标签宽度
-  const tags = DIMENSION_ORDER.map(dim => {
-    const info = DIMENSION_LABELS[dim];
-    const score = dimensionScores[dim];
-    const label = score < 0 ? info.left : info.right;
-    return { emoji: info.emoji, label };
-  });
-
-  // 动态计算每个标签宽度
-  ctx.font = 'bold 18px "PingFang SC", "Helvetica Neue", sans-serif';
-  const widths = tags.map(t => {
-    const textW = ctx.measureText(`${t.emoji} ${t.label}`).width;
-    return textW + 28; // padding
-  });
-  const totalTagsWidth = widths.reduce((a, b) => a + b, 0) + tagGap * (tags.length - 1);
-  let curX = stripX + (totalWidth - totalTagsWidth) / 2;
-
-  for (let i = 0; i < tags.length; i++) {
-    const w = widths[i];
-    const t = tags[i];
-
-    // 标签背景
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    drawRoundedRect(ctx, curX, y, w, tagHeight, tagHeight / 2);
-    ctx.fill();
-
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.10)';
-    ctx.lineWidth = 1;
-    drawRoundedRect(ctx, curX, y, w, tagHeight, tagHeight / 2);
-    ctx.stroke();
-
-    // 标签文字
-    ctx.fillStyle = '#333';
-    ctx.font = 'bold 18px "PingFang SC", "Helvetica Neue", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(`${t.emoji} ${t.label}`, curX + w / 2, y + tagHeight / 2);
-    ctx.textBaseline = 'alphabetic';
-
-    curX += w + tagGap;
-  }
-
-  return tagHeight;
-}
-
 // ---------- v4.1 Hook 金句绘制 ----------
 
 function drawHook(ctx: CanvasRenderingContext2D, hook: string, y: number): number {
@@ -311,7 +244,7 @@ function drawQuote(ctx: CanvasRenderingContext2D, quote: string, y: number, maxL
   const maxWidth = W - 200;
   const text = `「${quote}」`;
 
-  ctx.font = `italic ${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.font = `${fontSize}px "PingFang SC", "Helvetica Neue", sans-serif`;
   ctx.fillStyle = '#666';
 
   let lines = wrapText(ctx, text, maxWidth);
@@ -415,6 +348,61 @@ function drawFlavorBadge(ctx: CanvasRenderingContext2D) {
   ctx.textBaseline = 'alphabetic';
 }
 
+// ---------- v5.0 核心特征卡 (traits) ═══
+
+function drawTraitsCard(
+  ctx: CanvasRenderingContext2D,
+  traits: string[],
+  x: number,
+  y: number,
+): number {
+  const cardPadding = 36;
+  const innerX = x + cardPadding;
+  const innerW = CARD_W - cardPadding * 2;
+
+  // 标题
+  let cy = y + cardPadding;
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 28px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('核心特征', innerX, cy + 28);
+  cy += 52;
+
+  // 特征条目
+  ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
+  const iconGap = 36;
+  const itemGap = 24;
+  for (let i = 0; i < traits.length; i++) {
+    ctx.fillStyle = '#999';
+    ctx.fillText(`${i + 1}.`, innerX, cy + 28);
+    ctx.fillStyle = '#444';
+    const textLines = wrapText(ctx, traits[i], innerW - iconGap);
+    for (let j = 0; j < textLines.length; j++) {
+      ctx.fillText(textLines[j], innerX + iconGap, cy + j * 32);
+    }
+    cy += Math.max(32, textLines.length * 32) + itemGap;
+  }
+
+  // 底部留白
+  cy += 8;
+  const cardH = cy - y;
+
+  // 背景
+  ctx.save();
+  ctx.globalAlpha = 0.65;
+  ctx.fillStyle = '#FFFFFF';
+  drawRoundedRect(ctx, x, y, CARD_W, cardH, 20);
+  ctx.fill();
+  ctx.globalAlpha = 0.15;
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1;
+  drawRoundedRect(ctx, x, y, CARD_W, cardH, 20);
+  ctx.stroke();
+  ctx.restore();
+
+  return cardH;
+}
+
 // ---------- 搭档卡片辅助函数 v4.3 ═══
 
 function drawBuddyCardFull(
@@ -432,7 +420,7 @@ function drawBuddyCardFull(
   let estY = 0;
   estY += 50;       // 标题
   estY += 80;       // emoji + name
-  ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = '26px "PingFang SC", "Helvetica Neue", sans-serif';
   const quoteLines = wrapText(ctx, `「${buddy.quote}」`, innerW - 20);
   estY += quoteLines.length * 38;
   ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
@@ -477,7 +465,7 @@ function drawBuddyCardFull(
 
   // 搭档金句
   ctx.fillStyle = '#999';
-  ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = '26px "PingFang SC", "Helvetica Neue", sans-serif';
   for (let i = 0; i < quoteLines.length; i++) {
     ctx.fillText(quoteLines[i], innerX, cy + i * 38);
   }
@@ -529,13 +517,7 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
   ctx.fillText(personality.name, W / 2, curY);
   curY += 84;
 
-  // ═══ 4. v4.3 5维标签条（横向排列5个维度标签）═══
-  if (personality.dimensionComments) {
-    const stripH = drawDimensionStrip(ctx, personality.dimensionScores, curY);
-    curY += stripH + 36;
-  }
-
-  // ═══ 5. Hook 金句 ═══
+  // ═══ 4. Hook 金句 ═══
   if (personality.hook) {
     const hookH = drawHook(ctx, personality.hook, curY);
     curY += hookH + 40;
@@ -553,7 +535,13 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
     curY += cardH + 36;
   }
 
-  // ═══ 8. 胶囊标签 (最多5个) ═══
+  // ═══ 8. v5.0 核心特征 (traits) ═══
+  if (personality.traits && personality.traits.length > 0) {
+    const cardH = drawTraitsCard(ctx, personality.traits, CARD_X, curY);
+    curY += cardH + 36;
+  }
+
+  // ═══ 9. 胶囊标签 (最多5个) ═══
   if (personality.keywords && personality.keywords.length > 0) {
     const tagH = drawCapsuleTags(ctx, personality.keywords.slice(0, 5), curY);
     curY += tagH + 40;
@@ -586,17 +574,17 @@ export async function renderShareCard(personality: PersonalityResult): Promise<B
 
   // v4.1: shareTagline
   if (personality.shareTagline) {
-    ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
+    ctx.font = '26px "PingFang SC", "Helvetica Neue", sans-serif';
     ctx.fillStyle = '#888';
     ctx.fillText(`"${personality.shareTagline}"`, W / 2, ctaY + 44);
     ctx.fillStyle = '#666';
     ctx.font = '24px "PingFang SC", "Helvetica Neue", sans-serif';
-    ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 76);
+    ctx.fillText('扫码测测看 →', W / 2, ctaY + 76);
     curY = ctaY + 100;
   } else {
     ctx.font = '28px "PingFang SC", "Helvetica Neue", sans-serif';
     ctx.fillStyle = '#666';
-    ctx.fillText('扫码测测看 → 和好友 PK！', W / 2, ctaY + 48);
+    ctx.fillText('扫码测测看 →', W / 2, ctaY + 48);
     curY = ctaY + 72;
   }
 

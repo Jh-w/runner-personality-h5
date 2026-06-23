@@ -15,8 +15,8 @@ function LoadingFallback() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--bg-page)',
-      color: 'var(--text-light)',
+      background: 'var(--bg-primary, #f5f0eb)',
+      color: 'var(--text-primary, #1a1a2e)',
       fontSize: 'var(--fs-body)',
     }}>
       ⏳ 加载中...

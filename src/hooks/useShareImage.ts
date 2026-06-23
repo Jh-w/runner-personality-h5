@@ -100,7 +100,7 @@ async function renderShareImage(personality: PersonalityResult): Promise<Blob> {
   const roastPadding = 30 * scale;
 
   // 先测量吐槽文字高度
-  ctx.font = `italic ${24 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.font = `${24 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
   const roastLines = wrapText(ctx, `「${personality.roast}」`, roastWidth - roastPadding * 2);
   const roastCardHeight = roastLines.length * 36 * scale + roastPadding * 2;
 
@@ -116,7 +116,7 @@ async function renderShareImage(personality: PersonalityResult): Promise<Blob> {
   // 绘制吐槽文字
   ctx.fillStyle = '#333';
   ctx.textAlign = 'left';
-  ctx.font = `italic ${24 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
+  ctx.font = `${24 * scale}px "PingFang SC", "Helvetica Neue", sans-serif`;
   roastLines.forEach((line, i) => {
     ctx.fillText(line, roastX + roastPadding + 12 * scale, roastY + roastPadding + (i + 1) * 34 * scale);
   });

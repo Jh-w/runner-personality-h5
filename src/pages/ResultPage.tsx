@@ -1,30 +1,19 @@
 // ResultPage - 跑步人格测试结果页
-// v4.3: 浅色主题 + 动物PNG Hero + 5维段子 + 风味标签卡片
-// PRD §7.1 信息层级 + Phase 2+3
+// v5.1: 统一暖米白主题 + emoji Hero + 结构精简
+// Hero → 简单解读 → 该类型的特点(维度+风味) → 社交标语 → 操作按钮
 
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPersonalityByTypeId } from '../engine/personalities';
 import { useTestEngine } from '../hooks/useTestEngine';
 import CanvasRenderer, { renderShareCard } from '../components/CanvasRenderer';
-import { findBestBuddy } from '../engine/buddyMatching';
 import ShareSheet from '../components/ShareSheet';
 import KeywordTags from '../components/KeywordTags';
 import PrivacyLink from '../components/PrivacyLink';
-import RadarChart from '../components/RadarChart';
-import PkCard from '../components/PkCard';
-import DiffuseBackground from '../components/DiffuseBackground';
-import TypeIllustration from '../components/TypeIllustration';
 import GlassCard from '../components/GlassCard';
-import { renderPkCard } from '../components/PkCanvasRenderer';
 import { useToast } from '../components/Toast';
-import { getTypeColorTokens, getTypeGlowValue } from '../utils/typeColorMap';
-import wechatQrPlaceholder from '../assets/wechat-qr-placeholder.png';
-import { calculatePkResult } from '../engine/pkMatching';
-import { getStoredPkParams, clearPkParams, generatePkUrl } from '../utils/pkUrlParams';
 import { calculateFlavor, getAllFlavorCards } from '../engine/flavorScoring';
-import type { PersonalityTypeId, PersonalityResult, PkResult, Answer } from '../engine/types';
-import type { PersonalityCode } from '../engine/types';
+import type { PersonalityTypeId, PersonalityResult, Answer } from '../engine/types';
 import styles from '../styles/pages/ResultPage.module.css';
 
 export default function ResultPage() {
@@ -35,17 +24,9 @@ export default function ResultPage() {
 
   const [shareVisible, setShareVisible] = useState(false);
   const [imageBlob, setImageBlob] = useState<Blob | null>(null);
-  const [, setImageGenerating] = useState(false);
   const [imageError, setImageError] = useState(false);
   const generatingRef = useRef(false);
 
-  // Phase 3: PK 状态
-  const [pkResult, setPkResult] = useState<PkResult | null>(null);
-  const [pkCardBlob, setPkCardBlob] = useState<Blob | null>(null);
-  const [pkPreviewVisible, setPkPreviewVisible] = useState(false);
-  const pkProcessedRef = useRef(false);
-
-  // 从 URL path param 获取 typeId
   const typeId = Number(typeIdParam) as PersonalityTypeId;
 
   const personality: PersonalityResult | null = useMemo(() => {
@@ -56,135 +37,38 @@ export default function ResultPage() {
     }
   }, [typeId]);
 
-  // Phase 3: 检测 PK 参数并计算匹配度
-  useMemo(() => {
-    if (!personality || pkProcessedRef.current) return;
-    const pkParams = getStoredPkParams();
-    if (!pkParams) return;
-
-    pkProcessedRef.current = true;
-    const result = calculatePkResult(pkParams.pk as PersonalityCode, personality.code as PersonalityCode);
-    if (result) {
-      setPkResult(result);
-      // 后台预生成 PK 卡片
-      renderPkCard(result).then(blob => {
-        setPkCardBlob(blob);
-      }).catch(() => { /* ignore */ });
-    }
-    // 清除 sessionStorage（仅使用一次）
-    clearPkParams();
-  }, [personality]);
-
-  // CanvasRenderer 预生成回调
+  // Canvas pre-generate callback
   const handleCanvasGenerated = useCallback((blob: Blob) => {
     setImageBlob(blob);
-    setImageGenerating(false);
-    setImageError(false);
   }, []);
 
-  // 点击分享按钮
+  // Share button
   const handleShare = useCallback(async () => {
     if (!personality) return;
     setShareVisible(true);
 
     if (!imageBlob && !generatingRef.current) {
       generatingRef.current = true;
-      setImageGenerating(true);
       try {
         const blob = await renderShareCard(personality);
         setImageBlob(blob);
-        setImageGenerating(false);
       } catch {
         setImageError(true);
-        setImageGenerating(false);
       } finally {
         generatingRef.current = false;
       }
     }
   }, [personality, imageBlob]);
 
-  // Phase 3: 「和好友 PK」CTA — 生成链接并复制
-  const handlePkShare = useCallback(async () => {
-    if (!personality || !state.sessionId) return;
-    const url = generatePkUrl(personality.code, state.sessionId);
-    try {
-      await navigator.clipboard.writeText(url);
-      const Toast = (await import('../components/Toast')).showToast;
-      Toast('PK链接已复制！发给好友来测吧');
-    } catch {
-      const Toast = (await import('../components/Toast')).showToast;
-      Toast('PK链接已生成，请手动复制分享');
-    }
-  }, [personality, state.sessionId]);
-
-  // Phase 3: 查看PK完整卡片
-  const handleViewPkCard = useCallback(() => {
-    setPkPreviewVisible(true);
-  }, []);
-
-  // Phase 3: 保存PK卡片
-  const handleSavePkImage = useCallback(async () => {
-    if (!pkCardBlob) return;
-    const url = URL.createObjectURL(pkCardBlob);
-    try {
-      const blob = await fetch(url).then(r => r.blob());
-      const file = new File([blob], 'running-pk.jpg', { type: 'image/jpeg' });
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: '跑步人格PK' });
-      } else {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'running-pk.jpg';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-      const Toast = (await import('../components/Toast')).showToast;
-      Toast('PK卡片已保存');
-    } catch {
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'running-pk.jpg';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } finally {
-      URL.revokeObjectURL(url);
-    }
-  }, [pkCardBlob]);
-
-  // 再测一次
+  // Retry
   const handleRetry = useCallback(() => {
     reset();
     navigate('/');
   }, [reset, navigate]);
 
-  // 图片 URL
   const imageUrl = imageBlob ? URL.createObjectURL(imageBlob) : null;
-  const pkImageUrl = pkCardBlob ? URL.createObjectURL(pkCardBlob) : null;
 
-  if (!personality) {
-    return (
-      <div className={`page ${styles.page}`}>
-        <div className={styles.error}>
-          <p>未找到人格数据 😢</p>
-          <button className="btn-primary" onClick={handleRetry}>
-            返回首页
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const color = personality.color;
-  const code = personality.code as PersonalityCode;
-  const colorTokens = getTypeColorTokens(code);
-  const glowColor = getTypeGlowValue(code);
-
-  // 最佳搭档（v3.1 Phase1）
-  const bestBuddy = useMemo(() => findBestBuddy(personality.code), [personality.code]);
-
-  // v4.3: 风味标签卡片（基于Q2/Q10/Q13答案）
+  // v4.3: 风味标签卡片
   const flavorCards = useMemo(() => {
     const answers = Object.values(state.answers) as Answer[];
     if (answers.length === 0) return null;
@@ -196,263 +80,113 @@ export default function ResultPage() {
     }
   }, [state.answers]);
 
+  if (!personality) {
+    return (
+      <div className={`page ${styles.page}`}>
+        <div className={styles.error}>
+          <p>未找到人格数据</p>
+          <button className="btn-primary" onClick={handleRetry}>
+            返回首页
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`page ${styles.page}`}>
-      {/* v4.0 弥散光球背景 */}
-      <DiffuseBackground glowColor={glowColor} />
-
       {/* 隐藏 Canvas 预生成器 */}
       <CanvasRenderer personality={personality} onGenerated={handleCanvasGenerated} />
 
-      {/* Phase 3: PK Banner（如果有pkResult）*/}
-      {pkResult && (
-        <PkCard
-          pkResult={pkResult}
-          onViewFullCard={handleViewPkCard}
-          onSaveImage={handleSavePkImage}
-        />
-      )}
-
-      {/* ═══ 1. Hero 区：动物PNG + 人格名 + Hook金句 ═══ */}
-      <div
-        className={`${styles.hero} ${styles.heroReveal}`}
-        style={{
-          background: `var(${colorTokens.gradientVar})`,
-        }}
-      >
-        <div className={styles.heroIllustration}>
-          <TypeIllustration animalImg={personality.animalImg} animalEmoji={personality.animalEmoji} animalName={personality.animalName} size={200} color={color} />
-        </div>
-        <h1 className={styles.heroName}>
-          {personality.name}
-        </h1>
-        {personality.hook && (
-          <p className={styles.heroHook}>「{personality.hook}」</p>
+      {/* ═══════════ 1. Hero 区（含荒诞标签） ═══════════ */}
+      <div className={styles.hero}>
+        <p className={styles.heroLabel}>你的跑者类型是：</p>
+        <div className={styles.heroEmoji}>{personality.emoji}</div>
+        <h1 className={styles.heroName}>{personality.name}</h1>
+        {personality.englishName && (
+          <p className={styles.heroEnglish}>{personality.englishName}</p>
         )}
-      </div>
-
-      {/* ═══ 2. 关键词标签 — 48px gap ═══ */}
-      <div
-        className={styles.tagSection}
-        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '80ms' }}
-      >
-        <KeywordTags keywords={personality.keywords} color={color} />
-      </div>
-
-      {/* ═══ 3. 吐槽卡片 — 毛玻璃 + 48px gap ═══ */}
-      <GlassCard
-        className={styles.roastCard}
-        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '160ms' }}
-      >
-        <div className={styles.roastQuote}>
-          「{personality.roast}」
+        {personality.hook && (
+          <p className={styles.heroHook}>{personality.hook}</p>
+        )}
+        <div className={styles.heroKeywords}>
+          <KeywordTags keywords={personality.keywords} color={personality.color} />
         </div>
+      </div>
+
+      {/* ═══════════ 2. 简单解读（脱口秀吐槽） ═══════════ */}
+      <GlassCard className={styles.roastCard}>
+        <h2 className={styles.sectionTitle}>关于你</h2>
+        <div className={styles.roastText}>{personality.roast}</div>
       </GlassCard>
 
-      {/* ═══ 4. v4.3 五维度段子 — 跑者成分解析 ═══ */}
-      {personality.dimensionComments && (
-        <GlassCard
-          className={styles.dimensionSection}
-          style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '200ms' }}
-        >
-          <h2 className={styles.dimensionTitle}>🔍 你的跑者成分解析</h2>
-          <div className={styles.dimensionGrid}>
+      {/* ═══════════ 3. 该类型的特点（五维度速写 + 风味标签） ═══════════ */}
+      <GlassCard className={styles.traitsCard}>
+        <h2 className={styles.sectionTitle}>该类型的特点</h2>
+
+        {/* 五维度速写 */}
+        {personality.dimensionComments && (
+          <div className={styles.dimensionList}>
             <div className={styles.dimensionItem}>
-              <span className={styles.dimensionLabel}>
-                💥 竞技驱动 · {personality.dimensionScores.motivation < 0 ? '偏竞技' : '偏体验'}
-              </span>
-              <p className={styles.dimensionComment}>{personality.dimensionComments.motivation}</p>
+              <p>{personality.dimensionComments.motivation}</p>
             </div>
             <div className={styles.dimensionItem}>
-              <span className={styles.dimensionLabel}>
-                👥 社交模式 · {personality.dimensionScores.social < 0 ? '偏独狼' : '偏社群'}
-              </span>
-              <p className={styles.dimensionComment}>{personality.dimensionComments.social}</p>
+              <p>{personality.dimensionComments.social}</p>
             </div>
             <div className={styles.dimensionItem}>
-              <span className={styles.dimensionLabel}>
-                🎨 跑步风格 · {personality.dimensionScores.style < 0 ? '偏计划' : '偏随性'}
-              </span>
-              <p className={styles.dimensionComment}>{personality.dimensionComments.style}</p>
+              <p>{personality.dimensionComments.style}</p>
             </div>
             <div className={styles.dimensionItem}>
-              <span className={styles.dimensionLabel}>
-                🎒 仪式感 · {personality.dimensionScores.ritual < 0 ? '偏装备' : '偏极简'}
-              </span>
-              <p className={styles.dimensionComment}>{personality.dimensionComments.ritual}</p>
+              <p>{personality.dimensionComments.ritual}</p>
             </div>
             <div className={styles.dimensionItem}>
-              <span className={styles.dimensionLabel}>
-                📊 表达方式 · {personality.dimensionScores.expression < 0 ? '偏数据' : '偏文艺'}
-              </span>
-              <p className={styles.dimensionComment}>{personality.dimensionComments.expression}</p>
+              <p>{personality.dimensionComments.expression}</p>
             </div>
           </div>
-        </GlassCard>
-      )}
+        )}
 
-      {/* ═══ 5. 四维雷达图 — 48px gap ═══ */}
-      <div style={{ width: '100%', animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '240ms' }}>
-        <RadarChart
-          dimensionScores={personality.dimensionScores}
-          color={color}
-          animate={true}
-          visible={true}
-        />
-      </div>
-
-      {/* ═══ 6. v4.3 风味标签卡片 — 3张卡片（时间/伤痛/饮食） ═══ */}
-      {flavorCards && (
-        <div className={styles.flavorSection} style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '280ms' }}>
-          <h2 className={styles.flavorTitle}>🍜 你的跑步风味标签</h2>
-          <div className={styles.flavorGrid}>
-            <div className={styles.flavorCard}>
+        {/* 风味标签 — 融入统一卡片风格 */}
+        {flavorCards && (
+          <div className={styles.flavorInline}>
+            <div className={styles.flavorItem}>
               <span className={styles.flavorEmoji}>{flavorCards.time.emoji}</span>
-              <span className={styles.flavorCardTitle}>{flavorCards.time.title}</span>
-              <span className={styles.flavorCardSubtitle}>{flavorCards.time.subtitle}</span>
-              <p className={styles.flavorCardBody}>{flavorCards.time.body}</p>
+              <span className={styles.flavorLabel}>{flavorCards.time.title}</span>
+              <span className={styles.flavorDesc}>{flavorCards.time.body}</span>
             </div>
-            <div className={styles.flavorCard}>
+            <div className={styles.flavorItem}>
               <span className={styles.flavorEmoji}>{flavorCards.injury.emoji}</span>
-              <span className={styles.flavorCardTitle}>{flavorCards.injury.title}</span>
-              <span className={styles.flavorCardSubtitle}>{flavorCards.injury.subtitle}</span>
-              <p className={styles.flavorCardBody}>{flavorCards.injury.body}</p>
+              <span className={styles.flavorLabel}>{flavorCards.injury.title}</span>
+              <span className={styles.flavorDesc}>{flavorCards.injury.body}</span>
             </div>
-            <div className={styles.flavorCard}>
+            <div className={styles.flavorItem}>
               <span className={styles.flavorEmoji}>{flavorCards.diet.emoji}</span>
-              <span className={styles.flavorCardTitle}>{flavorCards.diet.title}</span>
-              <span className={styles.flavorCardSubtitle}>{flavorCards.diet.subtitle}</span>
-              <p className={styles.flavorCardBody}>{flavorCards.diet.body}</p>
+              <span className={styles.flavorLabel}>{flavorCards.diet.title}</span>
+              <span className={styles.flavorDesc}>{flavorCards.diet.body}</span>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* ═══ 6. 最佳跑团搭档 — 32px gap ═══ */}
-      {bestBuddy && (
-        <div
-          className={styles.buddySection}
-          style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '320ms' }}
-        >
-          <h2 className={styles.buddyTitle}>🤝 你的最佳跑团搭档</h2>
-          <div
-            className={styles.buddyCard}
-            style={{
-              '--buddy-color': color,
-              '--buddy-cta-bg': color,
-            } as React.CSSProperties}
-          >
-            <span className={styles.buddyEmoji}>{bestBuddy.emoji}</span>
-            <span className={styles.buddyName}>{bestBuddy.name}</span>
-            <p className={styles.buddyQuote}>「{bestBuddy.quote}」</p>
-            <p className={styles.buddyDescription}>{bestBuddy.pairDescription}</p>
-            <button
-              className={styles.buddyCta}
-              onClick={async () => {
-                const { showToast } = await import('../components/Toast');
-                const shareUrl = `${window.location.origin}${window.location.pathname}#/?ref=${bestBuddy.typeId}`;
-                try {
-                  await navigator.clipboard.writeText(shareUrl);
-                  showToast('链接已复制，发给TA来测！');
-                } catch {
-                  const textarea = document.createElement('textarea');
-                  textarea.value = shareUrl;
-                  textarea.style.position = 'fixed';
-                  textarea.style.opacity = '0';
-                  document.body.appendChild(textarea);
-                  textarea.select();
-                  document.execCommand('copy');
-                  document.body.removeChild(textarea);
-                  showToast('链接已复制，发给TA来测！');
-                }
-              }}
-              aria-label="喊TA来测"
-            >
-              📣 喊TA来测
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Phase 3: 「和好友 PK」CTA */}
-      {!pkResult && bestBuddy && (
-        <div style={{ width: 'calc(100% - 32px)', margin: 'var(--sp-lg) auto 0', animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '400ms' }}>
-          <div
-            style={{
-              padding: '16px',
-              background: 'var(--glass-bg)',
-              border: '1px dashed var(--glass-border)',
-              borderRadius: '12px',
-              textAlign: 'center',
-              cursor: 'pointer',
-            }}
-            onClick={handlePkShare}
-          >
-            <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--brand-primary)' }}>
-              ⚔️ 和好友 PK，看谁是「天选跑搭子」
-            </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>
-              生成你们的专属对比卡片 →
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ 6. 核心特征 — 毛玻璃卡片 ═══ */}
-      <GlassCard
-        className={styles.section}
-        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '480ms' }}
-      >
-        <h2 className={styles.sectionTitle}>核心特征</h2>
-        <ol className={styles.traitList}>
-          {personality.traits.map((trait, i) => (
-            <li key={i} className={styles.traitItem}>
-              <span className={styles.traitIcon}>📌</span>
-              <span>{trait}</span>
-            </li>
-          ))}
-        </ol>
+        )}
       </GlassCard>
 
-      {/* ═══ 7. 操作按钮 — 40px gap ═══ */}
-      <div
-        className={styles.actions}
-        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '560ms' }}
-      >
+      {/* ═══════════ 4. 社交标语 ═══════════ */}
+      {personality.shareTagline && (
+        <div className={styles.tagline}>
+          <p>{personality.shareTagline}</p>
+        </div>
+      )}
+
+      {/* ═══════════ 5. 操作按钮 ═══════════ */}
+      <div className={styles.actions}>
         <button
           className={`btn-primary ${styles.shareBtn}`}
           onClick={handleShare}
           disabled={imageError}
           aria-label="生成分享图片"
         >
-          📤 生成我的跑步人格分享给跑友
+          生成我的跑步人格分享给跑友
         </button>
         <button className="btn-secondary" onClick={handleRetry} aria-label="再测一次">
-          🔄 再测一次
+          再测一次
         </button>
-      </div>
-
-      {/* ═══ 8. 公众号关注引导 — 毛玻璃 ═══ */}
-      <div
-        className={styles.wechatCard}
-        style={{ animation: 'staggerFadeUp 500ms var(--ease-standard) both', animationDelay: '640ms' }}
-      >
-        <p className={styles.wechatText}>
-          📱 关注「跑步人格测试」
-        </p>
-        <p className={styles.wechatSubText}>
-          获取完整16型解读 + 跑者专属内容
-        </p>
-        <div className={styles.wechatQrPlaceholder}>
-          <img
-            src={wechatQrPlaceholder}
-            alt="关注跑步人格测试公众号"
-            width={160}
-            height={160}
-            style={{ borderRadius: 12, display: 'block' }}
-          />
-        </div>
-        <p className={styles.wechatHint}>👆 长按识别关注</p>
       </div>
 
       {/* 分享弹窗 */}
@@ -463,21 +197,7 @@ export default function ResultPage() {
         onClose={() => setShareVisible(false)}
       />
 
-      {/* Phase 3: PK 卡片全屏预览 */}
-      {pkPreviewVisible && pkImageUrl && (
-        <div className={styles.pkPreview} onClick={() => setPkPreviewVisible(false)}>
-          <button className={styles.pkCloseBtn} onClick={() => setPkPreviewVisible(false)}>✕</button>
-          <img src={pkImageUrl} alt="PK对比卡片" className={styles.pkPreviewImg} />
-          <div className={styles.pkPreviewActions}>
-            <button className="btn-primary" onClick={handleSavePkImage}>💾 保存到相册</button>
-            <button className="btn-secondary" onClick={() => setPkPreviewVisible(false)}>关闭</button>
-          </div>
-        </div>
-      )}
-
-      {/* Toast 容器 */}
       <ToastContainer />
-
       <PrivacyLink />
     </div>
   );

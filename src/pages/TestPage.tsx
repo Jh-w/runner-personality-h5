@@ -14,7 +14,7 @@ export default function TestPage() {
   const navigate = useNavigate();
   const { qid } = useParams<{ qid: string }>();
   const questionIndex = parseInt(qid || '0', 10);
-  const { state, selectAnswer } = useTestEngine();
+  const { state, selectAnswer, goBack } = useTestEngine();
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectPhase, setSelectPhase] = useState<SelectPhase>('idle');
   const selectTimer1 = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -26,9 +26,6 @@ export default function TestPage() {
   // Guard: redirect if not in testing phase
   useEffect(() => {
     if (state.phase === 'idle') {
-      // AC-10: 检查 localStorage 是否有保存的进度，防止竞态
-      // Provider 的 useEffect 可能还没 dispatch RESTORE_PROGRESS，
-      // 如果直接跳转会打断进度恢复
       if (!loadProgress()) {
         navigate('/', { replace: true });
       }
@@ -44,18 +41,23 @@ export default function TestPage() {
     }
   }, [state.phase, navigate, state.result]);
 
-  // If navigating to a different question than current, redirect
+  // v5.1: 允许后退（questionIndex < currentQuestionIndex），但不允许前跳
   useEffect(() => {
-    if (state.phase === 'testing' && questionIndex !== state.currentQuestionIndex) {
+    if (state.phase === 'testing' && questionIndex > state.currentQuestionIndex) {
       navigate(`/test/${state.currentQuestionIndex}`, { replace: true });
     }
   }, [questionIndex, state.currentQuestionIndex, state.phase, navigate]);
 
-  // Reset selected option and phase when question changes
+  // Restore previously selected answer when going back
   useEffect(() => {
-    setSelectedOptionId(null);
+    const prevAnswer = state.answers[questionIndex];
+    if (prevAnswer) {
+      setSelectedOptionId(prevAnswer.optionId);
+    } else {
+      setSelectedOptionId(null);
+    }
     setSelectPhase('idle');
-  }, [questionIndex]);
+  }, [questionIndex, state.answers]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -115,6 +117,13 @@ export default function TestPage() {
     }, 250);
   }, [questionIndex, question, selectedOptionId, selectPhase, selectAnswer, navigate]);
 
+  const handleBack = useCallback(() => {
+    if (questionIndex > 0) {
+      goBack();
+      navigate(`/test/${questionIndex - 1}`);
+    }
+  }, [questionIndex, goBack, navigate]);
+
   if (!question) {
     return (
       <div className={`page ${styles.page}`}>
@@ -125,6 +134,15 @@ export default function TestPage() {
 
   return (
     <div className={`page ${styles.page}`}>
+      {/* v5.2: Top nav — back button only, left-aligned */}
+      <div className={styles.topNav}>
+        {questionIndex > 0 && (
+          <button className={styles.navBackBtn} onClick={handleBack} aria-label="返回上一题">
+            ← 返回上一题
+          </button>
+        )}
+      </div>
+
       <RunwayProgress
         total={18}
         current={questionIndex}

@@ -98,6 +98,16 @@ export function testReducer(state: TestState, action: TestAction): TestState {
       };
     }
 
+    case 'PREV_QUESTION': {
+      if (state.phase !== 'testing') return state;
+      if (state.currentQuestionIndex <= 0) return state;
+      return {
+        ...state,
+        currentQuestionIndex: state.currentQuestionIndex - 1,
+        // answers 不动 — 后续答案全部保留
+      };
+    }
+
     case 'SET_RESULT':
       clearProgress();
       return { ...state, phase: 'completed', result: action.result };

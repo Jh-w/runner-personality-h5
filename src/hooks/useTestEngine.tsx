@@ -13,6 +13,7 @@ interface EngineContextValue {
   state: TestState;
   startTest: (session: SessionData) => void;
   selectAnswer: (questionIndex: number, optionId: string, dimensionScore: number) => void;
+  goBack: () => void;
   setResult: () => void;
   reset: () => void;
 }
@@ -48,6 +49,10 @@ export function TestEngineProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SELECT_ANSWER', questionIndex, optionId, dimensionScore });
   }, []);
 
+  const goBack = useCallback(() => {
+    dispatch({ type: 'PREV_QUESTION' });
+  }, []);
+
   const setResult = useCallback(() => {
     const answersArray = Object.values(state.answers);
     // v4.2: 18题模式（15计分+3风味）
@@ -59,7 +64,7 @@ export function TestEngineProvider({ children }: { children: ReactNode }) {
   const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
 
   return (
-    <EngineContext.Provider value={{ state, startTest, selectAnswer, setResult, reset }}>
+    <EngineContext.Provider value={{ state, startTest, selectAnswer, goBack, setResult, reset }}>
       {children}
     </EngineContext.Provider>
   );

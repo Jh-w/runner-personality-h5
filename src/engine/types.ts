@@ -45,6 +45,11 @@ export interface PersonalityResult {
   animalEmoji?: string;               // 动物 emoji（如 🐆），结果页展示 + 降级fallback
   animalName?: string;                // 动物名（如 "猎豹"），用于 alt/title
   animalImg?: string;                 // 动物 PNG 路径（如 "/runner-personality-h5/animals/animal-type-01.png"）
+  englishName?: string;               // v5.1: 英文名（如 "Cheetah"）
+
+  // ═══ v5.0 色系归属 ═══
+  colorFamily?: ColorFamily;          // 5 色系之一
+  colorTone?: ColorTone;              // deep（数据派）/ bright（文艺派）
 
   // ═══ v4.1 新增字段（全部 optional，向后兼容）═══
   hook?: string;                      // 开屏暴击金句 ≤30字
@@ -126,10 +131,15 @@ export interface TestState {
   result?: PersonalityResult;
 }
 
+/** v5.0 色系类型 */
+export type ColorFamily = 'warmred' | 'forest' | 'wisteria' | 'coolblue' | 'amber';
+export type ColorTone = 'deep' | 'bright';
+
 /** 答题动作 */
 export type TestAction =
   | { type: 'START_TEST'; session: SessionData }
   | { type: 'SELECT_ANSWER'; questionIndex: number; optionId: string; dimensionScore: number }
+  | { type: 'PREV_QUESTION' }
   | { type: 'COMPLETE_TEST' }
   | { type: 'SET_RESULT'; result: PersonalityResult }
   | { type: 'RESET' }

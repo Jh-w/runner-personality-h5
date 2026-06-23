@@ -32,77 +32,44 @@
   --text-on-color: #FFFFFF;               /* 彩色底上的文字 */
 
   /* ═══════════════════════════════════════════════════════════════
-     4. 16 型人格渐变体系
-     按 4 元维度分组，每型含：hex + multi-stop gradient + glow
+     4. v5.0 5 色系 × 2 色调 = 10 基准色（MBTI 借鉴）
+     按 motivation 维度第一字母分组
      ═══════════════════════════════════════════════════════════════ */
 
-  /* ── 维度一：竞技型（Motivation = Competitive）暖色系 ── */
-  --type-compete-1-hex: #FF4444;           /* 赛道卷王 */
-  --type-compete-1-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF4444 50%, #D32F2F 100%);
-  --type-compete-1-glow: rgba(255, 68, 68, 0.25);
+  /* 暖红系 — 竞技维度（C-*-*）*/
+  --color-warmred-deep: #C0392B;
+  --color-warmred-bright: #E8734A;
+  --color-warmred-glow: rgba(192, 57, 43, 0.15);
+  --color-warmred-gradient-deep: linear-gradient(135deg, #D44637 0%, #C0392B 50%, #A33024 100%);
+  --color-warmred-gradient-bright: linear-gradient(135deg, #F08A62 0%, #E8734A 50%, #D4653F 100%);
 
-  --type-compete-2-hex: #FF6B35;           /* PB特种兵 */
-  --type-compete-2-gradient: linear-gradient(135deg, #FF8C42 0%, #FF6B35 50%, #E65100 100%);
-  --type-compete-2-glow: rgba(255, 107, 53, 0.25);
+  /* 森林系 — 体验维度（E-*-*）*/
+  --color-forest-deep: #2E7D32;
+  --color-forest-bright: #66BB6A;
+  --color-forest-glow: rgba(46, 125, 50, 0.15);
+  --color-forest-gradient-deep: linear-gradient(135deg, #3D9142 0%, #2E7D32 50%, #1E5E22 100%);
+  --color-forest-gradient-bright: linear-gradient(135deg, #81C784 0%, #66BB6A 50%, #4CAF50 100%);
 
-  --type-compete-3-hex: #FF9800;           /* 跑步气氛组 */
-  --type-compete-3-gradient: linear-gradient(135deg, #FFB74D 0%, #FF9800 50%, #F57C00 100%);
-  --type-compete-3-glow: rgba(255, 152, 0, 0.25);
+  /* 紫藤系 — 社交维度（保留备用）*/
+  --color-wisteria-deep: #7B3F8C;
+  --color-wisteria-bright: #C77DBD;
+  --color-wisteria-glow: rgba(123, 63, 140, 0.15);
+  --color-wisteria-gradient-deep: linear-gradient(135deg, #8E4F9E 0%, #7B3F8C 50%, #5E2F6E 100%);
+  --color-wisteria-gradient-bright: linear-gradient(135deg, #D49AD0 0%, #C77DBD 50%, #B060AC 100%);
 
-  --type-compete-4-hex: #F44336;           /* 跑团穿搭博主 */
-  --type-compete-4-gradient: linear-gradient(135deg, #EF5350 0%, #F44336 50%, #C62828 100%);
-  --type-compete-4-glow: rgba(244, 67, 54, 0.25);
+  /* 冷蓝系 — 计划维度（备用）*/
+  --color-coolblue-deep: #3A5A8C;
+  --color-coolblue-bright: #64B5F6;
+  --color-coolblue-glow: rgba(58, 90, 140, 0.15);
+  --color-coolblue-gradient-deep: linear-gradient(135deg, #4A6EA0 0%, #3A5A8C 50%, #2A4570 100%);
+  --color-coolblue-gradient-bright: linear-gradient(135deg, #90CAF9 0%, #64B5F6 50%, #42A5F5 100%);
 
-  /* ── 维度二：社交型（Social = Group）亮色系 ── */
-  --type-social-1-hex: #E91E63;            /* 竞速社交达人 */
-  --type-social-1-gradient: linear-gradient(135deg, #F06292 0%, #E91E63 50%, #AD1457 100%);
-  --type-social-1-glow: rgba(233, 30, 99, 0.25);
-
-  --type-social-2-hex: #9C27B0;            /* 装备理财产品经理 */
-  --type-social-2-gradient: linear-gradient(135deg, #BA68C8 0%, #9C27B0 50%, #6A1B9A 100%);
-  --type-social-2-glow: rgba(156, 39, 176, 0.25);
-
-  --type-social-3-hex: #E040FB;            /* 装备颜控散步党 */
-  --type-social-3-gradient: linear-gradient(135deg, #EA80FC 0%, #E040FB 50%, #AA00FF 100%);
-  --type-social-3-glow: rgba(224, 64, 251, 0.25);
-
-  --type-social-4-hex: #3F51B5;            /* 精致独行侠 */
-  --type-social-4-gradient: linear-gradient(135deg, #7986CB 0%, #3F51B5 50%, #1A237E 100%);
-  --type-social-4-glow: rgba(63, 81, 181, 0.25);
-
-  /* ── 维度三：体验型（Motivation = Experience）冷色系 ── */
-  --type-experience-1-hex: #4CAF50;        /* 天赋型选手 */
-  --type-experience-1-gradient: linear-gradient(135deg, #81C784 0%, #4CAF50 50%, #2E7D32 100%);
-  --type-experience-1-glow: rgba(76, 175, 80, 0.25);
-
-  --type-experience-2-hex: #2196F3;        /* 跑圈政委 */
-  --type-experience-2-gradient: linear-gradient(135deg, #64B5F6 0%, #2196F3 50%, #1565C0 100%);
-  --type-experience-2-glow: rgba(33, 150, 243, 0.25);
-
-  --type-experience-3-hex: #00BCD4;        /* 气氛组卷王 */
-  --type-experience-3-gradient: linear-gradient(135deg, #4DD0E1 0%, #00BCD4 50%, #00838F 100%);
-  --type-experience-3-glow: rgba(0, 188, 212, 0.25);
-
-  --type-experience-4-hex: #8BC34A;        /* 佛系约跑人PLUS */
-  --type-experience-4-gradient: linear-gradient(135deg, #AED581 0%, #8BC34A 50%, #558B2F 100%);
-  --type-experience-4-glow: rgba(139, 195, 74, 0.25);
-
-  /* ── 维度四：独狼型（Social = Solo）暗色系 ── */
-  --type-lone-1-hex: #607D8B;              /* 沉默破风者 */
-  --type-lone-1-gradient: linear-gradient(135deg, #90A4AE 0%, #607D8B 50%, #37474F 100%);
-  --type-lone-1-glow: rgba(96, 125, 139, 0.25);
-
-  --type-lone-2-hex: #BDBDBD;              /* 真·佛系约跑人 */
-  --type-lone-2-gradient: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 50%, #757575 100%);
-  --type-lone-2-glow: rgba(189, 189, 189, 0.20);
-
-  --type-lone-3-hex: #795548;              /* 城市流浪跑者 */
-  --type-lone-3-gradient: linear-gradient(135deg, #A1887F 0%, #795548 50%, #4E342E 100%);
-  --type-lone-3-glow: rgba(121, 85, 72, 0.25);
-
-  --type-lone-4-hex: #546E7A;              /* 禅修跑者 */
-  --type-lone-4-gradient: linear-gradient(135deg, #78909C 0%, #546E7A 50%, #263238 100%);
-  --type-lone-4-glow: rgba(84, 110, 122, 0.25);
+  /* 琥珀系 — 装备维度（备用）*/
+  --color-amber-deep: #BF7A3A;
+  --color-amber-bright: #E8B44F;
+  --color-amber-glow: rgba(191, 122, 58, 0.15);
+  --color-amber-gradient-deep: linear-gradient(135deg, #D4924D 0%, #BF7A3A 50%, #A0642D 100%);
+  --color-amber-gradient-bright: linear-gradient(135deg, #EFC875 0%, #E8B44F 50%, #D9A340 100%);
 
   /* ═══════════════════════════════════════════════════════════════
      5. 语义色
@@ -133,7 +100,8 @@
      8. 排版系统
      ═══════════════════════════════════════════════════════════════ */
   /* 字体栈 */
-  --font-display: 'ZCOOL KuaiLe', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC',
+                'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC',
               'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;

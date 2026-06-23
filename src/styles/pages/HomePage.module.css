@@ -9,7 +9,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--bg-deep);
+  background: #f5f0eb;
   overflow: hidden;
   animation: pageEnter 400ms var(--ease-standard);
 }
@@ -112,8 +112,8 @@
 
 @supports not (backdrop-filter: blur(1px)) {
   .meta {
-    background: rgba(30, 35, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.90);
+    border: 1px solid rgba(0, 0, 0, 0.10);
   }
 }
 

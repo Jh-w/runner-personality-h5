@@ -272,7 +272,7 @@ export async function renderPkCard(
   // 7. 解读文字
   curY += 40;
   ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-  ctx.font = 'italic 26px "PingFang SC", "Helvetica Neue", sans-serif';
+  ctx.font = '26px "PingFang SC", "Helvetica Neue", sans-serif';
   ctx.textAlign = 'center';
   const descLines = wrapTextPk(ctx, `「${pkResult.description}」`, W - 200);
   for (let i = 0; i < descLines.length; i++) {
