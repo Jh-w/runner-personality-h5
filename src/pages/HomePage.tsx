@@ -9,7 +9,7 @@ const GEN = 'ABCD';
 
 function buildFakeSession() {
   const sessionId = 'local-' + Date.now().toString(36);
-  const randomizedOptions = Array.from({ length: 12 }, (_, i) => ({
+  const randomizedOptions = Array.from({ length: 18 }, (_, i) => ({
     question_id: i + 1,
     options: GEN.split('').map(c => ({ id: c, text: '' })),
   }));
@@ -67,14 +67,14 @@ export default function HomePage() {
 
       <div className={styles.main}>
         <div className={styles.header}>
-          <h1 className={styles.title}>跑步人格测试</h1>
-          <p className={styles.subtitle}>找到属于你的跑步人设</p>
+          <h1 className={styles.title}>跑者类型测试</h1>
+          <p className={styles.subtitle}>找到属于你的跑者类型</p>
         </div>
 
         <div className={styles.meta}>
           <span className={styles.metaItem}>⏱️ 4-5分钟</span>
           <span className={styles.metaDivider}>·</span>
-          <span className={styles.metaItem}>📝 12道题</span>
+          <span className={styles.metaItem}>📝 18道题</span>
         </div>
 
         <p className={styles.participants}>
@@ -91,7 +91,7 @@ export default function HomePage() {
 
       <div className={styles.footer}>
         <span className={styles.brand}>
-          跑步人格测试 · v4.0
+          跑者类型测试 · v5.2
         </span>
       </div>
     </div>

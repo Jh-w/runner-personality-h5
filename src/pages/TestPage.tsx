@@ -113,6 +113,8 @@ export default function TestPage() {
       // Check if this was the last question (index 17 = Q18)
       if (questionIndex >= 17) {
         navigate('/calculating');
+      } else {
+        navigate(`/test/${questionIndex + 1}`);
       }
     }, 250);
   }, [questionIndex, question, selectedOptionId, selectPhase, selectAnswer, navigate]);
