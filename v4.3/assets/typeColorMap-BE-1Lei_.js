@@ -1,1 +1,0 @@
-import{n as e}from"./ResultPage-BgRClm5C.js";export{e as getTypeGlowValue};
