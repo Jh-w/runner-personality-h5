@@ -85,7 +85,9 @@ export default function TestPage() {
   const answeredCount = Object.keys(state.answers).length;
 
   const handleSelect = useCallback((optionId: string) => {
-    if (selectPhase !== 'idle' || selectedOptionId) return;
+    if (selectPhase !== 'idle') return;
+    // 允许回退改答案：已有选中时仅拦截重复点击同一选项
+    if (selectedOptionId && selectedOptionId === optionId) return;
 
     const option = question?.options.find(o => o.id === optionId);
     if (!option) return;
