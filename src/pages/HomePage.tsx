@@ -91,7 +91,7 @@ export default function HomePage() {
 
       <div className={styles.footer}>
         <span className={styles.brand}>
-          跑者类型测试 · v5.2
+          跑者类型测试 · v5.3
         </span>
       </div>
     </div>

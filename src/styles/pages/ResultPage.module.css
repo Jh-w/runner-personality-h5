@@ -1,35 +1,26 @@
-/* ResultPage.module.css - v5.1 统一暖米白主题 + 无斜体 + 结构精简 */
+/* ResultPage 样式 — v4.3 浅色主题 + 动物PNG Hero + 风味标签卡片 */
 
 .page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 0;
-  padding-bottom: 80px;
-  background: #f5f0eb;
   min-height: 100vh;
-  color: #2c2c2c;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-}
-
-/* ─── Error ─── */
-.error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  gap: 20px;
-  color: #999;
+  gap: 0;
+  overflow-x: hidden;
+  position: relative;
+  background: #f5f0eb;
 }
 
-/* ═══════════ 1. Hero 区 ═══════════ */
+/* ═══ Hero 区 — emoji + 暖米白 ═══ */
+
 .hero {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 64px 24px 40px;
-  width: 100%;
+  position: relative;
   text-align: center;
 }
 
@@ -47,14 +38,6 @@
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
 }
 
-.heroName {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
-}
-
 .heroEnglish {
   font-size: 14px;
   color: #aaa;
@@ -63,6 +46,18 @@
   font-style: normal;
 }
 
+/* Hero 人格名 */
+.heroName {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero Hook */
 .heroHook {
   font-size: 16px;
   color: #666;
@@ -72,7 +67,7 @@
   font-style: normal;
 }
 
-/* ═══════════ 荒诞标签（Hero 内部） ═══════════ */
+/* 荒诞标签（Hero 内部） */
 .heroKeywords {
   margin-top: 20px;
   display: flex;
@@ -81,12 +76,15 @@
   gap: 8px;
 }
 
-/* ═══════════ 2. 简单解读 / 3. 特点 ═══════════ */
+/* ═══ 简单解读 / 特点卡片 ═══ */
+
 .roastCard,
 .traitsCard {
   width: calc(100% - 32px);
   max-width: 500px;
-  margin-bottom: 24px;
+  margin: 24px auto 0;
+  position: relative;
+  z-index: 2;
 }
 
 .sectionTitle {
@@ -105,87 +103,357 @@
   font-style: normal;
 }
 
-/* ═══════════ 五维度速写 ═══════════ */
-.dimensionList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* ═══ v4.3 维度解读 — 跑者成分解析 (5维) ═══ */
+
+.dimensionSection {
+  width: calc(100% - 32px);
+  margin: var(--sp-xl) auto 0;
+  padding: var(--sp-lg);
+  position: relative;
+  z-index: 2;
 }
 
-.dimensionItem p {
+.dimensionTitle {
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: var(--sp-md);
+  text-align: center;
+}
+
+.dimensionGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+.dimensionItem {
+  padding: var(--sp-sm) var(--sp-md);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-md);
+}
+
+.dimensionLabel {
+  display: block;
   font-size: 15px;
-  line-height: 1.7;
-  color: #555;
-  margin: 0;
-  font-style: normal;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: var(--sp-2xs);
 }
 
-/* ═══════════ 风味标签 — 融入特点卡片 ═══════════ */
-.flavorInline {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+.dimensionComment {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ═══ v4.3 风味标签卡片 ═══ */
+
+.flavorSection {
+  width: calc(100% - 32px);
+  margin: var(--sp-xl) auto 0;
+  position: relative;
+  z-index: 2;
+}
+
+.flavorTitle {
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: var(--sp-md);
+  text-align: center;
+}
+
+.flavorGrid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sp-sm);
 }
 
-.flavorItem {
+.flavorCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-md);
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 14px;
-  line-height: 1.5;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .flavorEmoji {
-  font-size: 18px;
-  flex-shrink: 0;
+  font-size: 32px;
+  line-height: 1;
 }
 
-.flavorLabel {
-  font-weight: 600;
+.flavorCardTitle {
+  font-size: 16px;
+  font-weight: 700;
   color: #333;
-  flex-shrink: 0;
-  font-style: normal;
 }
 
-.flavorDesc {
-  color: #777;
-  font-style: normal;
-}
-
-/* ═══════════ 4. 社交标语 ═══════════ */
-.tagline {
-  width: calc(100% - 64px);
-  max-width: 440px;
-  text-align: center;
-  padding: 24px 0;
-}
-
-.tagline p {
-  font-size: 18px;
+.flavorCardSubtitle {
+  font-size: 13px;
   font-weight: 600;
-  color: #333;
-  margin: 0;
-  font-style: normal;
+  color: var(--brand-primary);
 }
 
-/* ═══════════ 5. 操作按钮 ═══════════ */
-.actions {
+.flavorCardBody {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 4px 0 0 0;
+}
+
+/* ═══ 通用 Section — 毛玻璃卡片 ═══ */
+
+.section {
+  width: calc(100% - 32px);
+  margin: var(--sp-lg) auto 0;
+  padding: var(--sp-lg);
+}
+
+.sectionTitle {
+  font-size: var(--fs-title);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: var(--sp-sm);
+}
+
+/* ═══ 特征列表 ═══ */
+
+.traitList {
+  list-style: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: calc(100% - 48px);
-  max-width: 400px;
-  padding-top: 8px;
+  gap: var(--sp-sm);
+}
+
+.traitItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-xs);
+  font-size: var(--fs-body);
+  color: #555;
+  line-height: 1.6;
+}
+
+.traitIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ═══ 按钮区 ═══ */
+
+.actions {
+  width: calc(100% - 32px);
+  margin: 40px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
 }
 
 .shareBtn {
-  width: 100%;
-  padding: 16px;
+  font-size: var(--fs-body);
+}
+
+/* ═══ 公众号关注引导 — 浅色适配 ═══ */
+
+.wechatCard {
+  margin: 28px 20px 40px;
+  padding: 24px 20px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.wechatText {
   font-size: 16px;
   font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.wechatSubText {
+  font-size: 14px;
+  color: #999;
+  margin: 0 0 16px 0;
+}
+
+.wechatQrPlaceholder {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 12px;
   border-radius: 12px;
+  overflow: hidden;
+}
+
+.wechatHint {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+/* ═══ 最佳搭档区块（v3.1）浅色适配 ═══ */
+
+.buddySection {
+  width: calc(100% - 32px);
+  margin: var(--sp-lg) auto 0;
+}
+
+.buddyCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 0 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.buddyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.buddyEmoji {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.buddyName {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--buddy-color);
+  margin-bottom: 4px;
+}
+
+.buddyQuote {
+  font-style: normal;
+  font-size: 14px;
+  color: #999;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.buddyDescription {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin: 8px 0;
+}
+
+.buddyCta {
+  width: 100%;
+  font-size: 14px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  color: #fff;
+  background: var(--buddy-cta-bg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.buddyCta:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ═══ 错误状态 ═══ */
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-lg);
+  min-height: 60vh;
+  text-align: center;
+  font-size: var(--fs-body);
+  color: #666;
+}
+
+.error button {
+  max-width: 240px;
+}
+
+/* ═══ PK 全屏预览 ═══ */
+
+.pkPreview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pkPreviewImg {
+  max-width: 90vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.pkPreviewActions {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pkCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ 响应式微调 ═══ */
+
+@media (min-width: 480px) {
+  .hero {
+    padding: 72px var(--sp-xl) 56px;
+  }
+  .heroName {
+    font-size: 38px;
+  }
+}
+
+/* ═══ prefers-reduced-motion ═══ */
+
+@media (prefers-reduced-motion: reduce) {
+  .heroReveal {
+    animation: none;
+  }
 }
