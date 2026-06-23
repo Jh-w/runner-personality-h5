@@ -86,8 +86,6 @@ export default function TestPage() {
 
   const handleSelect = useCallback((optionId: string) => {
     if (selectPhase !== 'idle') return;
-    // 允许回退改答案：已有选中时仅拦截重复点击同一选项
-    if (selectedOptionId && selectedOptionId === optionId) return;
 
     const option = question?.options.find(o => o.id === optionId);
     if (!option) return;
@@ -119,10 +117,12 @@ export default function TestPage() {
         navigate(`/test/${questionIndex + 1}`);
       }
     }, 250);
-  }, [questionIndex, question, selectedOptionId, selectPhase, selectAnswer, navigate]);
+  }, [questionIndex, question, selectPhase, selectAnswer, navigate]);
 
   const handleBack = useCallback(() => {
     if (questionIndex > 0) {
+      setSelectPhase('idle');
+      setSelectedOptionId(null);
       goBack();
       navigate(`/test/${questionIndex - 1}`);
     }
