@@ -87,7 +87,15 @@ export function testReducer(state: TestState, action: TestAction): TestState {
     case 'SELECT_ANSWER': {
       if (state.phase !== 'testing') return state;
       const { questionIndex, optionId, dimensionScore } = action;
-      const newAnswers = { ...state.answers, [questionIndex]: { questionId: questionIndex + 1, optionId, dimensionScore } };
+      // v5.2: 回退修改答案时，清空 questionIndex 之后的所有答案
+      const newAnswers: Record<number, { questionId: number; optionId: string; dimensionScore: number }> = {};
+      for (const [key, value] of Object.entries(state.answers)) {
+        const idx = Number(key);
+        if (idx < questionIndex) {
+          newAnswers[idx] = value as { questionId: number; optionId: string; dimensionScore: number };
+        }
+      }
+      newAnswers[questionIndex] = { questionId: questionIndex + 1, optionId, dimensionScore };
       // v4.2: 18题模式，最后一题 index=17
       const isLast = questionIndex >= 17;
       return {
@@ -104,7 +112,7 @@ export function testReducer(state: TestState, action: TestAction): TestState {
       return {
         ...state,
         currentQuestionIndex: state.currentQuestionIndex - 1,
-        // answers 不动 — 后续答案全部保留
+        // answers 不动 — 回退时保留用于显示，用户重新选择后 SELECT_ANSWER 会清空后续
       };
     }
 
