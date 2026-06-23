@@ -116,7 +116,7 @@ export default function ResultPage() {
 
       {/* ═══════════ 2. 简单解读（脱口秀吐槽） ═══════════ */}
       <GlassCard className={styles.roastCard}>
-        <h2 className={styles.sectionTitle}>关于你</h2>
+        <h2 className={styles.sectionTitle}>简单解读</h2>
         <div className={styles.roastText}>{personality.roast}</div>
       </GlassCard>
 
